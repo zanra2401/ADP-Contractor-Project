@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contents', function (Blueprint $table) {
-            $table->id();
+        Schema::create('designs', function (Blueprint $table) {
+            $table->ulid('id')->primary();
             $table->foreignUlid('created_by')->references('id')->on('users')->cascadeOnDelete();
-            $table->enum('tipe', ['banner', 'galeri', 'artikel', 'video'])->nullable(false);
-            $table->string('judul', length:100)->nullable(false);
+            $table->string('nama', length:100)->nullable(false);
+            $table->decimal("harga", total: 15, places: 2);               
             $table->text('deskripsi')->nullable(true)->nullable(false);
-            $table->string('file_path', length: 255)->nullable(true);
             $table->timestamps();
             $table->softDeletes();
         });

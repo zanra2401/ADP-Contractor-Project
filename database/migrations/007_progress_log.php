@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('progress_log', function (Blueprint $table) {
             $table->bigInteger('id')->primary();
             $table->foreignUlid('project_id')->references('id')->on('projects')->cascadeOnDelete();
-            $table->foreignUlid('pengawas_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->text("deskripsi")->nullable(true);
             $table->string('file_path', length: 255);
             $table->enum('status_publikasi', ['menunggu', 'disetujui', 'ditolak'])->default('menunggu');
             $table->timestamp('tanggal_upload')->default(Carbon::now());
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-    Schema::drop('progress_log');
+        Schema::drop('progress_log');
     }
 };

@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jenis_material', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama')->nullable(false);
+        Schema::create('customizations', function (Blueprint $table) {
+            $table->foreignUlid('project')->references("id")->on('projects');
+            $table->foreign('material')->references('id')->on('materials');
+
+
+            $table->primary(['project', 'material']);
         });
     }
 
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('jenis_material');
+        Schema::drop('customizations');
     }
 };

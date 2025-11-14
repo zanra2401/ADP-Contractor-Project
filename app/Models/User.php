@@ -2,47 +2,45 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Symfony\Component\Uid\Ulid;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class User extends Authenticatable
+class User extends Model
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasUlids;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    protected $table = 'users';
+    protected $keyType =  'string';
+    
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'role_id', 
+        'nama',
+        'nomor_telpon',
+        'password'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password'
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    public function newUniqueId(): string
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return Ulid::generate();
+    }
+
+    public function role(): BelongsTo {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+
+    public function designs(): HasMany {
+        return $this->hasMany(Material::class, 'created_by', 'id');
+    }
+
+    public function activeForgetCode(): HasOne {
+        return $this->hasOne(ForgetCode::class, 'user_id', 'id')->where('expired_at', '>', now())->latest('created_at');
     }
 }

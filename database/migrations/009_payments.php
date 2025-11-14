@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('project_id')->references('id')->on('projects')->cascadeOnDelete();
+            $table->foreignUlid('project_id')->references('id')->on('projects')->uniqid()->cascadeOnDelete();
             $table->foreignUlid('pengunjung_id')->references('id')->on('users');
-            $table->decimal('jumlah', total: 15, places: 2);
-            $table->enum('metode', ['transfer', 'e-wallet', 'kartu', 'cash']);
-            $table->timestamp('tanggal_pembayaran');
-            $table->enum('status', ['pending', 'berhasil', 'gagal']);
+            $table->decimal('total_harga', total: 15, places: 2);
+            $table->enum('status', ['progress', 'selesai']);
             $table->timestamps();
             $table->softDeletes();
         });

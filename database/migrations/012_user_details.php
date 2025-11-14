@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('user_details', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->foreignUlid('role_id')->references('id')->on('roles');
-            $table->string('nama', length: 100);
-            $table->string('nomor_telepon', length: 12);
-            $table->string('password', length: 100);
+            $table->foreignUlid('user_id')->references('id')->on('users')->uniqid();
+            $table->string('photo_profile', length: 255)->nullable(true);
+            $table->text('alamat');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::drop('users');
+        Schema::drop('user_details');
     }
 };

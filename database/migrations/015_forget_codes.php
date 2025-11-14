@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('jenis_material', function (Blueprint $table) {
+        Schema::create('forget_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('nama')->nullable(false);
+            $table->foreignUlid('user_id')->references('id')->on('users');
+            $table->uuid('code')->uniqid();
+            $table->timestamp('expired_at')->nullable(false);
+            $table->timestamp('created_at')->nullable(false);
         });
     }
 
@@ -22,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('jenis_material');
+        Schema::dropIfExists('forget_codes');
     }
 };

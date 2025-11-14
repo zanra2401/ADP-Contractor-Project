@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,22 +12,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->foreignUlid('role_id')->references('id')->on('roles');
-            $table->string('nama', length: 100);
-            $table->string('nomor_telepon', length: 12);
-            $table->string('password', length: 100);
+        Schema::create('payment_progress', function (Blueprint $table) {
+            $table->ulid("id")->primary();
+            $table->foreignUlid('payment_id')->references('id')->on('payments');
+            $table->decimal('jumlah', total: 15, places: 2);
+            $table->enum('metode', ['transfer', 'cash']);
             $table->timestamps();
             $table->softDeletes();
         });
     }
-    
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::drop('users');
+        Schema::drop('payment_progress');
     }
 };

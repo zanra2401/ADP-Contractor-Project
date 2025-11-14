@@ -11,16 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('materials', function (Blueprint $table) {
+        Schema::create('content_media', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_material', length:100);
-            $table->foreignId('jenis')->references('id')->on('jenis_material');
-            $table->decimal('harga_per_unit', total: 12, places:2);
-            $table->string('satuan', length: 50);
-            $table->string('media_path', length: 255)->nullable(false);
+            $table->foreignUlid('design_id')->references('id')->on('designs');
+            $table->string('content_path', length: 255);
             $table->timestamps();
             $table->softDeletes();
-        });
+        }); 
     }
 
     /**
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('materials');
+        Schema::drop('content_media');
     }
 };
