@@ -19,7 +19,7 @@ class User extends Model
     protected $fillable = [
         'role_id', 
         'nama',
-        'nomor_telpon',
+        'nomor_telepon',
         'password'
     ];
 

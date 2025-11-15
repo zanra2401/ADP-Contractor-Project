@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->enum('nama_role', ['pengawas', 'pengunjung', 'customer_service', 'admin']);
+            $table->char('nama_role', length: 32);
             $table->timestamps();
             $table->softDeletes();
         });

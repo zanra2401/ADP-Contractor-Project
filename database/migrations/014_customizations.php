@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('customizations', function (Blueprint $table) {
             $table->foreignUlid('project')->references("id")->on('projects');
-            $table->foreign('material')->references('id')->on('materials');
+            $table->foreignId('material')->references('id')->on('materials');
 
 
             $table->primary(['project', 'material']);
