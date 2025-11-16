@@ -3,7 +3,7 @@
 ## TUTORIAL
 - jalankan perintah -> composer install
 - Kalo Mau pake **.env** yang udah di konfigurasi caranya:
-    - php artisan env:decrypt --key=key_tak_kirim_nde_wa
+    - php artisan env:decrypt --key=base64:key_tak_kirim_nde_wa
 
 
 ### ATURAN
