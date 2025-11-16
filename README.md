@@ -1,6 +1,7 @@
 # Project ADP-Contractor
 
-## TUTTORIAL
+## TUTORIAL
+- jalankan perintah -> composer install
 - Kalo Mau pake **.env** yang udah di konfigurasi caranya:
     - php artisan env:decrypt --key=key_tak_kirim_nde_wa
 
