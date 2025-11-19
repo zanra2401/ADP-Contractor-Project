@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class JenisMaterial extends Model
 {
+    public $timestamps = false;
     /**
      * Nama Table yang bersangkutan
      *
