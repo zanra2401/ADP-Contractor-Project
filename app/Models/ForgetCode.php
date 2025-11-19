@@ -12,6 +12,7 @@ class ForgetCode extends Model
 {
 
     use HasUuids;
+
     const UPDATED_AT = null;
 
     protected $table = 'forget_codes';
