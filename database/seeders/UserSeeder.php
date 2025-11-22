@@ -11,11 +11,12 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ambil role_id dari tabel roles
         $adminRole = Role::where('nama_role', 'admin')->first()->id;
         $pengawasRole = Role::where('nama_role', 'pengawas')->first()->id;
-        $superadminRole = Role::where('nama_role', 'superadmin')->first()->id;
         $customerServiceRole = Role::where('nama_role', 'customer_service')->first()->id;
+        $superadminRole = Role::where('nama_role', 'superadmin')->first()->id;
+        $pengunjungRole = Role::where('nama_role', 'pengunjung')->first()->id;
+
         // Admin
         User::create([
             'role_id' => $adminRole,
@@ -37,7 +38,7 @@ class UserSeeder extends Seeder
             'role_id' => $customerServiceRole,
             'nama' => 'Customer Service',
             'nomor_telepon' => '081111111112',
-            'password' => Hash::make('customerservicce123'),
+            'password' => Hash::make('customerservice123'),
         ]);
 
         // Superadmin
@@ -46,6 +47,14 @@ class UserSeeder extends Seeder
             'nama' => 'Super Admin',
             'nomor_telepon' => '081111111113',
             'password' => Hash::make('superadmin123'),
+        ]);
+
+        // ⭐ Pengunjung (WAJIB)
+        User::create([
+            'role_id' => $pengunjungRole,
+            'nama' => 'Pengunjung Pertama',
+            'nomor_telepon' => '081111111114',
+            'password' => Hash::make('pengunjung123'),
         ]);
     }
 }
