@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -13,15 +14,21 @@ class ForgetCode extends Model
 
     use HasUuids;
 
-    const UPDATED_AT = null;
-
     protected $table = 'forget_codes';
-    
+    public $timestamps = false;
+
     protected $fillable = [ 
         'user_id',
         'code',
         'expired_at'
     ];
+
+    public static function booted()
+    {
+        static::creating(function ($forgetCode) {
+            $forgetCode->created_at = Carbon::now();
+        });
+    }
 
     public function uniqueIds(): array
     {

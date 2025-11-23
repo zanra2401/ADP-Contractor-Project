@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 // RUTE PENGGUNA
 Route::controller(UserController::class)->group(function () {
     
-    Route::post('/user/pengunjung/register', 'createPengunjung')->withoutMiddleware(VerifyCsrfToken::class)->middleware([EnsurePasswordSecure::class, EnsureTelpNumValid::class]);
+    Route::post('/user/pengunjung/register', 'createPengunjung')->withoutMiddleware(VerifyCsrfToken::class);
+
+    Route::get('/halaman-welcome', 'welcome');
 
 });

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Services\RegisterService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;

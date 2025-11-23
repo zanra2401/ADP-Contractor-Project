@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignUlid('user_id')->references('id')->on('users');
             $table->uuid('code')->uniqid();
-            $table->timestamp('expired_at')->nullable(false);
-            $table->timestamp('created_at')->nullable(false);
+            $table->timestamp('expired_at');
+            $table->timestamp('created_at');
         });
     }
 
