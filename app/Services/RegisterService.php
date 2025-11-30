@@ -17,7 +17,7 @@ class RegisterService {
 
         $userData = [
             'role_id' => $role,
-            'nomor_telepon' => $data['nomor_telp'],
+            'nomor_telepon' => $data['nomor_telepon'],
             'nama' => $data['nama'],
             'password' => Hash::make($data['password'])
         ];
