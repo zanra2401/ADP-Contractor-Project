@@ -13,6 +13,7 @@ use App\Http\Controllers\Pelanggan\PelangganController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CSMiddleware;
 use App\Http\Middleware\PelangganMiddleware;
+use App\Http\Controllers\Admin\UserManagementController;
 
 // use App\Http\Controllers\ForgotPasswordController;
 
@@ -64,7 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
         Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
         Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
-        Route::get('/manajemen-user', fn() => view('admin.manajemen-user'))->name('manajemen-user');
+        Route::get('/manajemen-user', [UserManagementController::class, 'index'])->name('manajemen-user');
         Route::get('/chat', fn() => view('admin.chat'))->name('chat');
         Route::get('/payment', fn() => view('admin.payment'))->name('payment');
         Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');

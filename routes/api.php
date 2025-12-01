@@ -11,7 +11,7 @@ use App\Http\Controllers\Admin\DesignController;
 use App\Http\Controllers\Admin\ProgressApprovalController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProgressController;
-use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminProjectController;
 
 // ==========================================
@@ -43,7 +43,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/progress/pending',           [ProgressApprovalController::class, 'pending']);
     Route::post('/progress/{id}/approve',     [ProgressApprovalController::class, 'approve']);
     Route::post('/progress/{id}/reject',      [ProgressApprovalController::class, 'reject']);
-
 });
 
 
