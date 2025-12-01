@@ -30,7 +30,7 @@ class PelangganController extends Controller
 
         try {
             $user->save();
-            return redirect()->route('pelanggan.login');
+            return redirect()->route('login');
         } catch (Exception $e) {
             return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");
         }

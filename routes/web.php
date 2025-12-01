@@ -11,6 +11,7 @@ use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\LoginMiddleware;
 use App\Http\Controllers\Pelanggan\PelangganController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CSMiddleware;
 use App\Http\Middleware\PelangganMiddleware;
 
 // use App\Http\Controllers\ForgotPasswordController;
@@ -111,13 +112,11 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
 });
 
 /* --------------------- CUSTOMER SERVICE ---------------------- */
-Route::prefix('cs')->name('cs.')->group(function () {
-
-    
-
-    // Ingat folder view HARUS "CS/..." (huruf besar)
-    Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');
-    Route::get('/profil', fn() => view('CS.profil'))->name('profil');
+Route::prefix('cs')->name('cs.')->group(function () {    
+    Route::middleware([AuthMiddleware::class, CSMiddleware::class])->group(function () {
+        Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');
+        Route::get('/profil', fn() => view('CS.profil'))->name('profil');
+    });
 });
 
 /* --------------------- SUPERADMIN ---------------------- */
