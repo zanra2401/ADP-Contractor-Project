@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureTelpNumValid
+class AuthMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,14 +15,9 @@ class EnsureTelpNumValid
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $validated = $request->validate(
-            [
-                'nomor_telp' => 'max:12|required|regex:/^[0-9]{1,12}$/|unique:App\Models\User,nomor_telepon'
-            ],
-            [
-                'nomor_telp.*' => 'Nomor Telepon Tidak Valid'
-            ]
-        );
+        if (!$request->user()) {
+            return redirect()->to('login')->with('error', 'Unauthorized');
+        }
 
         return $next($request);
     }

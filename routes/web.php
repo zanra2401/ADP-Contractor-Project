@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 
 // RUTE PENGGUNA
 Route::controller(PengunjungController::class)->group(function () {
-    Route::post('/user/pengunjung/register', 'createPengunjung')->withoutMiddleware(VerifyCsrfToken::class);
+    Route::post('/user/pengunjung/register', 'register')->withoutMiddleware(VerifyCsrfToken::class);
 });
 
 // Chat Route

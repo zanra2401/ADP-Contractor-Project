@@ -16,7 +16,6 @@ class MessageController extends Controller
 {
     public function sendMessage(MessageRequest $message): Response {
         try {
-
             $path = $message->media->store('uploads', 'public');
     
             $chat = Chat::create([

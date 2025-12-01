@@ -10,20 +10,29 @@ use Illuminate\Support\Facades\Redirect;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Exception;
 
 class PengunjungController extends Controller
 {
-    public function Register(RegisterPengunjungRequest $user): RedirectResponse {    
+    public function register(RegisterPengunjungRequest $user): RedirectResponse {    
 
         $role = Role::where("nama_Role", "pengunjung")->first();
 
         $data = [
-            'nomor_telp' => $user->nomor_telepon,
+            'nomor_telepon' => $user->nomor_telepon,
             'password' => Hash::make($user->password),
             'nama' => $user->nama,
-            'role' => $role->id
+            'role_id' => $role->id
         ];
 
-        return redirect('/pengunjung/activate');
+        $user = User::create($data);
+
+        try {
+            $user->save();
+            return redirect('/pengunjung/activate');
+        } catch (Exception $e) {
+            return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");
+        }
     }
 }
