@@ -19,7 +19,7 @@ class LoginMiddleware
         if (Auth::guard('web')->check()) {
             return redirect()->route("pelanggan.dashboard");
         }
-
+        
         return $next($request);
     }
 }

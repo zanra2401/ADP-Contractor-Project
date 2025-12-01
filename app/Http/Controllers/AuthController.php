@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pelanggan;
+namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthRequest;
 use App\Models\User;
@@ -12,11 +12,20 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class AuthController extends Controller
 {
-    public function authPelanggan(AuthRequest $user): RedirectResponse {
+    public function auth(AuthRequest $user): RedirectResponse {
 
         if (Auth::guard('web')->attempt(['nomor_telepon' => $user->nomor_telepon, 'password' => $user->password])) {
+            $role = Auth::user()->role->nama_role;
             $user->session()->regenerate();
-            return redirect()->route('pelanggan.dashboard');
+            switch ($role) {
+                case 'pelanggan':
+                    return redirect()->route('pelanggan.dashboard');
+                    break;
+                
+                case 'admin':
+                    return redirect()->route('admin.dashboard');
+                    break;
+            }
         }
 
         return back()->withErrors([
@@ -27,11 +36,10 @@ class AuthController extends Controller
 
     public function logout(Request $request): RedirectResponse {
         Auth::logout();
-
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
 
-        return redirect()->route("pelanggan.login");
+        return redirect()->route("login");
     }
 }

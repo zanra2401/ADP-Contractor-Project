@@ -6,10 +6,12 @@ use App\Http\Middleware\EnsureTelpNumValid;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Pelanggan\AuthController as PelangganAuthController;
+use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\LoginMiddleware;
 use App\Http\Controllers\Pelanggan\PelangganController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\PelangganMiddleware;
 
 // use App\Http\Controllers\ForgotPasswordController;
 
@@ -19,16 +21,13 @@ use App\Http\Controllers\Pelanggan\PelangganController;
 |--------------------------------------------------------------------------
 */
 
-// RUTE PENGGUNA
-// Chat Route
-// Route::controller(MessageController::class)->group(function () {
-//     Route::get('/chat', function () {
-//         return view('TestChat');
-//     });
 
-//     Route::post('/message', 'sendMessage');
-// });
 
+Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
+    LoginMiddleware::class
+]);
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 
@@ -59,21 +58,19 @@ Route::get('/', fn() => view('welcome'))->name('home');
 
 /* --------------------- ADMIN ---------------------- */
 Route::prefix('admin')->name('admin.')->group(function () {
-
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-
-    Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
-    Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
-    Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
-    Route::get('/manajemen-user', fn() => view('admin.manajemen-user'))->name('manajemen-user');
-    Route::get('/chat', fn() => view('admin.chat'))->name('chat');
-    Route::get('/payment', fn() => view('admin.payment'))->name('payment');
-
-    // Fitur proyek tambahan
-    Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');
-    Route::get('/upload-progress', fn() => view('admin.upload-progress'))->name('upload-progress');
-    Route::get('/approve-progress', fn() => view('admin.approve-progress'))->name('approve-progress');
-    Route::get('/set-harga', fn() => view('admin.set-harga'))->name('set-harga');
+    Route::middleware([AuthMiddleware::class, AdminMiddleware::class])->group(function () {
+        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
+        Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
+        Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
+        Route::get('/manajemen-user', fn() => view('admin.manajemen-user'))->name('manajemen-user');
+        Route::get('/chat', fn() => view('admin.chat'))->name('chat');
+        Route::get('/payment', fn() => view('admin.payment'))->name('payment');
+        Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');
+        Route::get('/upload-progress', fn() => view('admin.upload-progress'))->name('upload-progress');
+        Route::get('/approve-progress', fn() => view('admin.approve-progress'))->name('approve-progress');
+        Route::get('/set-harga', fn() => view('admin.set-harga'))->name('set-harga');
+    });
 });
 
 /* --------------------- PELANGGAN ---------------------- */
@@ -83,26 +80,25 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
-    Route::controller(PelangganAuthController::class)->group(function () {
-        Route::post('/login', 'authPelanggan')->name('login');
-        Route::post('/logout', 'logout')->name('logout');
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('/login', 'auth')->name('login');
     });
 
-    Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
-        LoginMiddleware::class
-    ]);
+
 
     Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
-    Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
-        ->name('dashboard')
-        ->middleware([AuthMiddleware::class]);
-
-    Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
-    Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
-    Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
-    Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
+    Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
+        Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
+            ->name('dashboard')
+            ->middleware([AuthMiddleware::class]);
+    
+        Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
+        Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
+        Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+        Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
+    });
 });
 
 /* --------------------- PENGAWAS ---------------------- */

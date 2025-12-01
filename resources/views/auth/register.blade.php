@@ -77,7 +77,7 @@
 
             <p class="mt-4 text-center text-sm text-gray-600">
                 Sudah punya akun?
-                <a href="{{ route('pelanggan.login') }}" class="font-medium text-blue-600 hover:text-blue-500 transition duration-150 ease-in-out">
+                <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-500 transition duration-150 ease-in-out">
                     Masuk di sini
                 </a>
             </p>

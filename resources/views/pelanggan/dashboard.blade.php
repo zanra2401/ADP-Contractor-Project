@@ -52,7 +52,7 @@
                     </a>
                     
                     <!-- Tombol Logout -->
-                    <form method="POST" action="{{ route('pelanggan.logout') }}" class="inline">
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">
                             Logout

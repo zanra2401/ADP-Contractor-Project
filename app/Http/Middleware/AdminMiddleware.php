@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
-class AuthMiddleware
+class AdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,11 +16,10 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd(Auth::guard('web')->check());
-        if (!Auth::guard('web')->check()) {
-            return redirect()->route('login')->with('error', 'Silakan Login terlebih dahulu');
+        $user = Auth::user();
+        if ($user->role->nama_role != "admin") {
+            return response()->redirectToRoute("logout")->with('error', "Silakan Login");
         }
-
         return $next($request);
     }
 }
