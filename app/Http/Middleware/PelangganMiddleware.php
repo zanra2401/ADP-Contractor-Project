@@ -18,7 +18,10 @@ class PelangganMiddleware
     {
         $user = Auth::user()->role;
         if ($user->nama_role != "pengunjung") {
-            return response()->redirectToRoute("logout")->with('error', "Silakan Login");
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return response()->redirectToRoute("login")->with('error', "Silakan Login");
         }
 
         return $next($request);

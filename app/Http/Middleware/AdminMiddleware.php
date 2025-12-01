@@ -18,7 +18,10 @@ class AdminMiddleware
     {
         $user = Auth::user();
         if ($user->role->nama_role != "admin") {
-            return response()->redirectToRoute("logout")->with('error', "Silakan Login");
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return response()->redirectToRoute("login")->with('error', "Silakan Login");
         }
         return $next($request);
     }
