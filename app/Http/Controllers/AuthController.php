@@ -25,6 +25,13 @@ class AuthController extends Controller
                 case 'admin':
                     return redirect()->route('admin.dashboard');
                     break;
+
+                case 'super_admin':
+                    return redirect()->route('admin.manajemen-admin');
+                    break;
+                case 'pengawas':
+                    return redirect()->route('pengawas.dashboard');
+                    break;
             }
         }
 
