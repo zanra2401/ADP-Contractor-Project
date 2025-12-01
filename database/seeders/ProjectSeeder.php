@@ -24,6 +24,7 @@ class ProjectSeeder extends Seeder
             'deskripsi' => 'Proyek pembangunan rumah tipe minimalis modern.',
             'harga' => 250000000.00,
             'alamat' => 'Jl. Mawar No.123',
+            'file_path' => 'projects/rumah_minimalis.pdf',
             'tanggal_mulai' => Carbon::now(),
             'tanggal_selesai' => Carbon::now()->addMonths(3),
         ]);

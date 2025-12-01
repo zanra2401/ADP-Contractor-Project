@@ -120,7 +120,13 @@
                             <p class="text-xs text-green-600 flex items-center">
                                 <span class="h-2 w-2 bg-green-500 rounded-full mr-1"></span> Online
                             </p>
+                            
                         </div>
+                        <button 
+                            onclick="openHargaModal( {{ $pengunjung_id ?? 1 }} , {{ $design_id ?? 1 }} )"
+                            class="inline-flex justify-center p-2 rounded-full text-white bg-blue-600 hover:bg-blue-700">
+                            Tentukan Harga
+                        </button>
                     </div>
                     
                     <!-- Isi Chat -->
@@ -166,6 +172,99 @@
             </div>
         </main>
     </div>
+        <!-- MODAL TENTUKAN HARGA -->
+    <div id="hargaModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
+            <h2 class="text-xl font-bold mb-4">Tentukan Harga Proyek</h2>
+
+            <input type="hidden" id="pengawas_id" value="{{ Auth::user()->id }}">
+            <input type="hidden" id="pengunjung_id">
+            <input type="hidden" id="design_id">
+
+            <div class="space-y-3">
+                <div>
+                    <label class="text-sm font-semibold">Nama Proyek</label>
+                    <input id="nama_proyek" type="text" class="w-full p-2 border rounded">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold">Deskripsi</label>
+                    <textarea id="deskripsi" class="w-full p-2 border rounded"></textarea>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold">Harga (Rp)</label>
+                    <input id="harga" type="number" class="w-full p-2 border rounded">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold">Alamat Proyek</label>
+                    <textarea id="alamat" class="w-full p-2 border rounded"></textarea>
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold">Tanggal Mulai</label>
+                    <input id="tanggal_mulai" type="date" class="w-full p-2 border rounded">
+                </div>
+
+                <div>
+                    <label class="text-sm font-semibold">Tanggal Selesai</label>
+                    <input id="tanggal_selesai" type="date" class="w-full p-2 border rounded">
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-4 space-x-3">
+                <button onclick="closeHargaModal()" class="px-4 py-2 bg-gray-300 rounded">Batal</button>
+                <button onclick="submitHarga()" class="px-4 py-2 bg-blue-600 text-white rounded">Kirim</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function openHargaModal(pengunjungId, designId) {
+        document.getElementById("pengunjung_id").value = pengunjungId;
+        document.getElementById("design_id").value = designId;
+        document.getElementById("hargaModal").classList.remove("hidden");
+        document.getElementById("hargaModal").classList.add("flex");
+    }
+
+    function closeHargaModal() {
+        document.getElementById("hargaModal").classList.add("hidden");
+    }
+
+    // SUBMIT DATA
+    function submitHarga() {
+        const payload = {
+            pengawas_id: document.getElementById("pengawas_id").value,
+            pengunjung_id: document.getElementById("pengunjung_id").value,
+            design_id: document.getElementById("design_id").value,
+            nama_proyek: document.getElementById("nama_proyek").value,
+            deskripsi: document.getElementById("deskripsi").value,
+            harga: document.getElementById("harga").value,
+            alamat: document.getElementById("alamat").value,
+            tanggal_mulai: document.getElementById("tanggal_mulai").value,
+            tanggal_selesai: document.getElementById("tanggal_selesai").value
+        };
+
+        fetch('/api/admin/projects', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(response => {
+            alert("Harga proyek berhasil dikirim!");
+            closeHargaModal();
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Terjadi kesalahan saat mengirim data.");
+        });
+    }
+    </script>
 
 </body>
 </html>

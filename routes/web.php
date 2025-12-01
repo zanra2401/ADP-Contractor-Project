@@ -24,6 +24,9 @@ use App\Http\Controllers\Admin\UserManagementController;
 */
 
 
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/login', 'auth')->name('login');
+});
 
 Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
     LoginMiddleware::class
@@ -82,9 +85,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
-    Route::controller(AuthController::class)->group(function () {
-        Route::post('/login', 'auth')->name('login');
-    });
 
 
 
@@ -110,6 +110,7 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
     Route::get('/chat', fn() => view('pengawas.chat'))->name('chat');
     Route::get('/detail-proyek', fn() => view('pengawas.detail-proyek'))->name('detail-proyek');
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
+    // Route::post('/admin/projects', [AdminProjectController::class, 'store']);
 });
 
 /* --------------------- CUSTOMER SERVICE ---------------------- */
@@ -122,5 +123,5 @@ Route::prefix('cs')->name('cs.')->group(function () {
 
 /* --------------------- SUPERADMIN ---------------------- */
 Route::prefix('superadmin')->name('superadmin.')->group(function () {
-    Route::get('/kelola-admin', fn() => view('superadmin.manajemen-admin'))->name('kelola-admin');
+    Route::get('/manajemen-admin', fn() => view('superadmin.manajemen-admin'))->name('manajemen-admin');
 });
