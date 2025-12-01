@@ -14,9 +14,6 @@ class ProgressController extends Controller
     public function __construct(ProgressService $service)
     {
         $this->service = $service;
-
-        // Ensure user is authenticated for all endpoints in this controller (adjust middleware if you use Sanctum/session)
-        $this->middleware('auth:sanctum')->except([]); // or 'auth' for session-based
     }
 
     // Create new progress (admin only).
