@@ -43,7 +43,6 @@ Route::prefix('admin')->group(function () {
     Route::get('/progress/pending',           [ProgressApprovalController::class, 'pending']);
     Route::post('/progress/{id}/approve',     [ProgressApprovalController::class, 'approve']);
     Route::post('/progress/{id}/reject',      [ProgressApprovalController::class, 'reject']);
-
 });
 
 
