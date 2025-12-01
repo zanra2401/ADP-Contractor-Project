@@ -16,7 +16,7 @@ class UserController extends Controller
     ): RedirectResponse {    
 
         $data = [
-            'nomor_telp' => $request->input('nomor_telp'),
+            'nomor_telepon' => $request->input('nomor_telepon'),
             'password' => $request->input('password'),
             'nama' => $request->input('nama')
         ];
