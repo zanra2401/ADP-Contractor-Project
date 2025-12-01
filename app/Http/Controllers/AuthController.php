@@ -25,6 +25,10 @@ class AuthController extends Controller
                 case 'admin':
                     return redirect()->route('admin.dashboard');
                     break;
+                
+                case 'customer_service':
+                    return redirect()->route('cs.dashboard');
+                    break;
             }
         }
 

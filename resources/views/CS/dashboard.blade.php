@@ -46,112 +46,169 @@
         </div>
     </nav>
 
-    <!-- KONTEN UTAMA -->
+   <!-- KONTEN CHAT -->
     <div class="py-10">
         <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold leading-tight text-gray-900">
-                Chat Masuk dari Pengunjung
+                Hubungi Kami
             </h1>
+            <p class="mt-2 text-gray-600">Kontak Pelanggan.</p>
         </header>
         
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-            <div class="flex h-[70vh] bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="flex h-[70vh] bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
                 
                 <!-- DAFTAR KONTAK (KIRI) -->
+
                 <div class="w-1/3 border-r border-gray-200 flex flex-col">
-                    <div class="p-4 border-b border-gray-200">
-                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Cari pengunjung...">
+                    <div class="p-4 border-b border-gray-200 bg-gray-50">
+                        <h2 class="text-lg font-semibold text-gray-700">Kontak Saya</h2>
                     </div>
                     <ul class="divide-y divide-gray-200 overflow-y-auto flex-1">
-                        <!-- Kontak 1 (Aktif) -->
-                        <li class="p-4 flex items-center bg-blue-50 cursor-pointer border-l-4 border-blue-600">
-                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=Rina&background=random" alt="Rina">
-                            <div class="ml-3 flex-1 min-w-0">
-                                <div class="flex justify-between">
-                                    <p class="text-sm font-medium text-gray-900 truncate">Rina (Pengunjung)</p>
-                                    <span class="text-xs text-gray-500">10:30</span>
-                                </div>
-                                <p class="text-sm text-blue-600 font-semibold truncate">Halo, saya mau tanya...</p>
-                            </div>
-                            <span class="ml-2 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">1</span>
-                        </li>
-                        
-                        <!-- Kontak 2 -->
-                        <li class="p-4 flex items-center hover:bg-gray-50 cursor-pointer transition">
-                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=Joko&background=random" alt="Joko">
-                            <div class="ml-3 flex-1 min-w-0">
-                                <div class="flex justify-between">
-                                    <p class="text-sm font-medium text-gray-900 truncate">Joko (Pengunjung)</p>
-                                    <span class="text-xs text-gray-500">Kemarin</span>
-                                </div>
-                                <p class="text-sm text-gray-500 truncate">Oke, terima kasih infonya.</p>
-                            </div>
-                        </li>
-                        
-                        <!-- Kontak 3 -->
-                        <li class="p-4 flex items-center hover:bg-gray-50 cursor-pointer transition">
-                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=Ahmad&background=random" alt="Ahmad">
-                            <div class="ml-3 flex-1 min-w-0">
-                                <div class="flex justify-between">
-                                    <p class="text-sm font-medium text-gray-900 truncate">Bpk. Ahmad (Klien)</p>
-                                    <span class="text-xs text-gray-500">Kemarin</span>
-                                </div>
-                                <p class="text-sm text-gray-500 truncate">Saya ada masalah pembayaran...</p>
-                            </div>
-                        </li>
+                        @foreach ($contacts as $contact)
+                            <li>
+                                <a href="{{ route('cs.dashboard', ['rid' => $contact->id]) }}" class="p-4 flex items-cente cursor-pointer {{ $rid == $contact->id ? 'border-l-4 border-blue-600 bg-blue-50' : '' }} hover:bg-blue-100 transition">
+                                    <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ $contact->nama }}&background=random" alt=<?= $contact->role->nama ?>>
+                                    <div class="ml-3 flex-1 min-w-0">
+                                        <div class="flex justify-between">
+                                            <p class="text-sm font-medium text-gray-900 truncate"><?= $contact->nama ?></p>
+                                            <span class="text-xs text-gray-500">{{ $contact['last_message'] ? $contact['last_time'] : '' }}</span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 truncate">{{ $contact['last_message'] ? $contact['last_message'] : '...' }}</p>
+                                    </div>
+                                    @if($contact['unread'] > 0)
+                                        <span class="ml-2 bg-blue-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center"> {{ $contact['unread'] }} </span>
+                                    @endif
+                                </a>
+                            </li>
+                        @endforeach
                     </ul>
                 </div>
                 
                 <!-- JENDELA CHAT (KANAN) -->
-                <div class="w-2/3 flex flex-col">
-                    <!-- Header Chat -->
-                    <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-                        <h2 class="text-lg font-semibold text-gray-900">Rina (Pengunjung Baru)</h2>
-                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">Online</span>
-                    </div>
-                    
-                    <!-- Isi Chat -->
-                    <div class="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
-                        <!-- Chat dari Pengunjung -->
-                        <div class="flex">
-                            <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-lg rounded-tl-none max-w-xs shadow-sm">
-                                <p class="text-sm">Halo, saya mau tanya, untuk renovasi dapur kira-kira harganya berapa ya?</p>
-                                <span class="text-xs text-gray-400 block text-right mt-1">10:30</span>
+                @if ($rid)
+                        <div class="w-2/3 flex flex-col">
+                            <!-- Header Chat -->
+                            <div class="p-4 border-b border-gray-200 bg-white flex justify-between items-center shadow-sm z-10">
+                                <div>
+                                    <h2 class="text-lg font-bold text-gray-800">{{ $rcontact->nama }}</h2>
+                                    <p class="text-xs text-green-600 flex items-center">
+                                        <span class="h-2 w-2 bg-green-500 rounded-full mr-1"></span> Online
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <!-- Chat dari CS (Anda) -->
-                        <div class="flex justify-end">
-                            <div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-xs shadow-md">
-                                <p class="text-sm">Selamat pagi, Ibu Rina. Tentu, untuk renovasi harganya bervariasi tergantung luas dan material yang digunakan.</p>
-                                <span class="text-xs text-blue-100 block text-right mt-1">10:31</span>
+                            
+                            <!-- Isi Chat -->
+                            <div id='message-container' class="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
+                                @foreach ($messages as $message)
+
+                                    @if ($rid != $message->pengirim_id)
+                                        <!-- Chat Saya (Kanan) -->
+                                        <div class="flex justify-end">
+                                            <div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-xs shadow-md">
+                                                <p class="text-sm">{{ $message->pesan }}</p>
+                                                <span class="text-xs text-blue-100 block text-right mt-1">{{ \Illuminate\Support\Carbon::parse($message->waktu_kirim)->format("H:i") }}</span>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <!-- Chat Lawan (Kiri) -->
+                                        <div class="flex">
+                                            <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-lg rounded-tl-none max-w-xs shadow-sm">   
+                                                <p class="text-sm">{{ $message->pesan }}</p>
+                                                <span class="text-xs text-gray-400 block text-right mt-1">{{ \Illuminate\Support\Carbon::parse($message->waktu_kirim)->format('H:i') }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    
+                                @endforeach
                             </div>
-                        </div>
-                        
-                        <!-- Chat dari CS (Anda) -->
-                         <div class="flex justify-end">
-                            <div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-xs shadow-md">
-                                <p class="text-sm">Apakah Ibu sudah memiliki desain atau ukuran ruangannya?</p>
-                                <span class="text-xs text-blue-100 block text-right mt-1">10:31</span>
-                            </div>
+                            
+                            <!-- Input Chat -->
+                            <div class="p-4 bg-white border-t border-gray-200">
+                                    <form id="chatForm" enctype="multipart/form-data" class="flex items-center space-x-3">
+
+                                        <!-- Input teks -->
+                                        <input 
+                                            type="text" 
+                                            name="pesan"
+                                            placeholder="Ketik balasan Anda..."
+                                            class="flex-1 px-4 py-2 border border-gray-300 rounded-full
+                                            focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        >
+
+                                        <!-- Tombol upload file -->
+                                        <label id="fileBtn" class="p-2 rounded-full bg-gray-200 text-gray-700 
+                                            hover:bg-gray-300 cursor-pointer transition shadow-sm">
+
+                                            <input 
+                                                type="file" 
+                                                name="media"
+                                                id="fileInput"
+                                                class="hidden"
+                                                accept="image/*,video/*"
+                                            >
+
+                                            <!-- Icon upload -->
+                                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M4 3a2 2 0 00-2 2v8a2 2 0 002 2h4v-2H4V5h12v8h-4v2h4a2 2 0 002-2V5a2 2 0 00-2-2H4z"/>
+                                                <path d="M9 12V7a1 1 0 112 0v5h2l-3 3-3-3h2z"/>
+                                            </svg>
+                                        </label>
+
+                                        <!-- Tombol kirim -->
+                                        <button 
+                                            type="submit"
+                                            class="inline-flex justify-center p-2 rounded-full text-white bg-blue-600 
+                                            hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 
+                                            focus:ring-blue-500 shadow-md transition"
+                                        >
+                                            <svg class="h-5 w-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                                            </svg>
+                                        </button>
+
+                                    </form>
+                                </div>
+
+
                         </div>
                     </div>
-                    
-                    <!-- Input Chat -->
-                    <div class="p-4 bg-white border-t border-gray-200">
-                        <div class="flex items-center space-x-3">
-                            <input type="text" class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Ketik balasan Anda...">
-                            <button class="inline-flex justify-center p-2 rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <svg class="h-5 w-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                @endif
         </main>
     </div>
+    <script>
+        document.getElementById('fileBtn').addEventListener('click', () => {
+            document.getElementById('fileInput').click();
+        });
 
+        document.getElementById('chatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            let formData = new FormData(this);
+
+            formData.append('penerima_id', '{{ $rid }}');
+
+            let response = await fetch("{{ route('message.send') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: formData
+            });
+
+            let data = await response.json();
+
+            // Reset field input teks & file
+            this.reset();
+
+        });
+
+        window.chtChannel = "{{ 'chat.' . (($rid > Auth::id()) ?  Auth::id() . "." . $rid : $rid . "." . Auth::id()) }}";
+
+        window.my_id = '{{ Auth::id() }}';
+
+        document.getElementById('message-container').scroll(0, document.getElementById('message-container').scrollHeight);
+    </script>
+    @vite(['resources/js/message.js'])
 </body>
 </html>

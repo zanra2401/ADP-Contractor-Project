@@ -12,6 +12,7 @@ use App\Http\Middleware\LoginMiddleware;
 use App\Http\Controllers\Pelanggan\PelangganController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CSMiddleware;
+use App\Http\Controllers\CS\CSController;
 use App\Http\Middleware\PelangganMiddleware;
 
 // use App\Http\Controllers\ForgotPasswordController;
@@ -28,8 +29,13 @@ Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
     LoginMiddleware::class
 ]);
 
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/login', 'auth')->name('login');
+});
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::post('/message_send', [MessageController::class, 'sendMessage'])->name('message.send');
 
 
 /*
@@ -81,12 +87,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
-    Route::controller(AuthController::class)->group(function () {
-        Route::post('/login', 'auth')->name('login');
-    });
-
-
-
     Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
@@ -96,7 +96,7 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
             ->middleware([AuthMiddleware::class]);
     
         Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
-        Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
+        Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
     });
@@ -114,7 +114,7 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
 /* --------------------- CUSTOMER SERVICE ---------------------- */
 Route::prefix('cs')->name('cs.')->group(function () {    
     Route::middleware([AuthMiddleware::class, CSMiddleware::class])->group(function () {
-        Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');
+        Route::get('/dashboard/{rid?}', [CSController::class, 'chat'])->name('dashboard');
         Route::get('/profil', fn() => view('CS.profil'))->name('profil');
     });
 });

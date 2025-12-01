@@ -22,7 +22,7 @@ class MessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pesan' => 'required_withoud:media_path|nullable|string',
+            'pesan' => 'required_without:media_path|nullable|string',
             'media' => 'required_without:pesan|nullable|file|max:102400',
             'penerima_id' => 'required|string|exists:users,id'
         ];

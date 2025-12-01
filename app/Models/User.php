@@ -46,4 +46,12 @@ class User extends Authenticable
     public function activeForgetCode(): HasOne {
         return $this->hasOne(ForgetCode::class, 'user_id', 'id')->where('expired_at', '>', now())->latest('created_at');
     }
+
+    public function chatsAsSender(): HasMany {
+        return $this->hasMany(Chat::class, 'pengirim_id', 'id');
+    }
+
+    public function chatsAsReceiver(): HasMany {
+        return $this->hasMany(Chat::class, 'penerima_id', 'id');
+    }
 }

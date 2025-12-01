@@ -15,8 +15,8 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('pengirim_id')->references('id')->on('users');
             $table->foreignUlid('penerima_id')->references('id')->on('users');
-            $table->text('pesan');
-            $table->string('media_path', length: 255);
+            $table->text('pesan')->nullable();
+            $table->string('media_path', length: 255)->nullable();
             $table->timestamp('waktu_kirim');
             $table->enum('status', ['terkirim', 'dibaca']);
             $table->timestamps();

@@ -29,7 +29,7 @@
             </div>
 
             <!-- FORM LOGIN -->
-            <form class="mt-8 space-y-6" action="{{ route('pelanggan.login') }}" method="POST">
+            <form class="mt-8 space-y-6" action="{{ route('login') }}" method="POST">
                 
                 @csrf
                 <!-- Input hidden remember (opsional, sesuaikan kebutuhan) -->
