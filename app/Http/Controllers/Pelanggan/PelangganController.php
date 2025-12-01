@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Pengunjung;
+namespace App\Http\Controllers\Pelanggan;
 
 use App\Http\Requests\Pengunjung\RegisterPengunjungRequest;
 use App\Models\Role;
@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Exception;
 
-class PengunjungController extends Controller
+class PelangganController extends Controller
 {
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
 
@@ -30,7 +30,7 @@ class PengunjungController extends Controller
 
         try {
             $user->save();
-            return redirect('/pengunjung/activate');
+            return redirect()->route('pelanggan.login');
         } catch (Exception $e) {
             return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");
         }

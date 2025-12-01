@@ -1,17 +1,17 @@
 <?php
 
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\Pengunjung\PengunjungController;
 use App\Http\Middleware\EnsurePasswordSecure;
 use App\Http\Middleware\EnsureTelpNumValid;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-
-// Controllers
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Pelanggan\AuthController as PelangganAuthController;
+use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\LoginMiddleware;
+use App\Http\Controllers\Pelanggan\PelangganController;
+
+// use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,18 +20,17 @@ use App\Http\Controllers\ForgotPasswordController;
 */
 
 // RUTE PENGGUNA
-Route::controller(PengunjungController::class)->group(function () {
-    Route::post('/user/pengunjung/register', 'register')->withoutMiddleware(VerifyCsrfToken::class);
-});
-
 // Chat Route
-Route::controller(MessageController::class)->group(function () {
-    Route::get('/chat', function () {
-        return view('TestChat');
-    });
+// Route::controller(MessageController::class)->group(function () {
+//     Route::get('/chat', function () {
+//         return view('TestChat');
+//     });
 
-    Route::post('/message', 'sendMessage');
-});
+//     Route::post('/message', 'sendMessage');
+// });
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -42,27 +41,15 @@ Route::controller(MessageController::class)->group(function () {
 // LANDING PAGE
 Route::get('/', fn() => view('welcome'))->name('home');
 
-// LOGIN PAGE
-Route::get('/login', fn() => view('auth.login'))->name('login');
+// Logout
 
-// LOGIN PROSES
-Route::post('/login-process', [AuthController::class, 'login'])->name('login.process');
-
-// LOGOUT
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// REGISTER PAGE
-Route::get('/register', fn() => view('auth.register'))->name('register');
-
-// FORGOT PASSWORD PAGE
-Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
 // FORGOT PASSWORD PROSES
-Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verifyPhone'])
-    ->name('password.verify-phone');
+// Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verifyPhone'])
+//     ->name('password.verify-phone');
 
-Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePassword'])
-    ->name('password.update');
+// Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePassword'])
+//     ->name('password.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +79,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 
-    Route::get('/dashboard', fn() => view('pelanggan.dashboard'))->name('dashboard');
+    Route::controller(PelangganController::class)->group(function () {
+        Route::post('/register', 'register')->name('register');
+    });
+
+    Route::controller(PelangganAuthController::class)->group(function () {
+        Route::post('/login', 'authPelanggan')->name('login');
+        Route::post('/logout', 'logout')->name('logout');
+    });
+
+    Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
+        LoginMiddleware::class
+    ]);
+
+    Route::get('/register', fn() => view('auth.register'))->name('register');
+    Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
+
+    Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
+        ->name('dashboard')
+        ->middleware([AuthMiddleware::class]);
+
     Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
     Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
     Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
@@ -110,6 +116,8 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
 
 /* --------------------- CUSTOMER SERVICE ---------------------- */
 Route::prefix('cs')->name('cs.')->group(function () {
+
+    
 
     // Ingat folder view HARUS "CS/..." (huruf besar)
     Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');

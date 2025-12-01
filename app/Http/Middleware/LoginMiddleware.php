@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
-class AuthMiddleware
+class LoginMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,9 +16,8 @@ class AuthMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // dd(Auth::guard('web')->check());
-        if (!Auth::guard('web')->check()) {
-            return redirect()->route('pelanggan.login')->with('error', 'Silakan Login terlebih dahulu');
+        if (Auth::guard('web')->check()) {
+            return redirect()->route("pelanggan.dashboard");
         }
 
         return $next($request);

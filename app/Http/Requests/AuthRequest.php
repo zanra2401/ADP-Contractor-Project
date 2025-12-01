@@ -22,15 +22,8 @@ class AuthRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_telp' => 'unique:users,nomor_telepon|required|regex:/^[0-9]{1,12}$/|max:12',
+            'nomor_telepon' => 'required|regex:/^[0-9]{1,12}$/|max:12',
             'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*[0-9]).{8,}$/',
-        ];
-    }
-
-    protected function passedValidation(): array
-    {   
-        return [
-            'password' => Hash::make($this->input('password'))
         ];
     }
 }

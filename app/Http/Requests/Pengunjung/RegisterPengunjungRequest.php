@@ -22,9 +22,9 @@ class RegisterPengunjungRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nomor_telp' => 'unique:users,nomor_telepon|required|regex:/^[0-9]{1,12}$/|max:12',
+            'nomor_telepon' => 'unique:users,nomor_telepon|required|regex:/^[0-9]{1,12}$/|max:12',
             'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*[0-9]).{8,}$/|confirmed',
-            'nama' => 'required|regex:/[a-zA-Z _-]{3, 30}/'
+            'nama' => 'required|regex:/^[a-zA-Z ]{3,30}$/'
         ];
     }
 

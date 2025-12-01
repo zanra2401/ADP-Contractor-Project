@@ -21,7 +21,7 @@
             </div>
 
             <!-- Form mengarah ke route 'register.process' -->
-            <form class="mt-8 space-y-6" action="{{ route('register.process') }}" method="POST">
+            <form class="mt-8 space-y-6" action="{{ route('pelanggan.register') }}" method="POST">
                 @csrf
 
                 <div class="rounded-md shadow-sm -space-y-px">
@@ -77,7 +77,7 @@
 
             <p class="mt-4 text-center text-sm text-gray-600">
                 Sudah punya akun?
-                <a href="{{ route('login') }}" class="font-medium text-blue-600 hover:text-blue-500 transition duration-150 ease-in-out">
+                <a href="{{ route('pelanggan.login') }}" class="font-medium text-blue-600 hover:text-blue-500 transition duration-150 ease-in-out">
                     Masuk di sini
                 </a>
             </p>
