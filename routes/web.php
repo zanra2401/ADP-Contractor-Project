@@ -21,7 +21,6 @@ Route::post('/user/pengunjung/register', [UserController::class, 'createPengunju
 Route::get('/halaman-welcome', [UserController::class, 'welcome'])
     ->name('halaman-welcome');
 
-
 /*
 |--------------------------------------------------------------------------
 | 2. ROUTE AUTENTIKASI & HALAMAN DEPAN
@@ -53,7 +52,6 @@ Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verify
 Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePassword'])
     ->name('password.update');
 
-
 /*
 |--------------------------------------------------------------------------
 | 3. ROUTE DASHBOARD PER ROLE
@@ -79,7 +77,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/set-harga', fn() => view('admin.set-harga'))->name('set-harga');
 });
 
-
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 
@@ -90,7 +87,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
 });
 
-
 /* --------------------- PENGAWAS ---------------------- */
 Route::prefix('pengawas')->name('pengawas.')->group(function () {
 
@@ -100,7 +96,6 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
 });
 
-
 /* --------------------- CUSTOMER SERVICE ---------------------- */
 Route::prefix('cs')->name('cs.')->group(function () {
 
@@ -109,8 +104,8 @@ Route::prefix('cs')->name('cs.')->group(function () {
     Route::get('/profil', fn() => view('CS.profil'))->name('profil');
 });
 
-
 /* --------------------- SUPERADMIN ---------------------- */
 Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/kelola-admin', fn() => view('superadmin.manajemen-admin'))->name('kelola-admin');
 });
+
