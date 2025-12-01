@@ -17,7 +17,7 @@
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="{{ route('admin.dashboard') }}" class="nav-link active" aria-current="page">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link text-white">
                         🏠 Dashboard
                     </a>
                 </li>
@@ -73,6 +73,14 @@
                     <a href="{{ route('admin.set-harga') }}" class="nav-link text-white">
                         💲 UI Set Harga proyek
                     </a>
+                </li>
+                <li class="nav-item mt-4 border-top border-secondary pt-3">
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="nav-link text-white w-100 text-start bg-transparent border-0">
+                            🚪 Logout
+                        </button>
+                    </form>
                 </li>
             </ul>
         </nav>
