@@ -29,7 +29,7 @@
             </div>
 
             <!-- FORM LOGIN -->
-            <form class="mt-8 space-y-6" action="{{ route('login.process') }}" method="POST">
+            <form class="mt-8 space-y-6" action="{{ route('pelanggan.login') }}" method="POST">
                 
                 @csrf
                 <!-- Input hidden remember (opsional, sesuaikan kebutuhan) -->
@@ -40,16 +40,17 @@
                     <!-- INPUT NOMOR TELEPON -->
                     <div class="mb-4">
                         <label for="phone-number" class="sr-only">Nomor Telepon</label>
-                        <input id="phone-number" name="phone" type="text" 
-                               value="{{ old('phone') }}" 
+                        <input id="phone-number" name="nomor_telepon" type="text" 
+                               value="{{ old('nomor_telepon') }}" 
                                required 
                                class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm @error('phone') border-red-500 @enderror" 
                                placeholder="Nomor Telepon">
                         
-                        @error('phone')
+                        @error('nomor_telepon')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    
                     
                     <!-- INPUT PASSWORD -->
                     <div>
@@ -86,7 +87,7 @@
             <!-- LINK DAFTAR -->
             <p class="mt-4 text-center text-sm text-gray-600">
                 Belum punya akun?
-                <a href="{{ route('register') }}" class="font-medium text-blue-600 hover:text-blue-500">
+                <a href="{{ route('pelanggan.register') }}" class="font-medium text-blue-600 hover:text-blue-500">
                     Daftar di sini
                 </a>
             </p>

@@ -11,43 +11,43 @@
     <div class="d-flex">
 
         <nav class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px; min-height: 100vh;">
-            <a href="{{ route('dashboard') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <a href="{{ route('admin.dashboard') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                 <span class="fs-4">Admin Panel</span>
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
-                    <a href="{{ route('dashboard') }}" class="nav-link active" aria-current="page">
+                    <a href="{{ route('admin.dashboard') }}" class="nav-link active" aria-current="page">
                         🏠 Dashboard
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('laporan') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.laporan') }}" class="nav-link text-white">
                         📈 Laporan
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('manajemen.konten') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.manajemen-konten') }}" class="nav-link text-white">
                         📝 Manajemen Konten
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('manajemen.proyek') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.manajemen-proyek') }}" class="nav-link text-white">
                         🗂️ Manajemen Proyek
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('manajemen.user') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.manajemen-user') }}" class="nav-link text-white">
                         👥 Manajemen User
                     </a>
                 </li>
                  <li>
-                    <a href="{{ route('chat.admin') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.chat') }}" class="nav-link text-white">
                         💬 Chat Admin
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('payment') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.payment') }}" class="nav-link text-white">
                         💳 UI Payment
                     </a>
                 </li>
@@ -55,22 +55,22 @@
                     <span class="fs-6 text-secondary">Fitur Proyek</span>
                 </li>
                  <li>
-                    <a href="{{ route('simpan.desain') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.simpan-desain') }}" class="nav-link text-white">
                         🎨 UI Simpan desain
                     </a>
                 </li>
                  <li>
-                    <a href="{{ route('upload.progress') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.upload-progress') }}" class="nav-link text-white">
                         📤 UI Upload Progress
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('approve.progress') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.approve-progress') }}" class="nav-link text-white">
                         👍 UI Approve Progress
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('set.harga') }}" class="nav-link text-white">
+                    <a href="{{ route('admin.set-harga') }}" class="nav-link text-white">
                         💲 UI Set Harga proyek
                     </a>
                 </li>

@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureTelpNumValid
+class AdminMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,15 +16,13 @@ class EnsureTelpNumValid
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $validated = $request->validate(
-            [
-                'nomor_telp' => 'max:12|required|regex:/^[0-9]{1,12}$/|unique:App\Models\User,nomor_telepon'
-            ],
-            [
-                'nomor_telp.*' => 'Nomor Telepon Tidak Valid'
-            ]
-        );
-
+        $user = Auth::user();
+        if ($user->role->nama_role != "admin") {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return response()->redirectToRoute("login")->with('error', "Silakan Login");
+        }
         return $next($request);
     }
 }
