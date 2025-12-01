@@ -3,138 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Pelanggan - ADP Konstruksi</title>
-    <!-- Tailwind CSS -->
+    <title>Galeri Desain - ADP Konstruksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 font-sans">
 
-    <!-- NAVBAR -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex">
-                    <!-- LOGO -->
-                    <div class="flex-shrink-0 flex items-center">
+                    <div class="shrink-0 flex items-center">
                         <span class="font-bold text-xl text-blue-600">ADP Konstruksi</span>
                     </div>
-                    
-                    <!-- MENU LINKS -->
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <!-- Dashboard (Aktif) -->
-                        <a href="{{ route('pelanggan.dashboard') }}" 
-                           class="{{ request()->routeIs('pelanggan.dashboard') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Dashboard
-                        </a>
-                        
-                        <!-- Galeri Proyek -->
-                        <a href="{{ route('pelanggan.galeri') }}" 
-                           class="{{ request()->routeIs('pelanggan.galeri') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Galeri Proyek
-                        </a>
-                        
-                        <!-- Chat -->
-                        <a href="{{ route('pelanggan.chat') }}" 
-                           class="{{ request()->routeIs('pelanggan.chat') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Chat
-                        </a>
+                        <a href="{{ route('pelanggan.dashboard') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a>
+                        <a href="{{ route('pelanggan.galeri') }}" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Galeri Proyek</a>
+                        <a href="{{ route('pelanggan.chat') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Chat</a>
                     </div>
                 </div>
-
-                <!-- USER MENU (KANAN) -->
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-                    <span class="text-sm text-gray-700 mr-2">
-                        Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!
-                    </span>
-                    
-                    <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">
-                        Profil Saya
-                    </a>
-                    
-                    <!-- Tombol Logout -->
-                    <form method="POST" action="{{ route('pelanggan.logout') }}" class="inline">
+                    <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</span>
+                    <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil Saya</a>
+                    <form method="POST" action="#" class="inline">
                         @csrf
-                        <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">
-                            Logout
-                        </button>
+                        <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">Logout</button>
                     </form>
                 </div>
             </div>
         </div>
     </nav>
     
-    <!-- KONTEN -->
     <div class="py-10">
-        <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
             <h1 class="text-3xl font-bold leading-tight text-gray-900">
-                Proyek Saya
+                Galeri Desain Proyek
             </h1>
-            <p class="mt-2 text-gray-600">Pantau progres pembangunan proyek Anda secara real-time.</p>
+            <p class="mt-2 text-lg text-gray-600">Temukan inspirasi desain hunian impian Anda dari koleksi terbaik kami.</p>
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     
-                <!-- KARTU 1: SEDANG BERJALAN -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Rumah Tipe 70">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900">Rumah Tipe 70 - Citraland</h3>
-                        <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-yellow-600">Pengerjaan Pondasi</span></p>
-                        
-                        <div class="mt-4">
-                            <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: 25%</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 25%"></div>
-                            </div>
-                        </div>
-    
-                        <div class="mt-6">
-                            <a href="#" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
-                                Lihat Detail Progres
-                            </a>
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                    <div class="relative h-56">
+                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Rumah Minimalis Modern Type 45">
+                        <div class="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 rounded-bl-lg font-semibold text-sm">
+                            Terpopuler
                         </div>
                     </div>
-                </div>
-    
-                <!-- KARTU 2: SELESAI -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Renovasi Dapur">
+
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900">Renovasi Dapur Minimalis</h3>
-                        <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-green-600">Selesai</span></p>
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight mb-2">Rumah Minimalis Modern Tipe 45</h3>
                         
-                        <div class="mt-4">
-                            <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: 100%</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div>
-                            </div>
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="text-sm font-medium text-gray-600">Telah digunakan 128+ kali</span>
                         </div>
-    
-                        <div class="mt-6">
-                            <a href="#" class="w-full text-center block py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
-                                Lihat Galeri Hasil
-                            </a>
-                        </div>
-                    </div>
-                </div>
-    
-                <!-- KARTU 3: MENUNGGU PEMBAYARAN -->
-                <div class="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-orange-400">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-900">Pembangunan Ruko 2 Lantai</h3>
-                        <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-orange-600">Menunggu Pembayaran DP</span></p>
-                        
-                        <p class="mt-4 text-sm text-gray-500">
-                            Proyek Anda siap dimulai. Silakan lakukan pembayaran tahap awal untuk memulai pengerjaan.
+
+                        <p class="text-gray-600 text-sm mb-6 line-clamp-3">
+                            Desain hunian kompak dan efisien untuk keluarga muda. Dilengkapi 2 kamar tidur, 1 kamar mandi, dan ruang terbuka hijau di belakang. Mengutamakan pencahayaan alami dan sirkulasi udara.
                         </p>
     
-                        <div class="mt-6">
-                            <!-- Link ke Halaman Pembayaran -->
-                            <a href="{{ route('pelanggan.pembayaran') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-500 hover:bg-orange-600">
-                                Lakukan Pembayaran
-                            </a>
+                        <a href="{{ route('pelanggan.galeri.detail') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200">
+                            Lihat Detail Desain
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                    <div class="relative h-56">
+                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Rumah Skandinavia 2 Lantai">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight mb-2">Rumah Skandinavia 2 Lantai</h3>
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="text-sm font-medium text-gray-600">Telah digunakan 85 kali</span>
                         </div>
+                        <p class="text-gray-600 text-sm mb-6 line-clamp-3">
+                            Mengusung konsep Skandinavia yang hangat dan fungsional. 3 kamar tidur, 2 kamar mandi, dengan area keluarga yang luas dan balkon di lantai atas. Cocok untuk lahan terbatas.
+                        </p>
+                        <a href="{{ route('pelanggan.galeri.detail') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200">
+                            Lihat Detail Desain
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                    <div class="relative h-56">
+                        <img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Renovasi Dapur Klasik">
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 leading-tight mb-2">Konsep Renovasi Dapur Klasik</h3>
+                        <div class="flex items-center mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-yellow-500 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                            <span class="text-sm font-medium text-gray-600">Telah digunakan 240+ kali</span>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-6 line-clamp-3">
+                            Paket renovasi dapur dengan gaya klasik Amerika. Termasuk kabinet kayu solid, island table marmer, dan pencahayaan gantung yang elegan. Menciptakan suasana hangat untuk memasak.
+                        </p>
+                        <a href="{{ route('pelanggan.galeri.detail') }}" class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200">
+                            Lihat Detail Desain
+                        </a>
                     </div>
                 </div>
     

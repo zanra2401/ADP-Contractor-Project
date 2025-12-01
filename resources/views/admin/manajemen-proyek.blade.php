@@ -22,7 +22,7 @@
                             <th>Nama Proyek</th>
                             <th>Klien</th>
                             <th style="width: 30%;">Progress</th> <th>Status</th>
-                            <th>Aksi</th>
+                            <th>Detail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,8 +36,11 @@
                             </td>
                             <td><span class="badge text-bg-info text-white">In Progress</span></td>
                             <td>
-                                <button class="btn btn-sm btn-warning text-white">Detail</button>
+                                <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
+                                    <i class="bi bi-eye"></i> Lihat Detail
+                                </a>
                             </td>
+
                         </tr>
                         
                         <tr>
@@ -50,7 +53,9 @@
                             </td>
                             <td><span class="badge text-bg-success">Completed</span></td>
                             <td>
-                                <button class="btn btn-sm btn-warning text-white">Detail</button>
+                                <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
+                                    <i class="bi bi-eye"></i> Lihat Detail
+                                </a>
                             </td>
                         </tr>
                     </tbody>
