@@ -68,6 +68,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
         Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
         Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
+        Route::get('/manajemen-proyek/detail', fn() => view('admin.detail-proyek'))->name('proyek.detail');
         Route::get('/manajemen-user', [UserManagementController::class, 'index'])->name('manajemen-user');
         Route::get('/chat', fn() => view('admin.chat'))->name('chat');
         Route::get('/payment', fn() => view('admin.payment'))->name('payment');
@@ -100,6 +101,7 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
+        Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
     });
 });
 
