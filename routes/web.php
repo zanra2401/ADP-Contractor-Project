@@ -87,6 +87,8 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/login', 'auth')->name('login');
     });
 
+    Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+
 
 
     Route::get('/register', fn() => view('auth.register'))->name('register');

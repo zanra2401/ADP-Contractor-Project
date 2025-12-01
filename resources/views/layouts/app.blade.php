@@ -41,11 +41,6 @@
                         👥 Manajemen User
                     </a>
                 </li>
-                 <li>
-                    <a href="{{ route('admin.chat') }}" class="nav-link text-white">
-                        💬 Chat Admin
-                    </a>
-                </li>
                 <li>
                     <a href="{{ route('admin.payment') }}" class="nav-link text-white">
                         💳 UI Payment

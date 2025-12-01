@@ -38,6 +38,12 @@
                            class="{{ request()->routeIs('pelanggan.chat') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                             Chat
                         </a>
+
+                        {{-- pembayaran --}}
+                        <a href="{{ route('pelanggan.pembayaran') }}" 
+                           class="{{ request()->routeIs('pelanggan.pembayaran') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Pembayaran
+                        </a>
                     </div>
                 </div>
 
