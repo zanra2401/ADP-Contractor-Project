@@ -4,9 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsurePasswordSecure
+class LoginMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,14 +16,9 @@ class EnsurePasswordSecure
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $validated = $request->validate(
-            [
-                'password' => 'required|regex:/^(?=.*[A-Za-z])(?=.*[0-9]).{8,}$/|confirmed',
-            ],
-            [
-                'password.*' => 'Password Tidak Valid'
-            ],
-        );
+        if (Auth::guard('web')->check()) {
+            return redirect()->route("pelanggan.dashboard");
+        }
         
         return $next($request);
     }

@@ -1,12 +1,20 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MessageController;
+use App\Http\Middleware\EnsurePasswordSecure;
+use App\Http\Middleware\EnsureTelpNumValid;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
-
-// Controllers
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Middleware\AuthMiddleware;
+use App\Http\Middleware\LoginMiddleware;
+use App\Http\Controllers\Pelanggan\PelangganController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\CSMiddleware;
+use App\Http\Middleware\PelangganMiddleware;
+
+// use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +22,15 @@ use App\Http\Controllers\ForgotPasswordController;
 |--------------------------------------------------------------------------
 */
 
-Route::post('/user/pengunjung/register', [UserController::class, 'createPengunjung'])
-    ->withoutMiddleware(VerifyCsrfToken::class)
-    ->name('register.process');
 
-Route::get('/halaman-welcome', [UserController::class, 'welcome'])
-    ->name('halaman-welcome');
+
+Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
+    LoginMiddleware::class
+]);
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -30,27 +41,15 @@ Route::get('/halaman-welcome', [UserController::class, 'welcome'])
 // LANDING PAGE
 Route::get('/', fn() => view('welcome'))->name('home');
 
-// LOGIN PAGE
-Route::get('/login', fn() => view('auth.login'))->name('login');
+// Logout
 
-// LOGIN PROSES
-Route::post('/login-process', [AuthController::class, 'login'])->name('login.process');
-
-// LOGOUT
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// REGISTER PAGE
-Route::get('/register', fn() => view('auth.register'))->name('register');
-
-// FORGOT PASSWORD PAGE
-Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
 // FORGOT PASSWORD PROSES
-Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verifyPhone'])
-    ->name('password.verify-phone');
+// Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verifyPhone'])
+//     ->name('password.verify-phone');
 
-Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePassword'])
-    ->name('password.update');
+// Route::post('/forgot-password/update', [ForgotPasswordController::class, 'updatePassword'])
+//     ->name('password.update');
 
 /*
 |--------------------------------------------------------------------------
@@ -60,31 +59,47 @@ Route::post('/forgot-password/update', [ForgotPasswordController::class, 'update
 
 /* --------------------- ADMIN ---------------------- */
 Route::prefix('admin')->name('admin.')->group(function () {
-
-    Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-
-    Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
-    Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
-    Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
-    Route::get('/manajemen-user', fn() => view('admin.manajemen-user'))->name('manajemen-user');
-    Route::get('/chat', fn() => view('admin.chat'))->name('chat');
-    Route::get('/payment', fn() => view('admin.payment'))->name('payment');
-
-    // Fitur proyek tambahan
-    Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');
-    Route::get('/upload-progress', fn() => view('admin.upload-progress'))->name('upload-progress');
-    Route::get('/approve-progress', fn() => view('admin.approve-progress'))->name('approve-progress');
-    Route::get('/set-harga', fn() => view('admin.set-harga'))->name('set-harga');
+    Route::middleware([AuthMiddleware::class, AdminMiddleware::class])->group(function () {
+        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
+        Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
+        Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
+        Route::get('/manajemen-user', fn() => view('admin.manajemen-user'))->name('manajemen-user');
+        Route::get('/chat', fn() => view('admin.chat'))->name('chat');
+        Route::get('/payment', fn() => view('admin.payment'))->name('payment');
+        Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');
+        Route::get('/upload-progress', fn() => view('admin.upload-progress'))->name('upload-progress');
+        Route::get('/approve-progress', fn() => view('admin.approve-progress'))->name('approve-progress');
+        Route::get('/set-harga', fn() => view('admin.set-harga'))->name('set-harga');
+    });
 });
 
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 
-    Route::get('/dashboard', fn() => view('pelanggan.dashboard'))->name('dashboard');
-    Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
-    Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
-    Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
-    Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
+    Route::controller(PelangganController::class)->group(function () {
+        Route::post('/register', 'register')->name('register');
+    });
+
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('/login', 'auth')->name('login');
+    });
+
+
+
+    Route::get('/register', fn() => view('auth.register'))->name('register');
+    Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
+
+    Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
+        Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
+            ->name('dashboard')
+            ->middleware([AuthMiddleware::class]);
+    
+        Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
+        Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
+        Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+        Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
+    });
 });
 
 /* --------------------- PENGAWAS ---------------------- */
@@ -97,15 +112,14 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
 });
 
 /* --------------------- CUSTOMER SERVICE ---------------------- */
-Route::prefix('cs')->name('cs.')->group(function () {
-
-    // Ingat folder view HARUS "CS/..." (huruf besar)
-    Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');
-    Route::get('/profil', fn() => view('CS.profil'))->name('profil');
+Route::prefix('cs')->name('cs.')->group(function () {    
+    Route::middleware([AuthMiddleware::class, CSMiddleware::class])->group(function () {
+        Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');
+        Route::get('/profil', fn() => view('CS.profil'))->name('profil');
+    });
 });
 
 /* --------------------- SUPERADMIN ---------------------- */
 Route::prefix('superadmin')->name('superadmin.')->group(function () {
     Route::get('/kelola-admin', fn() => view('superadmin.manajemen-admin'))->name('kelola-admin');
 });
-

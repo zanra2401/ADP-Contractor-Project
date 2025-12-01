@@ -5,8 +5,9 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
-class EnsureCodeIsDigit
+class AuthMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,6 +16,11 @@ class EnsureCodeIsDigit
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // dd(Auth::guard('web')->check());
+        if (!Auth::guard('web')->check()) {
+            return redirect()->route('login')->with('error', 'Silakan Login terlebih dahulu');
+        }
+
         return $next($request);
     }
 }

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Project;
 use App\Services\ProjectService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller as BaseController;
 
-class AdminProjectController extends Controller
+class AdminProjectController extends BaseController
 {
     protected $service;
 
@@ -92,11 +94,11 @@ class AdminProjectController extends Controller
             'status' => 'deleted'
         ]);
     }
-
     private function authorizeAdmin()
     {
-        if (auth()->user()->role_id !== 1) {
+        if (!Auth::check() || Auth::user()->role_id !== 1) {
             abort(403, "Only admins can access this endpoint.");
         }
     }
 }
+

@@ -21,7 +21,7 @@
             </div>
 
             <!-- Form mengarah ke route 'register.process' -->
-            <form class="mt-8 space-y-6" action="{{ route('register.process') }}" method="POST">
+            <form class="mt-8 space-y-6" action="{{ route('pelanggan.register') }}" method="POST">
                 @csrf
 
                 <div class="rounded-md shadow-sm -space-y-px">
