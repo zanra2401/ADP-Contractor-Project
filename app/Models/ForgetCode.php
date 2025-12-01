@@ -20,7 +20,8 @@ class ForgetCode extends Model
     protected $fillable = [ 
         'user_id',
         'code',
-        'expired_at'
+        'expired_at',
+        'created_at'
     ];
 
     public static function booted()

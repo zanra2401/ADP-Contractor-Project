@@ -30,15 +30,6 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             PaymentProgressSeeder::class,
             ChatSeeder::class,
-            ForgetCodeSeeder::class,
-        ]);
-
-
-        // User::factory(10)->create();
-        
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
         ]);
     }
 }
