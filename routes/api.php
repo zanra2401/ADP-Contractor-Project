@@ -12,7 +12,7 @@ use App\Http\Controllers\Admin\ProgressApprovalController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
-use App\Http\Controllers\Auth\AdminProjectController;
+use App\Http\Controllers\AdminProjectController;
 
 // ==========================================
 //   Group khusus ADMIN (prefix: /api/admin)
