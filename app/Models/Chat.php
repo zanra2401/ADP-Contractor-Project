@@ -20,6 +20,7 @@ class Chat extends Model
     protected $fillable = [ 
         "pengirim_id",
         "penerima_id",
+        "media_path",
         "pesan",
         "waktu_kirim",
         "status",

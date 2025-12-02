@@ -106,7 +106,7 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 Route::prefix('pengawas')->name('pengawas.')->group(function () {
 
     Route::get('/dashboard', fn() => view('pengawas.dashboard'))->name('dashboard');
-    Route::get('/chat', fn() => view('pengawas.chat'))->name('chat');
+    Route::get('/chat/{rid?}', [PengawasController::class, 'chat'])->name('chat');
     Route::get('/detail-proyek', fn() => view('pengawas.detail-proyek'))->name('detail-proyek');
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
 });

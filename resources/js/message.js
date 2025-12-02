@@ -16,45 +16,85 @@ window.Echo = new Echo({
 });
 
 
-
-
 const messageContainer = document.getElementById('message-container');
 
 // bisa
 window.Echo.channel(window.chtChannel).listen('MessageSent',  (e) => {
-    console.log(e);
     if (e.message.pengirim_id != window.my_id) {
-        messageContainer.innerHTML = messageContainer.innerHTML + otherChat(e.message.pesan, e.message.waktu_kirim);
-        messageContainer.scroll(0, messageContainer.scrollHeight);
+        messageContainer.innerHTML = messageContainer.innerHTML + otherChat(e.message.pesan, e.message.waktu_kirim, e.message.status, e.message.media_path);
+        setTimeout(messageContainer.scroll(0, messageContainer.scrollHeight), 100);
     } else {
-        messageContainer.innerHTML = messageContainer.innerHTML + myChat(e.message.pesan, e.message.waktu_kirim);
-        messageContainer.scroll(0, messageContainer.scrollHeight);
+        messageContainer.innerHTML = messageContainer.innerHTML + myChat(e.message.pesan, e.message.waktu_kirim, e.message.status, e.message.media_path);
+        setTimeout(messageContainer.scroll(0, messageContainer.scrollHeight), 100);
     }
 });
 
 
-function myChat(pesan, waktu) {
-    const date = new Date(waktu);
-    const hour = String(date.getHours()).padStart(2, '0');
-    const minute = String(date.getMinutes()).padStart(2, '0');
+function renderMedia(media_path) {
+    if (!media_path) return "";
 
-    return `<div class="flex justify-end">
-        <div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-xs shadow-md">
-            <p class="text-sm">${pesan}</p>
-            <span class="text-xs text-blue-100 block text-right mt-1">${hour}:${minute}</span>
-        </div>
-    </div>`
+    const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(media_path);
+
+    if (isImage) {
+        return `
+            <img src="/storage/${media_path}" 
+                 class="rounded mb-2 max-h-48 object-cover">
+        `;
+    }
+
+    return `
+        <a href="/storage/${media_path}" 
+           target="_blank" 
+           class="underline text-blue-200 text-sm block mb-2">
+            Download File
+        </a>
+    `;
 }
 
-function otherChat(pesan, waktu) {
+function myChat(pesan, waktu, status, media_path = null) {
     const date = new Date(waktu);
     const hour = String(date.getHours()).padStart(2, '0');
     const minute = String(date.getMinutes()).padStart(2, '0');
 
-    return `<div class="flex justify-start">
-        <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-lg rounded-tl-none max-w-xs shadow-sm">
-            <p class="text-sm">${pesan}</p>
-            <span class="text-xs text-blue-100 block text-right mt-1">${hour}:${minute}</span>
+    return `
+    <div class="flex justify-end">
+        <div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-xs shadow-md">
+            
+            ${renderMedia(media_path)}
+
+            ${(pesan) ? '<p class="text-sm">' + pesan + '</p>' : '' }
+            <span class="text-xs text-blue-100 block text-right mt-1">
+                ${hour}:${minute}
+                ${readIndicator(status)}
+            </span>
         </div>
     </div>`;
 }
+
+function otherChat(pesan, waktu, status, media_path = null) {
+    const date = new Date(waktu);
+    const hour = String(date.getHours()).padStart(2, '0');
+    const minute = String(date.getMinutes()).padStart(2, '0');
+
+    return `
+    <div class="flex justify-start">
+        <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-lg rounded-tl-none max-w-xs shadow-sm">
+
+            ${renderMedia(media_path)}
+            ${(pesan) ? '<p class="text-sm">' + pesan + '</p>' : '' }
+            <span class="text-xs text-gray-400 block text-right mt-1">
+                ${hour}:${minute}
+                ${readIndicator(status)}
+            </span>
+        </div>
+    </div>`;
+}
+
+
+function readIndicator(status) {
+    if (status === "dibaca") {
+        return `<span class="text-xs text-blue-300 ml-2">dibaca</span>`;
+    }
+    return `<span class="text-xs text-gray-300 ml-2">terkirim</span>`;
+}
+

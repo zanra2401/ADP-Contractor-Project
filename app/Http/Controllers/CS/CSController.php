@@ -15,6 +15,11 @@ class CSController extends Controller
     public function chat(Request $request, String|null $rid = null): View {
         $myId = Auth::id();
 
+        if ($rid) {
+            Chat::where('penerima_id', Auth::id())->where('pengirim_id', $rid)
+                ->update(['status' => 'dibaca']);
+        }
+
         $users = User::where('id', '!=', $myId) // Jangan ambil diri sendiri
             ->where(function ($query) use ($myId) {
                 $query->whereHas('chatsAsSender', function ($q) use ($myId) {
@@ -33,11 +38,6 @@ class CSController extends Controller
             $user['last_message'] = $lastMessage?->pesan;
             $user['last_time'] = Carbon::parse($lastMessage?->waktu_kirim)?->toTimeString();
             $user['unread'] = Chat::getUnreadMessagesWith($user->id)->count();
-        }
-
-        if ($rid) {
-            Chat::where('penerima_id', Auth::id())->where('pengirim_id', $rid)
-                ->update(['status' => 'dibaca']);
         }
         
         return view('CS.dashboard', [

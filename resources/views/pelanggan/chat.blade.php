@@ -1,3 +1,12 @@
+@php
+    function readIndicator($status) {
+        if ($status === 'dibaca') {
+            return '<span class="text-xs text-blue-400 ml-1">dibaca</span>';
+        }
+        return '<span class="text-xs text-gray-400 ml-1">terkirim</span>';
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -109,29 +118,77 @@
                             <div id='message-container' class="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
                                 @foreach ($messages as $message)
 
+                                    @php
+                                        $isImage = $message->media_path && preg_match('/\.(jpg|jpeg|png|gif|webp)$/i', $message->media_path);
+                                    @endphp
+
                                     @if ($rid != $message->pengirim_id)
                                         <!-- Chat Saya (Kanan) -->
                                         <div class="flex justify-end">
                                             <div class="bg-blue-600 text-white p-3 rounded-lg rounded-tr-none max-w-xs shadow-md">
-                                                <p class="text-sm">{{ $message->pesan }}</p>
-                                                <span class="text-xs text-blue-100 block text-right mt-1">{{ \Illuminate\Support\Carbon::parse($message->waktu_kirim)->format("H:i") }}</span>
+
+                                                {{-- Jika ada media --}}
+                                                @if ($message->media_path)
+                                                    @if ($isImage)
+                                                        <img src="{{ asset('storage/' . $message->media_path) }}" class="rounded mb-2 max-h-48 object-cover">
+                                                    @else
+                                                        <a href="{{ asset('storage/' . $message->media_path) }}" target="_blank" class="underline text-blue-200 text-sm block mb-2">
+                                                            Download File
+                                                        </a>
+                                                    @endif
+                                                @endif
+                                                
+                                                @if ($message->pesan)
+                                                    <p class="text-sm">{{ $message->pesan }}</p>
+                                                @endif
+                                                <span class="text-xs text-blue-100 block text-right mt-1">
+                                                    {{ \Illuminate\Support\Carbon::parse($message->waktu_kirim)->format("H:i") }}
+                                                    {!! readIndicator($message->status) !!}
+                                                </span>
                                             </div>
                                         </div>
                                     @else
                                         <!-- Chat Lawan (Kiri) -->
                                         <div class="flex">
-                                            <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-lg rounded-tl-none max-w-xs shadow-sm">   
-                                                <p class="text-sm">{{ $message->pesan }}</p>
-                                                <span class="text-xs text-gray-400 block text-right mt-1">{{ \Illuminate\Support\Carbon::parse($message->waktu_kirim)->format('H:i') }}</span>
+                                            <div class="bg-white border border-gray-200 text-gray-800 p-3 rounded-lg rounded-tl-none max-w-xs shadow-sm">
+
+                                                {{-- Jika ada media --}}
+                                                @if ($message->media_path)
+                                                    @if ($isImage)
+                                                        <img src="{{ asset('storage/' . $message->media_path) }}" class="rounded mb-2 max-h-48 object-cover">
+                                                    @else
+                                                        <a href="{{ asset('storage/' . $message->media_path) }}" target="_blank" class="underline text-blue-600 text-sm block mb-2">
+                                                            Download File
+                                                        </a>
+                                                    @endif
+                                                @endif
+                                                @if ($message->pesan)
+                                                    <p class="text-sm">{{ $message->pesan }}</p>
+                                                @endif
+                                                <span class="text-xs text-gray-400 block text-right mt-1">
+                                                    {{ \Illuminate\Support\Carbon::parse($message->waktu_kirim)->format('H:i') }}
+                                                    {!! readIndicator($message->status) !!}
+                                                </span>
                                             </div>
                                         </div>
                                     @endif
-                                    
+
                                 @endforeach
                             </div>
+
                             
                             <!-- Input Chat -->
                             <div class="p-4 bg-white border-t border-gray-200">
+                                    <!-- Preview Area -->
+                                    <div id="previewArea" class="mb-3 hidden">
+                                        <div class="relative inline-block">
+                                            <div id="previewContent"></div>
+                                            <button id="removePreview" type="button" class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600">
+                                                ×
+                                            </button>
+                                        </div>
+                                    </div>
+
                                     <form id="chatForm" enctype="multipart/form-data" class="flex items-center space-x-3">
 
                                         <!-- Input teks -->
@@ -146,7 +203,6 @@
                                         <!-- Tombol upload file -->
                                         <label id="fileBtn" class="p-2 rounded-full bg-gray-200 text-gray-700 
                                             hover:bg-gray-300 cursor-pointer transition shadow-sm">
-
                                             <input 
                                                 type="file" 
                                                 name="media"
@@ -183,38 +239,110 @@
                 @endif
         </main>
     </div>
-    <script>
-        document.getElementById('fileBtn').addEventListener('click', () => {
-            document.getElementById('fileInput').click();
+<script>
+        // --- Variabel Elemen ---
+        const fileInput = document.getElementById('fileInput');
+        const previewArea = document.getElementById('previewArea');
+        const previewContent = document.getElementById('previewContent');
+        const removePreviewBtn = document.getElementById('removePreview');
+        const chatForm = document.getElementById('chatForm');
+        const messageContainer = document.getElementById('message-container');
+
+        // --- Fungsi Helper: Reset Preview ---
+        function clearPreview() {
+            fileInput.value = ''; // Reset input file
+            previewArea.classList.add('hidden'); // Sembunyikan area preview
+            previewContent.innerHTML = ''; // Hapus konten HTML
+        }
+
+        // --- Event Listener: Saat File Dipilih ---
+        fileInput.addEventListener('change', function (e) {
+            const file = this.files[0];
+            
+            if (file) {
+                const fileType = file.type;
+                const fileURL = URL.createObjectURL(file);
+                
+                // Buka area preview
+                previewArea.classList.remove('hidden');
+                
+                // Cek tipe file untuk menentukan tampilan
+                if (fileType.startsWith('image/')) {
+                    previewContent.innerHTML = `
+                        <img src="${fileURL}" class="h-32 w-auto rounded-lg shadow-sm object-cover border border-gray-200">
+                    `;
+                } else if (fileType.startsWith('video/')) {
+                    previewContent.innerHTML = `
+                        <video src="${fileURL}" controls class="h-32 w-auto rounded-lg shadow-sm border border-gray-200"></video>
+                    `;
+                } else {
+                    // Fallback jika file bukan gambar/video (misal PDF)
+                    previewContent.innerHTML = `
+                        <div class="h-16 flex items-center justify-center bg-gray-100 rounded text-sm text-gray-500 px-4">
+                            ${file.name}
+                        </div>
+                    `;
+                }
+            }
         });
 
-        document.getElementById('chatForm').addEventListener('submit', async function(e) {
+        // --- Event Listener: Tombol Hapus Preview (X) ---
+        removePreviewBtn.addEventListener('click', function() {
+            clearPreview();
+        });
+
+        // --- Event Listener: Submit Form ---
+        chatForm.addEventListener('submit', async function(e) {
             e.preventDefault();
 
             let formData = new FormData(this);
-
             formData.append('penerima_id', '{{ $rid }}');
 
-            let response = await fetch("{{ route('message.send') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
-                },
-                body: formData
-            });
+            // Debug (Opsional)
+            // for (let [key, value] of formData.entries()) { console.log(key, value); }
 
-            let data = await response.json();
+            try {
+                let response = await fetch("{{ route('message.send') }}", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                    },
+                    body: formData
+                });
 
-            // Reset field input teks & file
-            this.reset();
+                let data = await response.json();
 
+                if (response.ok) {
+                    // 1. Reset Form Text
+                    this.reset();
+                    // 2. Reset Preview Gambar/Video
+                    clearPreview();
+                    
+                    console.log('Pesan terkirim:', data);
+                    
+                    // Opsional: Scroll ke bawah manual jika tidak menggunakan realtime listener sementara
+                    // messageContainer.scrollTop = messageContainer.scrollHeight;
+                } else {
+                    console.error('Gagal mengirim:', data);
+                    alert('Gagal mengirim pesan.');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+            }
         });
 
+        // --- Setup Awal ---
         window.chtChannel = "{{ 'chat.' . (($rid > Auth::id()) ?  Auth::id() . "." . $rid : $rid . "." . Auth::id()) }}";
-
         window.my_id = '{{ Auth::id() }}';
 
-        document.getElementById('message-container').scroll(0, document.getElementById('message-container').scrollHeight);
+        // Scroll otomatis ke bawah saat halaman dimuat
+        // Menggunakan arrow function agar tidak tereksekusi langsung
+        setTimeout(() => {
+            if(messageContainer) {
+                messageContainer.scrollTop = messageContainer.scrollHeight;
+            }
+        }, 100);
     </script>
     @vite(['resources/js/message.js'])
 </body>
