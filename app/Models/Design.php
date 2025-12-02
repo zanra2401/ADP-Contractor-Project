@@ -21,7 +21,8 @@ class Design extends Model
         "created_by",
         "nama",
         "deskripsi",
-        "harga"
+        "harga",
+        'file_path'
     ];
 
     protected $keyType =  'string';
