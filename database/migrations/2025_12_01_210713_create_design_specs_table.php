@@ -8,19 +8,21 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('content_media', function (Blueprint $table) {
+        Schema::create('design_specs', function (Blueprint $table) {
             $table->id();
             $table->foreignUlid('design_id')
                   ->references('id')->on('designs')
                   ->cascadeOnDelete();
 
-            $table->string('file_path', 255); // path file gambar
+            // 1 kolom saja, berisi string seperti "2 Kamar Tidur", "Luas Bangunan 45m²"
+            $table->string('spesifikasi', 150);
+
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('content_media');
+        Schema::dropIfExists('design_specs');
     }
 };

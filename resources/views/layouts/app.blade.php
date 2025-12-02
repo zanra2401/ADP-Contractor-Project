@@ -41,11 +41,6 @@
                         👥 Manajemen User
                     </a>
                 </li>
-                 <li>
-                    <a href="{{ route('admin.chat') }}" class="nav-link text-white">
-                        💬 Chat Admin
-                    </a>
-                </li>
                 <li>
                     <a href="{{ route('admin.payment') }}" class="nav-link text-white">
                         💳 UI Payment
@@ -55,8 +50,13 @@
                     <span class="fs-6 text-secondary">Fitur Proyek</span>
                 </li>
                  <li>
-                    <a href="{{ route('admin.simpan-desain') }}" class="nav-link text-white">
-                        🎨 UI Simpan desain
+                    <a href="{{ route('admin.design.index') }}" class="nav-link text-white">
+                        🎨 Manajemen Design
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('admin.kategori.index') }}" class="nav-link text-white">
+                        Manajemen Kategori
                     </a>
                 </li>
                  <li>

@@ -53,8 +53,6 @@
                                 </div>
                             </td>
                             <td><span class="badge text-bg-info text-white">In Progress</span></td>
-
-
                             <td>
                                 <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
                                     <i class="bi bi-eye"></i> Lihat Detail
