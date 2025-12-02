@@ -1,9 +1,9 @@
 @php
     function readIndicator($status) {
-        if ($status === 'read') {
-            return '<span class="text-xs text-blue-400 ml-1">✔✔</span>';
+        if ($status === 'dibaca') {
+            return '<span class="text-xs text-blue-400 ml-1">dibaca</span>';
         }
-        return '<span class="text-xs text-gray-400 ml-1">✔</span>';
+        return '<span class="text-xs text-gray-400 ml-1">terkirim</span>';
     }
 @endphp
 
@@ -83,7 +83,7 @@
                     <ul class="divide-y divide-gray-200 overflow-y-auto flex-1">
                         @foreach ($contacts as $contact)
                             <li>
-                                <a href="{{ route('pengawas.dashboard', ['rid' => $contact->id]) }}" class="p-4 flex items-cente cursor-pointer {{ $rid == $contact->id ? 'border-l-4 border-blue-600 bg-blue-50' : '' }} hover:bg-blue-100 transition">
+                                <a href="{{ route('pengawas.chat', ['rid' => $contact->id]) }}" class="p-4 flex items-cente cursor-pointer {{ $rid == $contact->id ? 'border-l-4 border-blue-600 bg-blue-50' : '' }} hover:bg-blue-100 transition">
                                     <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ $contact->nama }}&background=random" alt=<?= $contact->role->nama ?>>
                                     <div class="ml-3 flex-1 min-w-0">
                                         <div class="flex justify-between">
@@ -233,11 +233,6 @@
                                     </form>
                                 </div>
                         </div>
-                        <button 
-                            onclick="openHargaModal( {{ $pengunjung_id ?? 1 }} , {{ $design_id ?? 1 }} )"
-                            class="inline-flex justify-center p-2 rounded-full text-white bg-blue-600 hover:bg-blue-700">
-                            Tentukan Harga
-                        </button>
                     </div>
                 @endif
         </main>
