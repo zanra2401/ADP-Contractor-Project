@@ -23,26 +23,22 @@
         <div class="card shadow-sm">
             <div class="card-header fw-bold bg-white">Laporkan Kemajuan Proyek</div>
             <div class="card-body">
-                
-                <!-- Tambahkan enctype agar bisa upload file -->
                 <form action="#" method="POST" enctype="multipart/form-data">
                     @csrf 
-
-                    <!-- 1. PROJECT -->
                     <div class="mb-3">
                         <label for="pilihProyek" class="form-label">Pilih Proyek</label>
                         <select class="form-select" id="pilihProyek" name="project_id" required>
                             <option selected disabled>-- Pilih Proyek --</option>
-                            <option value="1">Redesign Website Klien A</option>
-                            <option value="2">Aplikasi Mobile Bank B</option>
-                            <option value="3">Renovasi Aula Sekolah</option>
+                            <option value="1">pengerjaan plafond proyek A</option>
+                            <option value="2">Pengerjaan lantai proyek B</option>
                         </select>
                     </div>
 
                     <!-- 2. DESKRIPSI -->
                     <div class="mb-3">
-                        <label for="deskripsi" class="form-label">Deskripsi Pekerjaan</label>
-                        <textarea class="form-control" id="deskripsi" name="description" rows="4" placeholder="Jelaskan detail pekerjaan yang dilakukan..." required></textarea>
+
+                        <label for="deskripsi" class="form-label">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="description" rows="3" placeholder="Jelaskan detail dokumen atau progress yang diupload..." required></textarea>
                     </div>
 
                     <!-- 4. STATUS -->
@@ -68,6 +64,23 @@
                         <button type="reset" class="btn btn-secondary me-2">Reset</button>
                         <button type="submit" class="btn btn-primary">Kirim Laporan</button>
                     </div>
+                        <label for="fileUpload" class="form-label">Upload File Bukti/Dokumen</label>
+                        <input type="file" class="form-control" id="fileUpload" name="file_path" required>
+                        <div class="form-text">Format: PDF, JPG, PNG, DOCX (Maks. 5MB)</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status Laporan</label>
+                        <select class="form-select" id="status" name="status" required>
+                            <option selected disabled>-- Pilih Status --</option>
+                            <option value="draft">Belum Dikerjakan</option>
+                            <option value="in_review">Diproses</option>
+                            <option value="approved">Perlu di review</option>
+                            <option value="rejected">Finish</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Simpan Progress</button>
                 </form>
 
             </div>

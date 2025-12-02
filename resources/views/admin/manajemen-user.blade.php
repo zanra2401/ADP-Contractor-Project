@@ -95,7 +95,6 @@
                 <div class="mb-3">
                     <label class="form-label">Role</label>
                     <select id="role" class="form-select">
-                        <option value="admin">Admin</option>
                         <option value="pengawas">Pengawas</option>
                         <option value="customer_service">Customer Service</option>
                         <option value="pengunjung">Pengunjung</option>
@@ -158,9 +157,7 @@ function showCreateModal() {
     userModal.show();
 }
 
-/* ============================
-   SHOW EDIT MODAL (LOAD API)
-=============================== */
+// load data dan show edit modal
 function loadAndShowEditModal(id) {
     fetch(`/api/admin/users/${id}`)
         .then(res => res.json())
@@ -181,9 +178,7 @@ function loadAndShowEditModal(id) {
         });
 }
 
-/* ============================
-   SUBMIT CREATE / UPDATE USER
-=============================== */
+// submit (create / edit)
 function submitUser() {
     let id = document.getElementById('userId').value;
 
@@ -214,9 +209,7 @@ function submitUser() {
     });
 }
 
-/* ============================
-   DELETE USER
-=============================== */
+// delete
 function confirmDelete(id) {
 
     Swal.fire({

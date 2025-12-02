@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ContentMedia extends Model
+class DesignSpec extends Model
 {
-    protected $table = 'content_media';
+    protected $table = 'design_specs';
 
     protected $fillable = [
         'design_id',
-        'file_path',
+        'spesifikasi',
     ];
 
     public function design(): BelongsTo
