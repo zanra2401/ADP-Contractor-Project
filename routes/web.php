@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Pengawas\PengawasController;
 use App\Http\Middleware\PengawasMiddleware;
 use App\Http\Middleware\SuperAdminMiddleware;
+use App\Http\Controllers\Admin\DesignController;
 
 // use App\Http\Controllers\ForgotPasswordController;
 
@@ -77,6 +78,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
         Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
         Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
+        Route::get('/manajemen-proyek/detail', fn() => view('admin.detail-proyek'))->name('proyek.detail');
         Route::get('/manajemen-user', [UserManagementController::class, 'index'])->name('manajemen-user');
         Route::get('/chat', fn() => view('admin.chat'))->name('chat');
         Route::get('/payment', fn() => view('admin.payment'))->name('payment');
@@ -84,6 +86,30 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/upload-progress', fn() => view('admin.upload-progress'))->name('upload-progress');
         Route::get('/approve-progress', fn() => view('admin.approve-progress'))->name('approve-progress');
         Route::get('/set-harga', fn() => view('admin.set-harga'))->name('set-harga');
+
+        // DESIGN MANAGEMENT ROUTES
+        Route::get('/design', [DesignController::class, 'index'])->name('design.index');
+        Route::get('/design/create', [DesignController::class, 'create'])->name('design.create');
+        Route::post('/design/store', [DesignController::class, 'store'])->name('design.store');
+
+        Route::get('/design/{id}/edit', [DesignController::class, 'edit'])->name('design.edit');
+        Route::post('/design/{id}/update', [DesignController::class, 'update'])->name('design.update');
+
+        Route::delete('/design/{id}', [DesignController::class, 'destroy'])->name('design.destroy');
+
+        Route::post('/design/{id}/media', [DesignController::class, 'uploadMedia'])->name('design.media.upload');
+        Route::delete('/media/{mediaId}', [DesignController::class, 'deleteMedia'])->name('design.media.delete');
+
+        // CATEGORY CRUD
+        Route::get('/kategori', [\App\Http\Controllers\Admin\CategoryController::class, 'index'])->name('kategori.index');
+        Route::get('/kategori/create', [\App\Http\Controllers\Admin\CategoryController::class, 'create'])->name('kategori.create');
+        Route::post('/kategori/store', [\App\Http\Controllers\Admin\CategoryController::class, 'store'])->name('kategori.store');
+
+        Route::get('/kategori/{id}/edit', [\App\Http\Controllers\Admin\CategoryController::class, 'edit'])->name('kategori.edit');
+        Route::post('/kategori/{id}/update', [\App\Http\Controllers\Admin\CategoryController::class, 'update'])->name('kategori.update');
+
+        Route::delete('/kategori/{id}', [\App\Http\Controllers\Admin\CategoryController::class, 'destroy'])->name('kategori.destroy');
+
     });
 });
 
@@ -94,6 +120,18 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
+<<<<<<< HEAD
+=======
+
+    Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+
+    Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+        ->name('galeri');
+
+    Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
+        ->name('galeri.detail');
+
+>>>>>>> 38490e874d75a0c3e87bf494564f6a9486320486
     Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
@@ -102,10 +140,16 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
     
+<<<<<<< HEAD
         Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
+=======
+        // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
+        Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
+>>>>>>> 38490e874d75a0c3e87bf494564f6a9486320486
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
+        Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
     });
 });
 

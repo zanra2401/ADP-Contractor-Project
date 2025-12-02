@@ -7,9 +7,6 @@
             
             <div class="ms-auto d-flex align-items-center">
                 <div class="dropdown">
-                    <a href="#" class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        🔔 <span class="badge rounded-pill bg-danger">3</span>
-                    </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Notifikasi 1: Proyek A selesai.</a></li>
                         <li><a class="dropdown-item" href="#">Notifikasi 2: User B mengirim pesan.</a></li>

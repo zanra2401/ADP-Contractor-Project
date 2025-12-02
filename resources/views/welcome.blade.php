@@ -16,7 +16,7 @@
                 
                 <!-- LOGO & MENU KIRI -->
                 <div class="flex">
-                    <div class="flex-shrink-0 flex items-center">
+                    <div class="shrink-0 flex items-center">
                         <span class="font-bold text-xl text-blue-600">ADP Konstruksi</span>
                     </div>
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">

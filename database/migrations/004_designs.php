@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('designs', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('created_by')->references('id')->on('users')->cascadeOnDelete();
-            $table->string('nama', length:100)->nullable(false);
-            $table->decimal("harga", total: 15, places: 2);               
-            $table->text('deskripsi')->nullable(true)->nullable(false);
+            $table->string('nama', 100);
+            $table->decimal('harga', 15, 2)->nullable(); // kalau boleh kosong
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -29,6 +29,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('contents');
+        Schema::dropIfExists('designs');
     }
+
 };

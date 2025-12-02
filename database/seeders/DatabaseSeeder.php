@@ -29,7 +29,9 @@ class DatabaseSeeder extends Seeder
             ProgressLogSeeder::class,
             PaymentSeeder::class,
             PaymentProgressSeeder::class,
-            ChatSeeder::class
+            ChatSeeder::class,
+            CategorySeeder::class,
+            DesignCategorySeeder::class
         ]);
     }
 }
