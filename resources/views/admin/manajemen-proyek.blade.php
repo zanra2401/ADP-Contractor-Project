@@ -37,18 +37,10 @@
                 <table class="table table-striped table-hover align-middle mb-0">
                     <thead class="table-dark">
                         <tr>
-<<<<<<< HEAD
-                            <th scope="col" class="ps-4">Nama Proyek</th>
-                            <th scope="col">Klien</th>
-                            <th style="width: 30%;">Progress</th>
-                            <th>Status</th>
-                            <th class="text-end pe-4">Aksi</th>
-=======
                             <th>Nama Proyek</th>
                             <th>Klien</th>
                             <th style="width: 30%;">Progress</th> <th>Status</th>
                             <th>Detail</th>
->>>>>>> b7845a00d063b147f290e1afd092cfe5e763f71d
                         </tr>
                     </thead>
                     <tbody>
@@ -61,24 +53,12 @@
                                 </div>
                             </td>
                             <td><span class="badge text-bg-info text-white">In Progress</span></td>
-<<<<<<< HEAD
-                            <td class="text-end pe-4">
-                                <!-- Tombol Edit -->
-                                <button type="button" class="btn btn-sm btn-outline-warning me-1"
-                                    onclick="showEditProjectModal(1, 'Redesign Website Klien A', 'PT. Maju Jaya', 75, 'In Progress')">
-                                    Edit
-                                </button>
-                                <!-- Tombol Hapus -->
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                    onclick="showDeleteProjectModal(1, 'Redesign Website Klien A')">
-                                    Hapus
-                                </button>
-=======
+
+
                             <td>
                                 <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
                                     <i class="bi bi-eye"></i> Lihat Detail
                                 </a>
->>>>>>> b7845a00d063b147f290e1afd092cfe5e763f71d
                             </td>
 
                         </tr>
@@ -92,22 +72,10 @@
                                 </div>
                             </td>
                             <td><span class="badge text-bg-success">Completed</span></td>
-<<<<<<< HEAD
-                            <td class="text-end pe-4">
-                                <button type="button" class="btn btn-sm btn-outline-warning me-1"
-                                    onclick="showEditProjectModal(2, 'Aplikasi Mobile Bank B', 'Bank B', 100, 'Completed')">
-                                    Edit
-                                </button>
-                                <button type="button" class="btn btn-sm btn-outline-danger"
-                                    onclick="showDeleteProjectModal(2, 'Aplikasi Mobile Bank B')">
-                                    Hapus
-                                </button>
-=======
                             <td>
                                 <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
                                     <i class="bi bi-eye"></i> Lihat Detail
                                 </a>
->>>>>>> b7845a00d063b147f290e1afd092cfe5e763f71d
                             </td>
                         </tr>
                     </tbody>
