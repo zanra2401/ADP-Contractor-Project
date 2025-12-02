@@ -2,44 +2,69 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Category;
+use App\Models\ContentMedia;
 use App\Models\Design;
+use App\Models\DesignSpec;
 use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class DesignSeeder extends Seeder
 {
     public function run(): void
     {
-        // Ambil user pertama untuk created_by
-        $admin = User::first(); // atau where role admin
+        $user = User::first(); // pastikan ada user dulu
+        if (!$user) return;
 
-        if (!$admin) {
-            throw new \Exception("User tidak ditemukan. Jalankan UserSeeder dulu.");
-        }
+        // kategori
+        $minimalis = Category::firstOrCreate(
+            ['slug' => 'minimalis'],
+            ['nama' => 'Minimalis']
+        );
+        $eco = Category::firstOrCreate(
+            ['slug' => 'eco-friendly'],
+            ['nama' => 'Eco-Friendly']
+        );
 
-        $designs = [
-            [
-                'created_by' => $admin->id,
-                'nama' => 'Desain Rumah Minimalis 1',
-                'harga' => 150000000.00,
-                'deskripsi' => 'Desain rumah minimalis modern dengan 2 kamar tidur dan 1 kamar mandi.'
-            ],
-            [
-                'created_by' => $admin->id,
-                'nama' => 'Desain Rumah Tipe 36',
-                'harga' => 180000000.00,
-                'deskripsi' => 'Rumah tipe 36 cocok untuk keluarga kecil dengan konsep open space.'
-            ],
-            [
-                'created_by' => $admin->id,
-                'nama' => 'Desain Rumah Modern 2 Lantai',
-                'harga' => 350000000.00,
-                'deskripsi' => 'Desain modern 2 lantai dengan 3 kamar tidur dan balkon depan.'
-            ],
+        // desain utama
+        $design = Design::create([
+            'created_by' => $user->id,
+            'nama'       => 'Rumah Minimalis Modern Tipe 45',
+            'deskripsi'  => 'Desain hunian kompak yang dirancang khusus untuk keluarga muda di area perkotaan...',
+            'harga'      => 350000000,
+        ]);
+
+        // spesifikasi (satu kolom spesifikasi)
+        $specs = [
+            '2 Kamar Tidur',
+            '1 Kamar Mandi',
+            'Luas Bangunan 45m²',
+            'Carport 1 Mobil',
         ];
 
-        foreach ($designs as $design) {
-            Design::create($design);
+        foreach ($specs as $s) {
+            DesignSpec::create([
+                'design_id'   => $design->id,
+                'spesifikasi' => $s,
+            ]);
         }
+
+        // gambar–gambar (nanti siapkan file di storage/app/public/designs/...)
+        $images = [
+            'designs/minimalis_main.jpg',
+            'designs/minimalis_interior1.jpg',
+            'designs/minimalis_interior2.jpg',
+        ];
+
+        foreach ($images as $path) {
+            ContentMedia::create([
+                'design_id' => $design->id,
+                'file_path' => $path,
+            ]);
+        }
+
+        // relasi kategori
+        $design->categories()->sync([$minimalis->id, $eco->id]);
     }
 }

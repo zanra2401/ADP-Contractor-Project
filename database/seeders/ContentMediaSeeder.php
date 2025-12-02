@@ -15,7 +15,7 @@ class ContentMediaSeeder extends Seeder
         foreach ($designs as $index => $design) {
             ContentMedia::create([
                 'design_id'   => $design->id,
-                'content_path'=> 'uploads/designs/design_' . ($index + 1) . '.jpg',
+                'file_path'=> 'uploads/designs/design_' . ($index + 1) . '.jpg',
             ]);
         }
     }
