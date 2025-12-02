@@ -27,6 +27,7 @@ class Project extends Model
         "nama_proyek",
         "harga",
         "alamat",
+        "file_path",
         "tanggal_mulai",
         "tanggal_selesai",
         "updated_at",

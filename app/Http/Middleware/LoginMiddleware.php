@@ -20,7 +20,9 @@ class LoginMiddleware
         $data = [
             'pengunjung' => 'pelanggan',
             'admin' => 'admin',
-            'customer_service' => 'cs'
+            'customer_service' => 'cs',
+            'pengawas' => 'pengawas',
+            'superadmin' => 'superadmin',
         ];
 
         if (Auth::guard('web')->check()) {

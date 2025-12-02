@@ -232,9 +232,12 @@
 
                                     </form>
                                 </div>
-
-
                         </div>
+                        <button 
+                            onclick="openHargaModal( {{ $pengunjung_id ?? 1 }} , {{ $design_id ?? 1 }} )"
+                            class="inline-flex justify-center p-2 rounded-full text-white bg-blue-600 hover:bg-blue-700">
+                            Tentukan Harga
+                        </button>
                     </div>
                 @endif
         </main>

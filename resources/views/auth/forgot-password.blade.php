@@ -69,7 +69,7 @@
             @else
 
                 <!-- TAHAP 1: VERIFIKASI NOMOR TELEPON (Default) -->
-                <form class="mt-8 space-y-6" action="{{ route('password.verify-phone') }}" method="POST">
+                <form class="mt-8 space-y-6" action="{{ url('/api/forgot-password') }}" method="POST">
                     @csrf
 
                     <div class="rounded-md shadow-sm -space-y-px">

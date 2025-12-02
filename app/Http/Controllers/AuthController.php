@@ -20,14 +20,17 @@ class AuthController extends Controller
             switch ($role) {
                 case 'pelanggan':
                     return redirect()->route('pelanggan.dashboard');
-                    break;
-                
+                    break;           
                 case 'admin':
                     return redirect()->route('admin.dashboard');
                     break;
-                
                 case 'customer_service':
                     return redirect()->route('cs.dashboard');
+                case 'superadmin':
+                    return redirect()->route('superadmin.manajemen-admin');
+                    break;
+                case 'pengawas':
+                    return redirect()->route('pengawas.dashboard');
                     break;
             }
         }

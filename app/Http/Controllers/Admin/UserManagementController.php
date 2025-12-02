@@ -14,7 +14,7 @@ class UserManagementController extends Controller
     public function index()
     {
         $users = User::with('role')->get();
-        return response()->json($users);
+        return view('admin.manajemen-user', compact('users'));
     }
 
     public function store(UserStoreRequest $request)
@@ -63,10 +63,24 @@ class UserManagementController extends Controller
 
     public function destroy($id)
     {
-        $user = User::findOrFail($id)->delete();
+        try {
+            $user = User::findOrFail($id);
+            $user->delete();
 
-        return response()->json([
-            'message' => 'Akun berhasil dihapus'
-        ]);
+            return response()->json([
+                'message' => 'Akun berhasil dihapus'
+            ], 200);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // Misal gagal karena foreign key constraint
+            return response()->json([
+                'message' => 'Gagal menghapus user karena masih terhubung dengan data lain.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan pada server.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
     }
 }
