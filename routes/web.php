@@ -120,9 +120,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
-<<<<<<< HEAD
-=======
-
     Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
 
     Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
@@ -131,7 +128,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
         ->name('galeri.detail');
 
->>>>>>> 38490e874d75a0c3e87bf494564f6a9486320486
     Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
@@ -139,14 +135,10 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
-    
-<<<<<<< HEAD
-        Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
-        Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
-=======
+
         // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
->>>>>>> 38490e874d75a0c3e87bf494564f6a9486320486
+
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
         Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
