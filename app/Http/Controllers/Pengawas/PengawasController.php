@@ -1,47 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Pelanggan;
+namespace App\Http\Controllers\Pengawas;
 
-use App\Http\Requests\Pengunjung\RegisterPengunjungRequest;
-use App\Models\Role;
-use App\Services\RegisterService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use Exception;
-use Illuminate\Contracts\View\View;
-use Illuminate\View\Factory;
-use App\Models\Chat;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Chat;
+use Illuminate\Contracts\View\View;
+use App\Models\User;
+use Illuminate\Support\Carbon;
 
-class PelangganController extends Controller
+class PengawasController extends Controller
 {
-    public function register(RegisterPengunjungRequest $user): RedirectResponse {    
-
-        $role = Role::where("nama_Role", "pengunjung")->first();
-
-        $data = [
-            'nomor_telepon' => $user->nomor_telepon,
-            'password' => Hash::make($user->password),
-            'nama' => $user->nama,
-            'role_id' => $role->id
-        ];
-
-        $user = User::create($data);
-
-        try {
-            $user->save();
-            return redirect()->route('login');
-        } catch (Exception $e) {
-            return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");
-        }
-    }
-
-    public function chat(Request $request, String|null $rid = null): View {
+        public function chat(Request $request, String|null $rid = null): View {
         $myId = Auth::id();
 
         if ($rid) {
@@ -69,7 +40,7 @@ class PelangganController extends Controller
             $user['unread'] = Chat::getUnreadMessagesWith($user->id)->count();
         }
         
-        return view('pelanggan.chat', [
+        return view('pengawas.chat', [
             'contacts' => $users,
             'messages' => $rid ? $messages : null,
             'rid' => $rid,

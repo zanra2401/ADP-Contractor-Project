@@ -16,10 +16,19 @@ class LoginMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+
+        $data = [
+            'pengunjung' => 'pelanggan',
+            'admin' => 'admin',
+            'customer_service' => 'cs',
+            'pengawas' => 'pengawas',
+            'superadmin' => 'superadmin',
+        ];
+
         if (Auth::guard('web')->check()) {
-            return redirect()->route("pelanggan.dashboard");
+            return redirect()->route($data[Auth::user()->role->nama_role] . ".dashboard");
         }
-        
+
         return $next($request);
     }
 }

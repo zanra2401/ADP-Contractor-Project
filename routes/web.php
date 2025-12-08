@@ -12,8 +12,12 @@ use App\Http\Middleware\LoginMiddleware;
 use App\Http\Controllers\Pelanggan\PelangganController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CSMiddleware;
+use App\Http\Controllers\CS\CSController;
 use App\Http\Middleware\PelangganMiddleware;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Pengawas\PengawasController;
+use App\Http\Middleware\PengawasMiddleware;
+use App\Http\Middleware\SuperAdminMiddleware;
 use App\Http\Controllers\Admin\DesignController;
 
 // use App\Http\Controllers\ForgotPasswordController;
@@ -33,8 +37,13 @@ Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
     LoginMiddleware::class
 ]);
 
+Route::controller(AuthController::class)->group(function () {
+    Route::post('/login', 'auth')->name('login');
+});
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::post('/message_send', [MessageController::class, 'sendMessage'])->name('message.send');
 
 
 /*
@@ -111,7 +120,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
-
     Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
 
     Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
@@ -127,9 +135,10 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
-    
+
         // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
+
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
         Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
@@ -137,10 +146,9 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 });
 
 /* --------------------- PENGAWAS ---------------------- */
-Route::prefix('pengawas')->name('pengawas.')->group(function () {
-
+Route::prefix('pengawas')->middleware([AuthMiddleware::class, PengawasMiddleware::class])->name('pengawas.')->group(function () {
     Route::get('/dashboard', fn() => view('pengawas.dashboard'))->name('dashboard');
-    Route::get('/chat', fn() => view('pengawas.chat'))->name('chat');
+    Route::get('/chat/{rid?}', [PengawasController::class, 'chat'])->name('chat');
     Route::get('/detail-proyek', fn() => view('pengawas.detail-proyek'))->name('detail-proyek');
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
     // Route::post('/admin/projects', [AdminProjectController::class, 'store']);
@@ -149,12 +157,12 @@ Route::prefix('pengawas')->name('pengawas.')->group(function () {
 /* --------------------- CUSTOMER SERVICE ---------------------- */
 Route::prefix('cs')->name('cs.')->group(function () {    
     Route::middleware([AuthMiddleware::class, CSMiddleware::class])->group(function () {
-        Route::get('/dashboard', fn() => view('CS.dashboard'))->name('dashboard');
+        Route::get('/dashboard/{rid?}', [CSController::class, 'chat'])->name('dashboard');
         Route::get('/profil', fn() => view('CS.profil'))->name('profil');
     });
 });
 
 /* --------------------- SUPERADMIN ---------------------- */
-Route::prefix('superadmin')->name('superadmin.')->group(function () {
+Route::prefix('superadmin')->middleware([AuthMiddleware::class, SuperAdminMiddleware::class])->name('superadmin.')->group(function () {
     Route::get('/manajemen-admin', fn() => view('superadmin.manajemen-admin'))->name('manajemen-admin');
 });

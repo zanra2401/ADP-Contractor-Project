@@ -14,24 +14,22 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\User;
 
 
-class MessageSent
+class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $chat_id;
-    public $user;
+    private $chat_id;
     public $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(User $user, Chat $message)
+    public function __construct(Chat $message)
     {
         $penerima = $message->penerima_id;
-        $pengirim = $user->id;
-        $this->user = $user;
+        $pengirim = $message->pengirim_id;
         $this->message = $message;
-
+        
         $this->chat_id = "chat." . (($pengirim > $penerima) ? $penerima . "." . $pengirim : $pengirim . "." .  $penerima);
     }
 
@@ -40,10 +38,8 @@ class MessageSent
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): array
+    public function broadcastOn(): Channel
     {
-        return [
-            new PrivateChannel('a'),
-        ];
+        return new Channel($this->chat_id);
     }
 }

@@ -3,92 +3,104 @@
 @section('title', 'Manajemen Proyek')
 
 @section('content')
-    <!-- TOP NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-3 mb-4 shadow-sm">
         <div class="container-fluid">
             <h1 class="h3 mb-0">🗂️ Manajemen Proyek</h1>
-            
-            <div class="ms-auto d-flex align-items-center">
-                <div class="dropdown">
-                    <a href="#" class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        🔔 <span class="badge rounded-pill bg-danger">3</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Notifikasi 1: Proyek baru ditambahkan.</a></li>
-                        <li><a class="dropdown-item" href="#">Notifikasi 2: Progress proyek diupdate.</a></li>
-                    </ul>
-                </div>
             </div>
-        </div>
     </nav>
 
     <div class="p-4">
         <p class="lead mb-4">Kelola semua proyek yang sedang berjalan atau sudah selesai.</p>
         
         <div class="card shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center bg-white">
+            <div class="card-header d-flex flex-wrap justify-content-between align-items-center bg-white py-3 gap-2">
                 <h5 class="mb-0">Daftar Proyek</h5>
-                <!-- TOMBOL TAMBAH PROYEK (Trigger Modal) -->
                 <button type="button" class="btn btn-primary btn-sm" onclick="showCreateProjectModal()">
                     <span class="me-1">+</span> Buat Proyek Baru
                 </button>
             </div>
+            
             <div class="card-body p-0">
-                <table class="table table-striped table-hover align-middle mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Nama Proyek</th>
-                            <th>Klien</th>
-                            <th style="width: 30%;">Progress</th> <th>Status</th>
-                            <th>Detail</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="ps-4">Redesign Website Klien A</td>
-                            <td>PT. Maju Jaya</td>
-                            <td>
-                                <div class="progress" role="progressbar" style="height: 10px;">
-                                    <div class="progress-bar" style="width: 75%">75%</div>
-                                </div>
-                            </td>
-                            <td><span class="badge text-bg-info text-white">In Progress</span></td>
-
-
-                            <td>
-                                <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
-                                    <i class="bi bi-eye"></i> Lihat Detail
-                                </a>
-                            </td>
-
-                        </tr>
-                        
-                        <tr>
-                            <td class="ps-4">Aplikasi Mobile Bank B</td>
-                            <td>Bank B</td>
-                            <td>
-                                <div class="progress" role="progressbar" style="height: 10px;">
-                                    <div class="progress-bar bg-success" style="width: 100%">100%</div>
-                                </div>
-                            </td>
-                            <td><span class="badge text-bg-success">Completed</span></td>
-                            <td>
-                                <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-warning text-white">
-                                    <i class="bi bi-eye"></i> Lihat Detail
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0 text-nowrap">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4">Nama Proyek</th>
+                                <th>Klien</th>
+                                <th style="min-width: 150px;">Progress</th> 
+                                <th>Status</th>
+                                <th class="text-end pe-4">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="ps-4 fw-bold">Redesign Website Klien A</td>
+                                <td>PT. Maju Jaya</td>
+                                <td>
+                                    <div class="progress" role="progressbar" style="height: 10px;">
+                                        <div class="progress-bar" style="width: 75%">75%</div>
+                                    </div>
+                                    <small class="text-muted">75% Complete</small>
+                                </td>
+                                <td><span class="badge text-bg-info text-white">In Progress</span></td>
+                                <td class="text-end pe-4">
+                                    <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-info text-white me-1" title="Lihat Detail">
+                                        👁️
+                                    </a>
+                                    <button class="btn btn-sm btn-warning text-white me-1" 
+                                        onclick="showEditProjectModal(1, 'Redesign Website Klien A', 'PT. Maju Jaya', 75, 'In Progress')" title="Edit Proyek">
+                                        ✏️
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" 
+                                        onclick="showDeleteProjectModal(1, 'Redesign Website Klien A')" title="Hapus Proyek">
+                                        🗑️
+                                    </button>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td class="ps-4 fw-bold">Aplikasi Mobile Bank B</td>
+                                <td>Bank B</td>
+                                <td>
+                                    <div class="progress" role="progressbar" style="height: 10px;">
+                                        <div class="progress-bar bg-success" style="width: 100%">100%</div>
+                                    </div>
+                                    <small class="text-muted">Completed</small>
+                                </td>
+                                <td><span class="badge text-bg-success">Completed</span></td>
+                                <td class="text-end pe-4">
+                                    <a href="{{ route('admin.proyek.detail') }}" class="btn btn-sm btn-info text-white me-1">
+                                        👁️
+                                    </a>
+                                    <button class="btn btn-sm btn-warning text-white me-1" 
+                                        onclick="showEditProjectModal(2, 'Aplikasi Mobile Bank B', 'Bank B', 100, 'Completed')">
+                                        ✏️
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" 
+                                        onclick="showDeleteProjectModal(2, 'Aplikasi Mobile Bank B')">
+                                        🗑️
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card-footer bg-white">
+                <nav>
+                    <ul class="pagination justify-content-end mb-0">
+                        <li class="page-item disabled"><a class="page-link">Prev</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
 
-    <!-- ================================ -->
-    <!-- MODAL: FORM TAMBAH/EDIT PROYEK   -->
-    <!-- ================================ -->
     <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- modal-lg agar lebih lebar -->
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="projectModalLabel">Buat Proyek Baru</h5>
@@ -102,7 +114,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="nama_proyek" class="form-label">Nama Proyek</label>
-                                <input type="text" class="form-control" id="nama_proyek" name="nama_proyek" placeholder="Contoh: Renovasi Rumah Tipe 36" required>
+                                <input type="text" class="form-control" id="nama_proyek" name="nama_proyek" placeholder="Contoh: Renovasi Rumah" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="klien" class="form-label">Nama Klien</label>
@@ -143,9 +155,6 @@
         </div>
     </div>
 
-    <!-- ================================ -->
-    <!-- MODAL: KONFIRMASI HAPUS PROYEK   -->
-    <!-- ================================ -->
     <div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">

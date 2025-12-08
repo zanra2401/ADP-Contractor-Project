@@ -131,6 +131,7 @@
 
         function finishProcess() {
             alert("Sandi berhasil diubah! Mengalihkan ke Login...");
+            // Untuk simulasi, arahkan ke halaman login
             window.location.href = "{{ route('login') }}";
         }
     </script>

@@ -1,46 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Pelanggan;
+namespace App\Http\Controllers\CS;
 
-use App\Http\Requests\Pengunjung\RegisterPengunjungRequest;
-use App\Models\Role;
-use App\Services\RegisterService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use Exception;
-use Illuminate\Contracts\View\View;
-use Illuminate\View\Factory;
+use Illuminate\Http\Request;
 use App\Models\Chat;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Support\Carbon;
+use Illuminate\Contracts\View\View;
 
-class PelangganController extends Controller
+class CSController extends Controller
 {
-    public function register(RegisterPengunjungRequest $user): RedirectResponse {    
-
-        $role = Role::where("nama_Role", "pengunjung")->first();
-
-        $data = [
-            'nomor_telepon' => $user->nomor_telepon,
-            'password' => Hash::make($user->password),
-            'nama' => $user->nama,
-            'role_id' => $role->id
-        ];
-
-        $user = User::create($data);
-
-        try {
-            $user->save();
-            return redirect()->route('login');
-        } catch (Exception $e) {
-            return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");
-        }
-    }
-
     public function chat(Request $request, String|null $rid = null): View {
         $myId = Auth::id();
 
@@ -49,7 +20,7 @@ class PelangganController extends Controller
                 ->update(['status' => 'dibaca']);
         }
 
-        $users = User::where('id', '!=', $myId)
+        $users = User::where('id', '!=', $myId) // Jangan ambil diri sendiri
             ->where(function ($query) use ($myId) {
                 $query->whereHas('chatsAsSender', function ($q) use ($myId) {
                     $q->where('penerima_id', $myId);
@@ -69,7 +40,7 @@ class PelangganController extends Controller
             $user['unread'] = Chat::getUnreadMessagesWith($user->id)->count();
         }
         
-        return view('pelanggan.chat', [
+        return view('CS.dashboard', [
             'contacts' => $users,
             'messages' => $rid ? $messages : null,
             'rid' => $rid,
