@@ -225,9 +225,6 @@
 
                         </div>
                     </div>
-<<<<<<< HEAD
-                @endif
-=======
                     
                     <!-- Isi Chat -->
                     <div class="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50">
@@ -280,7 +277,6 @@
                     </div>
                 </div>
             </div>
->>>>>>> 38490e874d75a0c3e87bf494564f6a9486320486
         </main>
     </div>
 <script>
