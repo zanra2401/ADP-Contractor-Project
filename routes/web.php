@@ -131,6 +131,10 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
+    Route::get('/detail-proyek', function () {
+        return view('pelanggan.detail-proyek');
+    })->name('detail-proyek');
+
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
         Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
             ->name('dashboard')

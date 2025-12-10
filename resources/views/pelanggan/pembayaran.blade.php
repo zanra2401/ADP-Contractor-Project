@@ -76,175 +76,72 @@
             <p class="mt-2 text-gray-600">Kelola pembayaran dan lihat riwayat transaksi Anda.</p>
         </header>
 
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
-            
-            <div class="bg-white p-6 sm:p-8 rounded-lg shadow-lg border-l-4 border-blue-600" id="payment-card">
+            {{-- SECTION: TABEL PEMBAYARAN --}}
+            <div class="mt-16">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6 border-l-4 border-blue-600 pl-4">Rincian Pembayaran</h2>
                 
-                <div id="payment-form-section">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Input Pembayaran Baru</h2>
-                    </div>
-                    
-                    <form onsubmit="event.preventDefault(); submitPayment();"> 
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            
-                            <div class="space-y-6 order-2 md:order-1"> <div>
-                                    <label for="payment_id" class="block text-sm font-medium text-gray-700">Payment ID</label>
-                                    <input type="text" id="payment_id" required
-                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                                            placeholder="Contoh: 01KBCAX3YM9DSJZP99PGE50QRC">
-                                    <p class="mt-1 text-xs text-gray-500">Masukkan ID tagihan yang tertera pada invoice Anda.</p>
-                                </div>
-    
-                                <div>
-                                    <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah Pembayaran (Rp)</label>
-                                    <div class="relative mt-1 rounded-md shadow-sm">
-                                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                            <span class="text-gray-500 sm:text-sm">Rp</span>
-                                        </div>
-                                        <input type="number" id="jumlah" required
-                                                class="block w-full rounded-md border-gray-300 pl-10 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
-                                                placeholder="0">
-                                    </div>
-                                </div>
-    
-                                <div class="pt-4">
-                                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 shadow-md">
-                                        Konfirmasi Pembayaran
-                                    </button>
-                                </div>
-                            </div>
-    
-                            <div class="order-1 md:order-2 bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center text-center h-full">
-                                <h3 class="text-lg font-bold text-gray-900 mb-2">Scan QRIS</h3>
-                                <p class="text-sm text-gray-500 mb-4">Gunakan GoPay, OVO, Dana, atau M-Banking</p>
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                    <div class="overflow-x-auto no-scrollbar">
+                        <table class="w-full text-left border-collapse min-w-[600px]">
+                            <thead>
+                                <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wider border-b border-gray-100">
+                                    <th class="px-6 py-4 font-bold text-center w-16">No</th>
+                                    <th class="px-6 py-4 font-bold">Deskripsi Tagihan</th>
+                                    <th class="px-6 py-4 font-bold">Total Harga</th>
+                                    <th class="px-6 py-4 font-bold text-center">Status</th>
+                                    <th class="px-6 py-4 font-bold text-center">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100">
                                 
-                                <div class="bg-white p-3 rounded-lg shadow-md border inline-block mb-4">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="QRIS Code" class="w-40 h-40 sm:w-48 sm:h-48 object-contain">
-                                </div>
-                                
-                                <div class="space-y-1">
-                                    <p class="text-xs font-semibold text-gray-600 uppercase tracking-wider">ADP KONSTRUKSI MERCH</p>
-                                    <p class="text-xs text-gray-400">NMID: ID102003292392</p>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                                {{-- Row 1: Menunggu Pembayaran (Contoh) --}}
+                                <tr class="bg-blue-50/50 hover:bg-blue-50 transition duration-150">
+                                    <td class="px-6 py-5 text-center font-medium text-blue-500">1</td>
+                                    <td class="px-6 py-5 text-gray-700">
+                                        <div class="font-bold text-blue-900">Pembayaran Tahap Akhir</div>
+                                        <span class="text-xs text-gray-500 mt-1 block">Finishing & Serah Terima</span>
+                                    </td>
+                                    <td class="px-6 py-5 font-bold text-blue-700">Rp 45.000.000</td>
+                                    <td class="px-6 py-5 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-200 animate-pulse">
+                                            Menunggu Pembayaran
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-5 text-center">
+                                        <a href="{{ route('pelanggan.pembayaran') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5">
+                                            Bayar Sekarang
+                                        </a>
+                                    </td>
+                                </tr>
 
-                <div id="payment-success-section" class="hidden text-center py-10">
-                    <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
-                        <svg class="h-12 w-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                        </svg>
+                                {{-- Row 2: Lunas (Contoh) --}}
+                                <tr class="hover:bg-gray-50 transition duration-150">
+                                    <td class="px-6 py-5 text-center font-medium text-gray-400">2</td>
+                                    <td class="px-6 py-5 text-gray-700">
+                                        <div class="font-bold text-gray-900">Uang Muka (DP)</div>
+                                        <span class="text-xs text-gray-400 mt-1 block">Pembayaran awal proyek</span>
+                                    </td>
+                                    <td class="px-6 py-5 font-bold text-gray-900">Rp 105.000.000</td>
+                                    <td class="px-6 py-5 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                            Lunas
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-5 text-center">
+                                        <button class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
+                                            Cetak Invoice
+                                        </button>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Pembayaran Berhasil Dikirim!</h2>
-                    <p class="text-gray-600 mb-6">Terima kasih. Data pembayaran Anda sedang kami verifikasi. <br>Status transaksi akan berubah dalam 1x24 jam.</p>
-                    
-                    <div class="bg-gray-50 p-4 rounded-lg inline-block text-left mb-6 border border-gray-200">
-                        <p class="text-sm text-gray-500">ID Transaksi: <span class="font-mono font-bold text-gray-800">TRX-78239912</span></p>
-                        <p class="text-sm text-gray-500">Metode: <span class="font-bold text-gray-800">QRIS</span></p>
-                    </div>
-
-                    <br>
-                    <button onclick="resetPaymentForm()" class="text-blue-600 hover:text-blue-800 font-medium underline">
-                        Kembali
-                    </button>
-                </div>
-
-            </div>
-
-            <div class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
-                <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Riwayat Pembayaran</h2>
-                    <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full border border-green-200">Terverifikasi</span>
-                </div>
-
-                <div class="overflow-x-auto rounded-lg border border-gray-200">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-800 text-white">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">ID</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">Payment ID</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">Jumlah</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200" id="history-table-body">
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">#001</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-blue-600">01KBCAX3YM9...</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Rp 75.000.000</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-yellow-600">Pending</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
 
         </main>
     </div>
 
-    <script>
-        // Logika Navbar Mobile
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        }
-
-        // Logika Simulasi Pembayaran
-        function submitPayment() {
-            const payId = document.getElementById('payment_id').value;
-            const amount = document.getElementById('jumlah').value;
-
-            if (!payId || !amount) {
-                alert("Mohon lengkapi semua data!");
-                return;
-            }
-
-            const formSection = document.getElementById('payment-form-section');
-            const successSection = document.getElementById('payment-success-section');
-            const btn = document.querySelector('#payment-form-section button[type="submit"]');
-            
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "Memproses...";
-            btn.disabled = true;
-            btn.classList.add('opacity-75', 'cursor-not-allowed');
-
-            setTimeout(() => {
-                formSection.classList.add('hidden');
-                successSection.classList.remove('hidden');
-                
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-                btn.classList.remove('opacity-75', 'cursor-not-allowed');
-
-                addHistoryRow(payId, amount);
-
-            }, 1500);
-        }
-
-        function resetPaymentForm() {
-            document.getElementById('payment_id').value = '';
-            document.getElementById('jumlah').value = '';
-            
-            document.getElementById('payment-success-section').classList.add('hidden');
-            document.getElementById('payment-form-section').classList.remove('hidden');
-        }
-
-        function addHistoryRow(id, amount) {
-            const table = document.getElementById('history-table-body');
-            const newRow = `
-                <tr class="bg-green-50 border-l-4 border-green-500 transition duration-500">
-                    <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">#BARU</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-blue-600">${id.substring(0, 10)}...</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Rp ${Number(amount).toLocaleString('id-ID')}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-yellow-600">Verifikasi</td>
-                </tr>
-            `;
-            table.insertAdjacentHTML('afterbegin', newRow);
-        }
-    </script>
 </body>
 </html>
