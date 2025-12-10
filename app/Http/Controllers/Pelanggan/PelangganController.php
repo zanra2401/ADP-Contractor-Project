@@ -76,4 +76,8 @@ class PelangganController extends Controller
             'rcontact' => User::where('id', $rid)->first()
         ]);
     }
+
+    public function detailDesign(Request $request): View|Factory {
+        return view('pelanggan.detail-desain');
+    }
 }

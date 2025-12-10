@@ -96,7 +96,7 @@
                         </div>
     
                         <div class="mt-6">
-                            <a href="#" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                            <a href="{{ route('pelanggan.detail-design') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
                                 Lihat Detail Progres
                             </a>
                         </div>

@@ -4,33 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pembayaran - ADP Konstruksi</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100">
 
-    <!-- NAVBAR PELANGGAN -->
     <nav class="bg-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
+                
+                {{-- KIRI: LOGO & MENU DESKTOP --}}
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
                         <span class="font-bold text-xl text-blue-600">ADP Konstruksi</span>
                     </div>
+                    
+                    {{-- Menu Navigasi Desktop (hidden di HP) --}}
                     <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <a href="{{ route('pelanggan.dashboard') }}" class="{{ request()->routeIs('pelanggan.dashboard') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Dashboard
-                        </a>
-                        <a href="{{ route('pelanggan.galeri') }}" class="{{ request()->routeIs('pelanggan.galeri') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Galeri Proyek
-                        </a>
-                        <a href="{{ route('pelanggan.chat') }}" class="{{ request()->routeIs('pelanggan.chat') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Chat
-                        </a>
+                        <a href="{{ route('pelanggan.dashboard') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Dashboard</a>
+                        <a href="{{ route('pelanggan.galeri') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Galeri Proyek</a>
+                        <a href="{{ route('pelanggan.chat') }}" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Chat</a>
+                        <a href="{{ route('pelanggan.pembayaran') }}" class="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">Pembayaran</a>
                     </div>
                 </div>
                 
-                <!-- MENU KANAN -->
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
                     <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</span>
                     <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil Saya</a>
@@ -39,92 +35,216 @@
                         <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">Logout</button>
                     </form>
                 </div>
+
+                <div class="flex items-center sm:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="hidden sm:hidden bg-white border-t border-gray-200 absolute w-full z-40 shadow-lg" id="mobile-menu">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="{{ route('pelanggan.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Dashboard</a>
+                <a href="{{ route('pelanggan.galeri') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Galeri Proyek</a>
+                <a href="{{ route('pelanggan.chat') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Chat</a>
+                <a href="{{ route('pelanggan.pembayaran') }}" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">Pembayaran</a>
+            </div>
+            <div class="pt-4 pb-3 border-t border-gray-200">
+                <div class="px-4">
+                    <div class="text-base font-medium text-gray-800">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}</div>
+                </div>
+                <div class="mt-3 space-y-1">
+                    <a href="{{ route('pelanggan.profil') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Profil Saya</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-red-600 hover:text-red-800 hover:bg-gray-100">Logout</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- KONTEN UTAMA -->
     <div class="py-10">
         <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold leading-tight text-gray-900">
-                Pembayaran Proyek
+                Pembayaran Proyek ({{ Auth::user()->name ?? 'Pelanggan' }})
             </h1>
-            <p class="mt-2 text-gray-600">Selesaikan pembayaran untuk memulai proyek Anda.</p>
+            <p class="mt-2 text-gray-600">Kelola pembayaran dan lihat riwayat transaksi Anda.</p>
         </header>
 
-        <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
-            <div class="bg-white p-8 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold text-gray-900">Detail Tagihan</h2>
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 space-y-8">
+            
+            <div class="bg-white p-6 sm:p-8 rounded-lg shadow-lg border-l-4 border-blue-600" id="payment-card">
                 
-                <div class="mt-6 border-t border-gray-200 pt-6">
-                    <dl class="space-y-4">
-                        <div class="flex justify-between">
-                            <dt class="text-sm font-medium text-gray-500">Proyek</dt>
-                            <dd class="text-sm font-medium text-gray-900">Rumah Tipe 70 - Citraland</dd>
+                <div id="payment-form-section">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Input Pembayaran Baru</h2>
+                    </div>
+                    
+                    <form onsubmit="event.preventDefault(); submitPayment();"> 
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                            
+                            <div class="space-y-6 order-2 md:order-1"> <div>
+                                    <label for="payment_id" class="block text-sm font-medium text-gray-700">Payment ID</label>
+                                    <input type="text" id="payment_id" required
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
+                                            placeholder="Contoh: 01KBCAX3YM9DSJZP99PGE50QRC">
+                                    <p class="mt-1 text-xs text-gray-500">Masukkan ID tagihan yang tertera pada invoice Anda.</p>
+                                </div>
+    
+                                <div>
+                                    <label for="jumlah" class="block text-sm font-medium text-gray-700">Jumlah Pembayaran (Rp)</label>
+                                    <div class="relative mt-1 rounded-md shadow-sm">
+                                        <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                            <span class="text-gray-500 sm:text-sm">Rp</span>
+                                        </div>
+                                        <input type="number" id="jumlah" required
+                                                class="block w-full rounded-md border-gray-300 pl-10 py-2 focus:border-blue-500 focus:ring-blue-500 sm:text-sm" 
+                                                placeholder="0">
+                                    </div>
+                                </div>
+    
+                                <div class="pt-4">
+                                    <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 shadow-md">
+                                        Konfirmasi Pembayaran
+                                    </button>
+                                </div>
+                            </div>
+    
+                            <div class="order-1 md:order-2 bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col justify-center items-center text-center h-full">
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Scan QRIS</h3>
+                                <p class="text-sm text-gray-500 mb-4">Gunakan GoPay, OVO, Dana, atau M-Banking</p>
+                                
+                                <div class="bg-white p-3 rounded-lg shadow-md border inline-block mb-4">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/QR_code_for_mobile_English_Wikipedia.svg" alt="QRIS Code" class="w-40 h-40 sm:w-48 sm:h-48 object-contain">
+                                </div>
+                                
+                                <div class="space-y-1">
+                                    <p class="text-xs font-semibold text-gray-600 uppercase tracking-wider">ADP KONSTRUKSI MERCH</p>
+                                    <p class="text-xs text-gray-400">NMID: ID102003292392</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex justify-between">
-                            <dt class="text-sm font-medium text-gray-500">Klien</dt>
-                            <!-- Nama Klien Dinamis -->
-                            <dd class="text-sm font-medium text-gray-900">{{ Auth::user()->name ?? 'Bpk. Ahmad' }}</dd>
-                        </div>
-                        <div class="flex justify-between">
-                            <dt class="text-sm font-medium text-gray-500">Total Harga Proyek</dt>
-                            <dd class="text-sm font-medium text-gray-900">Rp 450.000.000</dd>
-                        </div>
-                        <div class="flex justify-between border-t pt-4">
-                            <dt class="text-lg font-semibold text-gray-900">Tagihan Saat Ini (DP 30%)</dt>
-                            <dd class="text-lg font-semibold text-blue-600">Rp 135.000.000</dd>
-                        </div>
-                    </dl>
+                    </form>
                 </div>
 
-                <!-- FORM PEMBAYARAN -->
-                <form action="#" method="POST" class="mt-8">
-                    @csrf
-                    <h3 class="text-lg font-medium text-gray-900">Pilih Metode Pembayaran</h3>
-                    
-                    <fieldset class="mt-4">
-                        <legend class="sr-only">Metode Pembayaran</legend>
-                        <div class="space-y-4">
-                            
-                            <!-- Opsi BCA -->
-                            <div class="flex items-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
-                                <input id="transfer_bca" name="payment_method" type="radio" value="bca" checked 
-                                       class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-                                <label for="transfer_bca" class="ml-3 block text-sm font-medium text-gray-700 w-full cursor-pointer">
-                                    Virtual Account BCA
-                                </label>
-                            </div>
-
-                            <!-- Opsi Mandiri -->
-                            <div class="flex items-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
-                                <input id="transfer_mandiri" name="payment_method" type="radio" value="mandiri" 
-                                       class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-                                <label for="transfer_mandiri" class="ml-3 block text-sm font-medium text-gray-700 w-full cursor-pointer">
-                                    Virtual Account Mandiri
-                                </label>
-                            </div>
-
-                            <!-- Opsi Kartu Kredit -->
-                            <div class="flex items-center p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer">
-                                <input id="credit_card" name="payment_method" type="radio" value="cc" 
-                                       class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
-                                <label for="credit_card" class="ml-3 block text-sm font-medium text-gray-700 w-full cursor-pointer">
-                                    Kartu Kredit (Visa/Mastercard)
-                                </label>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <div class="mt-10 text-right">
-                        <button type="submit" class="inline-flex justify-center py-3 px-8 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
-                            Bayar Sekarang
-                        </button>
+                <div id="payment-success-section" class="hidden text-center py-10">
+                    <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-green-100 mb-6">
+                        <svg class="h-12 w-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
                     </div>
-                </form>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Pembayaran Berhasil Dikirim!</h2>
+                    <p class="text-gray-600 mb-6">Terima kasih. Data pembayaran Anda sedang kami verifikasi. <br>Status transaksi akan berubah dalam 1x24 jam.</p>
+                    
+                    <div class="bg-gray-50 p-4 rounded-lg inline-block text-left mb-6 border border-gray-200">
+                        <p class="text-sm text-gray-500">ID Transaksi: <span class="font-mono font-bold text-gray-800">TRX-78239912</span></p>
+                        <p class="text-sm text-gray-500">Metode: <span class="font-bold text-gray-800">QRIS</span></p>
+                    </div>
+
+                    <br>
+                    <button onclick="resetPaymentForm()" class="text-blue-600 hover:text-blue-800 font-medium underline">
+                        Kembali
+                    </button>
+                </div>
+
             </div>
+
+            <div class="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Riwayat Pembayaran</h2>
+                    <span class="px-3 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full border border-green-200">Terverifikasi</span>
+                </div>
+
+                <div class="overflow-x-auto rounded-lg border border-gray-200">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-800 text-white">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">Payment ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">Jumlah</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider whitespace-nowrap">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200" id="history-table-body">
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">#001</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-blue-600">01KBCAX3YM9...</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Rp 75.000.000</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-yellow-600">Pending</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </main>
     </div>
 
+    <script>
+        // Logika Navbar Mobile
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Logika Simulasi Pembayaran
+        function submitPayment() {
+            const payId = document.getElementById('payment_id').value;
+            const amount = document.getElementById('jumlah').value;
+
+            if (!payId || !amount) {
+                alert("Mohon lengkapi semua data!");
+                return;
+            }
+
+            const formSection = document.getElementById('payment-form-section');
+            const successSection = document.getElementById('payment-success-section');
+            const btn = document.querySelector('#payment-form-section button[type="submit"]');
+            
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Memproses...";
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+            setTimeout(() => {
+                formSection.classList.add('hidden');
+                successSection.classList.remove('hidden');
+                
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+
+                addHistoryRow(payId, amount);
+
+            }, 1500);
+        }
+
+        function resetPaymentForm() {
+            document.getElementById('payment_id').value = '';
+            document.getElementById('jumlah').value = '';
+            
+            document.getElementById('payment-success-section').classList.add('hidden');
+            document.getElementById('payment-form-section').classList.remove('hidden');
+        }
+
+        function addHistoryRow(id, amount) {
+            const table = document.getElementById('history-table-body');
+            const newRow = `
+                <tr class="bg-green-50 border-l-4 border-green-500 transition duration-500">
+                    <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-gray-500">#BARU</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-xs font-mono text-blue-600">${id.substring(0, 10)}...</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">Rp ${Number(amount).toLocaleString('id-ID')}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-yellow-600">Verifikasi</td>
+                </tr>
+            `;
+            table.insertAdjacentHTML('afterbegin', newRow);
+        }
+    </script>
 </body>
 </html>
