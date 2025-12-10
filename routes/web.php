@@ -120,6 +120,8 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::post('/register', 'register')->name('register');
     });
 
+
+    Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
     Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
 
     Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
@@ -139,10 +141,9 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
-
-        // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
-        Route::get('/chat', fn() => view('pelanggan.chat'))->name('chat');
-
+    
+        Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
+        Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
         Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');

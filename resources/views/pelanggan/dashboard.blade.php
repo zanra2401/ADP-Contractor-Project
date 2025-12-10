@@ -121,8 +121,9 @@
                                 <div class="bg-blue-600 h-2.5 rounded-full" style="width: 25%"></div>
                             </div>
                         </div>
-                        <div class="mt-6 flex-shrink-0">
-                            <a href="{{ route('pelanggan.detail-proyek') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition">
+    
+                        <div class="mt-6">
+                            <a href="{{ route('pelanggan.detail-design') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
                                 Lihat Detail Progres
                             </a>
                         </div>

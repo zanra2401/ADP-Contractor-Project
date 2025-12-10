@@ -45,6 +45,7 @@
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
 
 
+<<<<<<< HEAD
         {{-- ================= CARD UTAMA ================= --}}
         <div class="bg-white rounded-none overflow-hidden mb-12">
             
@@ -98,6 +99,7 @@
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Tentang Desain Ini</h3>
                         <div class="prose prose-blue text-gray-600 leading-relaxed text-base">
                             {!! nl2br(e($design->deskripsi)) !!}
+
                         </div>
                     </div>
                     <div class="bg-gray-100/70 p-6 rounded-2xl h-fit">
