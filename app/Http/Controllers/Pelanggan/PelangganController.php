@@ -15,11 +15,23 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Factory;
 use App\Models\Chat;
+use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PelangganController extends Controller
 {
+
+    public function dashboard(): View|Factory {
+        $proyek = Project::where('pengunjung_id', Auth::id())->get();
+        foreach ($proyek as $p) {
+            $p['content_path'] = $p->design->contents->first()->content_path;
+            $p['progress'] = $p->harga / $p->payment->progresses->sum('jumlah') * 100;
+        }
+
+        return view('pelanggan.dashboard', compact('proyek'));
+    }
+
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
 
         $role = Role::where("nama_Role", "pengunjung")->first();

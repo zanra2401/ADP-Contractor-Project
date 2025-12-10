@@ -53,7 +53,7 @@
                 </div>
 
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-                    <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</span>
+                    <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->nama ?? 'Pelanggan' }}!</span>
                     <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil Saya</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
@@ -107,51 +107,8 @@
 
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition hover:shadow-xl">
-                    <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Rumah Tipe 70">
-                    <div class="p-6 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-900">Rumah Tipe 70 - Citraland</h3>
-                            <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-yellow-600">Pengerjaan Pondasi</span></p>
-                        </div>
-                        <div class="mt-4 flex-shrink-0">
-                            <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: 25%</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                <div class="bg-blue-600 h-2.5 rounded-full" style="width: 25%"></div>
-                            </div>
-                        </div>    
-                        <div class="mt-6">
-                            <a href="{{ route('pelanggan.detail-design') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
 
-                                Lihat Detail Progres
-                            </a>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition hover:shadow-xl">
-                    <img class="h-48 w-full object-cover" src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60" alt="Renovasi Dapur">
-                    <div class="p-6 flex-grow flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-xl font-semibold text-gray-900">Renovasi Dapur Minimalis</h3>
-                            <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-green-600">Selesai</span></p>
-                        </div>
-                        <div class="mt-4 flex-shrink-0">
-                            <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: 100%</span>
-                            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                <div class="bg-green-600 h-2.5 rounded-full" style="width: 100%"></div>
-                            </div>
-                        </div>
-                        <div class="mt-6 flex-shrink-0">
-                            <a href="{{ route('pelanggan.galeri') }}" class="w-full text-center block py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
-                                Lihat Galeri Hasil
-                            </a>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-dashed border-gray-300 flex flex-col justify-center items-center p-6 min-h-[400px] hover:border-blue-400 transition cursor-pointer" onclick="openModal()">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden border-2 border-dashed border-gray-300 flex flex-col justify-center items-center p-6 min-h-[400px] hover:border-blue-400 transition cursor-pointer" onclick="openModal()">
                     <div class="text-center">
                         <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 mb-4">
                             <svg class="h-8 w-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
@@ -165,6 +122,38 @@
                         </button>
                     </div>
                 </div>
+                
+                @foreach ($proyek as $p)
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition hover:shadow-xl">
+                        <img class="h-48 w-full object-cover" src="{{ storage_path($p['content_path']) }}" alt="Rumah Tipe 70">
+                        <div class="p-6 flex-grow flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900">{{ $p->nama_proyek ? $p->nama_proyek : '-' }}</h3>
+                                <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-yellow-600">{{ $p->status }}</span></p>
+                            </div>
+                            <div class="mt-4 flex-shrink-0">
+                                <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: {{ $p->progress }}%</span>
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
+                                    <div class="{{ $p->progress == 100.0 ? 'bg-green-600' : 'bg-blue-600' }} h-2.5 rounded-full" style="width: {{ $p->progress }}%"></div>
+                                </div>
+                            </div>    
+                            @if ($p->progress == 100.0)
+                                <div class="mt-6 flex-shrink-0">
+                                    <a href="{{ route('pelanggan.galeri') }}" class="w-full text-center block py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition">
+                                        Lihat Detail Proyek
+                                    </a>
+                                </div>
+                            @else
+                                <div class="mt-6">
+                                    <a href="{{ route('pelanggan.detail-proyek') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                                        Lihat Detail Proyek
+                                    </a>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endforeach
+
     
             </div>
         </main>

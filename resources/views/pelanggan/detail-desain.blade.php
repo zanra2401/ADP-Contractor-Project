@@ -43,6 +43,7 @@
 
     {{-- MAIN CONTENT --}}
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
+
         {{-- ================= CARD UTAMA ================= --}}
         <div class="bg-white rounded-none overflow-hidden mb-12">
             
@@ -127,6 +128,7 @@
             </div>
         </div>
         {{-- ================= END CARD UTAMA ================= --}}
+
 
     </main>
 

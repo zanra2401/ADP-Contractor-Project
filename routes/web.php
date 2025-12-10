@@ -140,7 +140,7 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     })->name('detail-proyek');
 
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
-        Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
+        Route::get('/dashboard', [PelangganController::class, 'dashboard'])
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
     
