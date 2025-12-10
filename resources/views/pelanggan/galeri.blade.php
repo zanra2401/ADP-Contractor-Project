@@ -130,8 +130,8 @@
                     {{-- GAMBAR UTAMA --}}
                     <div class="relative h-56">
                         <img class="w-full h-full object-cover"
-                             src="{{ asset($design->contents->first()->file_path ?? 'placeholder.jpg') }}"
-                             alt="{{ $design->nama }}">
+                            src="{{ asset('storage/' . ($design->contents->first()->file_path ?? 'placeholder.jpg')) }}"
+                            alt="{{ $design->nama }}">
 
                         {{-- Label Terpopuler untuk item pertama --}}
                         @if ($loop->iteration == 1)

@@ -45,7 +45,6 @@
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
 
 
-<<<<<<< HEAD
         {{-- ================= CARD UTAMA ================= --}}
         <div class="bg-white rounded-none overflow-hidden mb-12">
             
@@ -54,9 +53,8 @@
                 <div class="relative w-full h-full">
                     @foreach ($design->contents as $index => $content)
                         <div class="carousel-slide absolute inset-0 w-full h-full {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
-                            <img src="{{ asset($content->file_path) }}"
-                                 alt="{{ $design->nama }} - Slide {{ $index + 1 }}"
-                                 class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/'.$content->file_path) }}">
+                            
                         </div>
                     @endforeach
                 </div>
@@ -132,19 +130,6 @@
         </div>
         {{-- ================= END CARD UTAMA ================= --}}
 
-<<<<<<< HEAD
-        {{-- GALERI GAMBAR TAMBAHAN --}}
-        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-
-            @foreach ($design->contents->skip(1) as $img)
-                <img class="rounded-xl shadow-md h-48 w-full object-cover hover:opacity-90 cursor-pointer"
-                    src="{{ asset('storage/' . $img->file_path) }}"
-                    alt="Detail Gambar">
-            @endforeach
-
-        </div>
-=======
->>>>>>> 4fc28e118ca80a02e4fc790fe7539d1989f910b8
 
     </main>
 
