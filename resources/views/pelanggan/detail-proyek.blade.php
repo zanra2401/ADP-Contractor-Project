@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-                    <span class="text-sm text-gray-600">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</span>
+                    <span class="text-sm text-gray-600">Halo, {{ Auth::user()->nama ?? 'Pelanggan' }}!</span>
                     <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
@@ -107,7 +107,7 @@
                             {{-- Total --}}
                             <div class="flex justify-between items-center border-b border-blue-500/50 pb-3">
                                 <span class="text-blue-100 text-sm">Total Kontrak</span>
-                                <span class="font-bold text-lg">{{ Number::currency($proyek->harga, "IDR") }}</span>
+                                <span class="font-bold text-lg">{{ Number::currency($proyek->harga ? $proyek->harga : 0, "IDR") }}</span>
                             </div>
                             
                             {{-- Terbayar --}}
@@ -138,18 +138,20 @@
                     <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Pengawas Proyek</h3>
                     <div class="flex items-center">
                         <img class="h-14 w-14 rounded-full object-cover border-2 border-white shadow-md" 
-                             src="https://ui-avatars.com/api/?name=Joko+Santoso&background=random" 
+                             src="https://ui-avatars.com/api/?name={{ $proyek->pengawas?->nama ?? 'Belum Ditentukan' }}&background=random" 
                              alt="Foto Pengawas">
                         <div class="ml-4">
-                            <h4 class="text-lg font-bold text-gray-900">{{ $proyek->pengawas->nama }}</h4>
+                            <h4 class="text-lg font-bold text-gray-900">{{ $proyek->pengawas?->nama ?? 'Belum Ditentukan' }}</h4>
                             <p class="text-sm text-blue-600 font-medium">Pengawas Lapangan</p>
                         </div>
                     </div>
-                    <div class="mt-6">
-                        <a href="{{ route('pelanggan.chat', ['rid' => $proyek->pengawas->id]) }}" class="block w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 hover:text-blue-600 hover:border-blue-300 transition text-sm font-bold text-center shadow-sm">
-                            Chat Aplikasi
-                        </a>
-                    </div>
+                    @if ($proyek->pengawas)
+                        <div class="mt-6">
+                            <a href="{{ route('pelanggan.chat', ['rid' => $proyek->pengawas->id]) }}" class="block w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 hover:text-blue-600 hover:border-blue-300 transition text-sm font-bold text-center shadow-sm">
+                                Chat Aplikasi
+                            </a>
+                        </div>
+                    @endif
                 </div>
                 
                 {{-- (Optional) Bisa tambah widget lain di sini misal Cuaca Lokasi atau Kontak Darurat --}}
@@ -185,11 +187,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            @foreach ($proyek->payment->progresses as $index => $payment)
+                            @foreach ($proyek->payment?->progresses ?? [] as $index => $payment)
                                 <tr class="hover:bg-gray-50 transition duration-150">
                                     <td class="px-6 py-5 text-center font-medium text-gray-400">{{ $index + 1 }}</td>
                                     <td class="px-6 py-5 text-gray-700">
-                                        <div class="font-bold text-gray-900">{{ $paymeny->deskripsi ?? "-" }}</div>
+                                        <div class="font-bold text-gray-900">{{ $payment->deskripsi ?? "-" }}</div>
                                         <span class="text-xs text-gray-400 mt-1 block">Pembayaran awal proyek</span>
                                     </td>
                                     <td class="px-6 py-5 font-bold text-gray-900">{{ Number::currency($payment->jumlah, 'IDR') }}</td>

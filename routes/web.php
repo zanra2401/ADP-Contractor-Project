@@ -118,27 +118,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
-
-    Route::controller(PelangganController::class)->group(function () {
-        Route::post('/register', 'register')->name('register');
-    });
-
-    Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
-
-    Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
-
-    Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
-        ->name('galeri');
-
-    Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
-        ->name('galeri.detail');
-
-    Route::get('/register', fn() => view('auth.register'))->name('register');
-    Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
-
-    Route::get('/detail-proyek/{id}', [PelangganController::class, 'detailProject'])->name('detail-proyek');
-
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
+        Route::controller(PelangganController::class)->group(function () {
+            Route::post('/register', 'register')->name('register');
+        });
+    
+        Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
+    
+        Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+    
+        Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+            ->name('galeri');
+    
+        Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
+            ->name('galeri.detail');
+    
+        Route::get('/register', fn() => view('auth.register'))->name('register');
+        Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
+    
+        Route::get('/detail-proyek/{id}', [PelangganController::class, 'detailProject'])->name('detail-proyek');
         Route::get('/dashboard', [PelangganController::class, 'dashboard'])
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
@@ -172,4 +170,8 @@ Route::prefix('cs')->name('cs.')->group(function () {
 /* --------------------- SUPERADMIN ---------------------- */
 Route::prefix('superadmin')->middleware([AuthMiddleware::class, SuperAdminMiddleware::class])->name('superadmin.')->group(function () {
     Route::get('/manajemen-admin', fn() => view('superadmin.manajemen-admin'))->name('manajemen-admin');
+});
+
+Route::prefix("project")->name("project.")->group(function() {
+    Route::post("/create", [\App\Http\Controllers\ProjectController::class, 'createProject'])->name('create');
 });

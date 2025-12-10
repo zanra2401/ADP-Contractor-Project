@@ -45,10 +45,7 @@
                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                             Chat
                         </a>
-                        <a href="{{ route('pelanggan.pembayaran') }}" 
-                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                            Pembayaran
-                        </a>
+
                     </div>
                 </div>
 
@@ -145,7 +142,7 @@
                                 </div>
                             @else
                                 <div class="mt-6">
-                                    <a href="{{ route('pelanggan.detail-proyek') }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
+                                    <a href="{{ route('pelanggan.detail-proyek', ['id' => $p->id]) }}" class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700">
                                         Lihat Detail Proyek
                                     </a>
                                 </div>
@@ -184,7 +181,7 @@
 
                     {{-- Form Body --}}
                     <div class="px-4 py-6 sm:p-6 bg-white max-h-[80vh] overflow-y-auto">
-                        <form action="" method="POST" class="space-y-5">
+                        <form action="{{ route('project.create') }}" method="POST" class="space-y-5">
                             @csrf
                             
                             {{-- Field: Pilih Desain --}}
@@ -192,11 +189,10 @@
                                 <label for="design_id" class="block text-sm font-bold text-gray-700 mb-1">Pilih Desain Referensi</label>
                                 <div class="relative">
                                     <select id="design_id" name="design_id" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border appearance-none">
-                                        <option value="">-- Pilih Desain (Opsional) --</option>
-                                        <option value="1">Rumah Minimalis Type 45</option>
-                                        <option value="2">Rumah Klasik Modern</option>
-                                        <option value="3">Ruko 2 Lantai</option>
-                                        <option value="custom">Desain Custom (Konsultasi)</option>
+                                        <option value="">Pilih Desain</option>
+                                        @foreach ($designs as $design)
+                                            <option value="{{ $design->id }}">{{ $design->nama }}</option>
+                                        @endforeach
                                     </select>
                                     <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -219,7 +215,7 @@
                             {{-- Field: Alamat --}}
                             <div>
                                 <label for="alamat" class="block text-sm font-bold text-gray-700 mb-1">Alamat Lokasi Proyek</label>
-                                <textarea id="alamat" name="alamat" rows="2" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Alamat lengkap lokasi pembangunan..."></textarea>
+                                <textarea required id="alamat" name="alamat" rows="2" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Alamat lengkap lokasi pembangunan..."></textarea>
                             </div>
 
                             {{-- Footer Form --}}

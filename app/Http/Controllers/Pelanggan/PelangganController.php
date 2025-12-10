@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Factory;
 use App\Models\Chat;
+use App\Models\Design;
 use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -25,21 +26,23 @@ class PelangganController extends Controller
     public function dashboard(): View|Factory {
         $proyek = Project::where('pengunjung_id', Auth::id())->get();
         foreach ($proyek as $p) {
-            $p['content_path'] = $p->design->contents->first()->content_path;
-            $p['progress'] = $p->harga / $p->payment->progresses->sum('jumlah') * 100;
+            $p['content_path'] = $p->design?->contents->first()->content_path;
+            $p['progress'] = $p->payment ? $p->harga / $p->payment?->progresses->sum('jumlah') * 100 : 0;
         }
 
-        return view('pelanggan.dashboard', compact('proyek'));
+        $designs = Design::all();
+
+
+        return view('pelanggan.dashboard', compact('proyek', 'designs'));
     }
 
     public function detailProject(Request $request, $id): View|Factory {
         $proyek = Project::where('id', $id)->first();
        
         $sudahDibayar = $proyek->payment?->progresses->sum('jumlah');
-        $proyek['progress'] = $proyek->harga / $sudahDibayar * 100;
-        $proyek['sudah_dibayar'] = $sudahDibayar;
+        $proyek['progress'] = $sudahDibayar ? $proyek->harga / $sudahDibayar * 100 : 0;
+        $proyek['sudah_dibayar'] = $sudahDibayar ? $sudahDibayar : 0;
 
-        // dd($proyek->pengawas->nama);
         
 
         return view('pelanggan.detail-proyek', compact('proyek'));
