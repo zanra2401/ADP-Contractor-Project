@@ -124,7 +124,6 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     });
 
     Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
-
     Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
 
     Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])

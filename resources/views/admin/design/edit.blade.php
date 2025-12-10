@@ -32,44 +32,58 @@
                     @endforeach
                 </select>
 
+
+                {{-- ================= SPESIFIKASI ================= --}}
+                <label class="mt-4 fw-bold">Spesifikasi</label>
+
+                <div id="specContainer" class="mb-3">
+
+                    @foreach ($design->specs as $spec)
+                        <div class="input-group mb-2">
+                            <input type="text" name="spesifikasi[]" value="{{ $spec->spesifikasi }}" class="form-control">
+                            <button type="button" class="btn btn-danger removeSpec">X</button>
+                        </div>
+                    @endforeach
+
+                    {{-- dummy kosong --}}
+                    <div class="input-group mb-2">
+                        <input type="text" name="spesifikasi[]" class="form-control" placeholder="Tambah spesifikasi baru">
+                        <button type="button" class="btn btn-danger removeSpec d-none">X</button>
+                    </div>
+                </div>
+
+                <button type="button" onclick="addSpec()" class="btn btn-outline-primary btn-sm mb-3">
+                    + Tambah Spesifikasi
+                </button>
+
+
+
                 <button class="btn btn-success mt-4">Simpan Perubahan</button>
             </form>
 
         </div>
     </div>
 
-    {{-- MEDIA GAMBAR --}}
-    <div class="card shadow-sm">
-        <div class="card-header fw-bold">📸 Gambar Desain</div>
-        <div class="card-body">
-
-            <form action="{{ route('admin.design.media.upload',$design->id) }}"
-                  method="POST" enctype="multipart/form-data">
-                @csrf
-
-                <input type="file" name="file" class="form-control">
-                <button class="btn btn-primary mt-3">Upload Gambar</button>
-            </form>
-
-            <hr class="my-4">
-
-            <div class="row">
-                @foreach ($design->contents as $img)
-                <div class="col-md-3 text-center mb-4">
-                    <img src="{{ asset('storage/'.$img->file_path) }}"
-                         class="img-fluid rounded mb-2" style="height:140px; object-fit:cover;">
-
-                    <form action="{{ route('admin.design.media.delete', $img->id) }}"
-                        method="POST">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Hapus</button>
-                    </form>
-                </div>
-                @endforeach
-            </div>
-
-        </div>
-    </div>
 
 </div>
+
+
+<script>
+function addSpec(){
+    let html = `
+        <div class="input-group mb-2">
+            <input type="text" name="spesifikasi[]" class="form-control" placeholder="contoh: 2 Kamar Tidur">
+            <button type="button" class="btn btn-danger removeSpec">X</button>
+        </div>
+    `;
+    document.getElementById('specContainer').insertAdjacentHTML('beforeend', html);
+}
+
+document.addEventListener('click', function(e){
+    if(e.target.classList.contains('removeSpec')){
+        e.target.parentElement.remove();
+    }
+});
+</script>
+
 @endsection
