@@ -42,7 +42,7 @@
 
                 {{-- GAMBAR UTAMA --}}
                 <div class="h-96 lg:h-auto bg-gray-200 relative">
-                    <img src="{{ asset($design->contents->first()->content_path) }}
+                    <img src="{{ asset('storage/' . $design->contents->first()->file_path) }}"
 "
 "
                          alt="{{ $design->nama }}"
@@ -124,8 +124,8 @@
 
             @foreach ($design->contents->skip(1) as $img)
                 <img class="rounded-xl shadow-md h-48 w-full object-cover hover:opacity-90 cursor-pointer"
-                     src="{{ asset($img->file_path) }}"
-                     alt="Detail Gambar">
+                    src="{{ asset('storage/' . $img->file_path) }}"
+                    alt="Detail Gambar">
             @endforeach
 
         </div>

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('payment_progress', function (Blueprint $table) {
             $table->ulid("id")->primary();
-            $table->foreignUlid('payment_id')->references('id')->on('payments');
+            $table->foreignUlid('payment_id')->references('id')->on('payments')->cascadeOnDelete();
             $table->decimal('jumlah', total: 15, places: 2);
             $table->enum('metode', ['transfer', 'cash']);
             $table->timestamps();
