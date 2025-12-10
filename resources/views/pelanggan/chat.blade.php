@@ -36,12 +36,16 @@
                         <a href="{{ route('pelanggan.chat') }}" class="{{ request()->routeIs('pelanggan.chat') ? 'border-blue-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                             Chat
                         </a>
+                        <a href="{{ route('pelanggan.pembayaran') }}" 
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                            Pembayaran
+                        </a>
                     </div>
                 </div>
                 
                 <!-- MENU KANAN -->
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-                    <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!</span>
+                    <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->nama ?? 'Pelanggan' }}!</span>
                     <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil Saya</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf

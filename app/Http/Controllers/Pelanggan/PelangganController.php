@@ -32,6 +32,19 @@ class PelangganController extends Controller
         return view('pelanggan.dashboard', compact('proyek'));
     }
 
+    public function detailProject(Request $request, $id): View|Factory {
+        $proyek = Project::where('id', $id)->first();
+       
+        $sudahDibayar = $proyek->payment?->progresses->sum('jumlah');
+        $proyek['progress'] = $proyek->harga / $sudahDibayar * 100;
+        $proyek['sudah_dibayar'] = $sudahDibayar;
+
+        // dd($proyek->pengawas->nama);
+        
+
+        return view('pelanggan.detail-proyek', compact('proyek'));
+    }
+
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
 
         $role = Role::where("nama_Role", "pengunjung")->first();
@@ -71,6 +84,12 @@ class PelangganController extends Controller
                 });
             })
             ->get();
+        
+        if ($rid) {
+            if ($users->contains('id', $rid) == false) {
+                $users->push(User::where('id', $rid)->first());
+            }
+        }
 
         $messages = Chat::getMessageWith($rid);
 
@@ -80,6 +99,8 @@ class PelangganController extends Controller
             $user['last_time'] = Carbon::parse($lastMessage?->waktu_kirim)?->toTimeString();
             $user['unread'] = Chat::getUnreadMessagesWith($user->id)->count();
         }
+
+        
         
         return view('pelanggan.chat', [
             'contacts' => $users,

@@ -57,19 +57,19 @@
             <div class="md:flex md:items-start md:justify-between gap-6 mb-8">
                 <div class="flex-1 min-w-0">
                     <h2 class="text-3xl font-extrabold text-gray-900 sm:text-4xl tracking-tight">
-                        Rumah Type 45
+                        {{ $proyek->nama_proyek ?? 'Belum Ditentukan' }}
                     </h2>
                     <div class="mt-3 flex flex-col sm:flex-row sm:flex-wrap sm:space-x-6 gap-y-2">
                         <div class="flex items-center text-sm text-gray-500">
                             <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                            Jl. Merpati Indah No. 10, Surabaya
+                            {{ $proyek->alamat }}
                         </div>
                     </div>
                 </div>
                 <div class="mt-4 md:mt-0 flex flex-col items-end">
                     <span class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold text-blue-700 bg-blue-50 border border-blue-100 shadow-sm">
                         <span class="w-2 h-2 bg-blue-600 rounded-full mr-2 animate-pulse"></span>
-                        Proses
+                        {{ $proyek->status }}
                     </span>
                 </div>
             </div>
@@ -82,18 +82,17 @@
                     <div class="flex justify-between mb-4 items-end">
                         <div>
                             <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Progress Realisasi</span>
-                            <div class="text-3xl font-extrabold text-gray-900 mt-1">70%</div>
+                            <div class="text-3xl font-extrabold text-gray-900 mt-1">{{ $proyek->progress }}%</div>
                         </div>
-                        <span class="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">Proses</span>
+                        <span class="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">{{ $proyek->status }}</span>
                     </div>
                     
                     {{-- Bar --}}
                     <div class="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
-                        <div class="bg-blue-600 h-4 rounded-full shadow-lg relative" style="width: 70%">
+                        <div class="{{ $proyek->progress == 100.0 ? 'bg-green-600' : 'bg-blue-600' }} h-4 rounded-full shadow-lg relative" style="width: {{ $proyek->progress }}%">
                             <div class="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]"></div>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-400 mt-3">Terakhir diupdate: 2 Jam yang lalu oleh Pengawas</p>
                 </div>
 
                 {{-- 2. Card Info Biaya (Mengambil 1 Kolom) --}}
@@ -108,15 +107,15 @@
                             {{-- Total --}}
                             <div class="flex justify-between items-center border-b border-blue-500/50 pb-3">
                                 <span class="text-blue-100 text-sm">Total Kontrak</span>
-                                <span class="font-bold text-lg">Rp 150.000.000</span>
+                                <span class="font-bold text-lg">{{ Number::currency($proyek->harga, "IDR") }}</span>
                             </div>
                             
                             {{-- Terbayar --}}
                             <div class="flex justify-between items-center">
                                 <span class="text-blue-100 text-sm">Sudah Dibayar</span>
                                 <div class="text-right">
-                                    <span class="font-bold text-xl text-white">Rp 105.000.000</span>
-                                    <span class="text-xs inline-block bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 font-medium">70%</span>
+                                    <span class="font-bold text-xl text-white">{{ Number::currency($proyek->sudah_dibayar, "IDR") }}</span>
+                                    <span class="text-xs inline-block bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 font-medium">{{ $proyek->progress }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -142,12 +141,12 @@
                              src="https://ui-avatars.com/api/?name=Joko+Santoso&background=random" 
                              alt="Foto Pengawas">
                         <div class="ml-4">
-                            <h4 class="text-lg font-bold text-gray-900">Ir. Joko Santoso</h4>
-                            <p class="text-sm text-blue-600 font-medium">Supervisor Lapangan</p>
+                            <h4 class="text-lg font-bold text-gray-900">{{ $proyek->pengawas->nama }}</h4>
+                            <p class="text-sm text-blue-600 font-medium">Pengawas Lapangan</p>
                         </div>
                     </div>
                     <div class="mt-6">
-                        <a href="{{ route('pelanggan.chat') }}" class="block w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 hover:text-blue-600 hover:border-blue-300 transition text-sm font-bold text-center shadow-sm">
+                        <a href="{{ route('pelanggan.chat', ['rid' => $proyek->pengawas->id]) }}" class="block w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 hover:text-blue-600 hover:border-blue-300 transition text-sm font-bold text-center shadow-sm">
                             Chat Aplikasi
                         </a>
                     </div>
@@ -163,7 +162,7 @@
                 <div class="bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
                     <h3 class="text-xl font-bold text-gray-900 mb-4">Deskripsi Pekerjaan</h3>
                     <p class="text-gray-600 leading-relaxed text-justify">
-                        Proyek renovasi mencakup perbaikan struktur atap menggunakan baja ringan, penggantian lantai keramik menjadi granit ukuran 60x60, serta pengecatan ulang seluruh dinding interior dan eksterior. Saat ini tim sedang fokus pada pemasangan rangka plafon di ruang tamu dan kamar utama. Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id maxime distinctio totam, ullam dolor ipsum delectus ea praesentium expedita amet animi dignissimos doloribus corporis perferendis repudiandae culpa omnis nisi sunt.
+                        {{ $proyek->deskripsi }}
                     </p>
                 </div>
             </div>
@@ -186,44 +185,34 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            {{-- Row 1 --}}
-                            <tr class="bg-blue-50/50 hover:bg-blue-50 transition duration-150">
-                                <td class="px-6 py-5 text-center font-medium text-blue-500">1</td>
-                                <td class="px-6 py-5 text-gray-700">
-                                    <div class="font-bold text-blue-900">Pembayaran Tahap Akhir</div>
-                                    <span class="text-xs text-gray-500 mt-1 block">Finishing & Serah Terima</span>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-blue-700">Rp 45.000.000</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-200 animate-pulse">
-                                        Menunggu Pembayaran
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5 text-center">
-                                    <a href="{{ route('pelanggan.pembayaran') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5">
-                                        Bayar Sekarang
-                                    </a>
-                                </td>
-                            </tr>
-                            {{-- Row 2 --}}
-                            <tr class="hover:bg-gray-50 transition duration-150">
-                                <td class="px-6 py-5 text-center font-medium text-gray-400">2</td>
-                                <td class="px-6 py-5 text-gray-700">
-                                    <div class="font-bold text-gray-900">Uang Muka (DP)</div>
-                                    <span class="text-xs text-gray-400 mt-1 block">Pembayaran awal proyek</span>
-                                </td>
-                                <td class="px-6 py-5 font-bold text-gray-900">Rp 105.000.000</td>
-                                <td class="px-6 py-5 text-center">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
-                                        Lunas
-                                    </span>
-                                </td>
-                                <td class="px-6 py-5 text-center">
-                                    <button class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
-                                        Cetak Invoice
-                                    </button>
-                                </td>
-                            </tr>
+                            @foreach ($proyek->payment->progresses as $index => $payment)
+                                <tr class="hover:bg-gray-50 transition duration-150">
+                                    <td class="px-6 py-5 text-center font-medium text-gray-400">{{ $index + 1 }}</td>
+                                    <td class="px-6 py-5 text-gray-700">
+                                        <div class="font-bold text-gray-900">{{ $paymeny->deskripsi ?? "-" }}</div>
+                                        <span class="text-xs text-gray-400 mt-1 block">Pembayaran awal proyek</span>
+                                    </td>
+                                    <td class="px-6 py-5 font-bold text-gray-900">{{ Number::currency($payment->jumlah, 'IDR') }}</td>
+                                    <td class="px-6 py-5 text-center">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
+                                            {{ $payment->status }}
+                                        </span>
+                                    </td>
+                                    @if ($payment->status == 'lunas')
+                                        <td class="px-6 py-5 text-center">
+                                            <button class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
+                                                Cetak Invoice
+                                            </button>
+                                        </td>
+                                    @else
+                                        <td class="px-6 py-5 text-center">
+                                            <a href="{{ route('pelanggan.pembayaran') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5">
+                                                Bayar Sekarang
+                                            </a>
+                                        </td>
+                                    @endif
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

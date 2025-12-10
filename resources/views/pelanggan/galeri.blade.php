@@ -43,7 +43,7 @@
                 {{-- KANAN: USER INFO & LOGOUT DESKTOP --}}
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
                     <span class="text-sm text-gray-700 mr-2">
-                        Halo, {{ Auth::user()->name ?? 'Pelanggan' }}!
+                        Halo, {{ Auth::user()->nama ?? 'Pelanggan' }}!
                     </span>
 
                     <a href="{{ route('pelanggan.profil') }}"
@@ -130,8 +130,8 @@
                     {{-- GAMBAR UTAMA --}}
                     <div class="relative h-56">
                         <img class="w-full h-full object-cover"
-                             src="{{ asset($design->contents->first()->file_path ?? 'placeholder.jpg') }}"
-                             alt="{{ $design->nama }}">
+                            src="{{ asset('storage/' . ($design->contents->first()->file_path ?? 'placeholder.jpg')) }}"
+                            alt="{{ $design->nama }}">
 
                         {{-- Label Terpopuler untuk item pertama --}}
                         @if ($loop->iteration == 1)

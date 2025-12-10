@@ -52,9 +52,8 @@
                 <div class="relative w-full h-full">
                     @foreach ($design->contents as $index => $content)
                         <div class="carousel-slide absolute inset-0 w-full h-full {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
-                            <img src="{{ asset($content->file_path) }}"
-                                 alt="{{ $design->nama }} - Slide {{ $index + 1 }}"
-                                 class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/'.$content->file_path) }}">
+                            
                         </div>
                     @endforeach
                 </div>
