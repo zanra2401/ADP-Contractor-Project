@@ -133,6 +133,10 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
 
+    Route::get('/detail-proyek', function () {
+        return view('pelanggan.detail-proyek');
+    })->name('detail-proyek');
+
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
         Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
             ->name('dashboard')
@@ -140,6 +144,7 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     
         Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
+
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
         Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
