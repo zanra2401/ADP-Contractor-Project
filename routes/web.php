@@ -53,7 +53,10 @@ Route::post('/message_send', [MessageController::class, 'sendMessage'])->name('m
 */
 
 // LANDING PAGE
-Route::get('/', fn() => view('welcome'))->name('home');
+Route::get('/', function ()  {
+    $designs = \App\Models\Design::has('contents')->with('contents')->inRandomOrder()->take(3)->get();
+    return view('welcome', compact('designs'));
+})->name('home');
 
 // Logout
 
