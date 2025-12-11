@@ -6,16 +6,6 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-3 mb-4 shadow-sm">
         <div class="container-fluid">
             <h1 class="h3 mb-0">📤 Upload Progress</h1>
-             <div class="ms-auto d-flex align-items-center">
-                <div class="dropdown">
-                    <a href="#" class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        🔔 <span class="badge rounded-pill bg-danger">3</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="#">Notifikasi 1: Proyek baru ditambahkan.</a></li>
-                    </ul>
-                </div>
-            </div>
         </div>
     </nav>
 
@@ -23,63 +13,68 @@
         <div class="card shadow-sm">
             <div class="card-header fw-bold bg-white">Laporkan Kemajuan Proyek</div>
             <div class="card-body">
-                <form action="#" method="POST" enctype="multipart/form-data">
-                    @csrf 
+
+                {{-- tampilkan error --}}
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if (session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                <div class="mb-3 text-end">
+                    <a href="{{ route('admin.progress.index') }}" class="btn btn-outline-primary">
+                        Lihat Semua Progress
+                    </a>
+                </div>
+
+                <form action="{{ route('admin.progress.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    {{-- Pilih proyek --}}
                     <div class="mb-3">
-                        <label for="pilihProyek" class="form-label">Pilih Proyek</label>
-                        <select class="form-select" id="pilihProyek" name="project_id" required>
-                            <option selected disabled>-- Pilih Proyek --</option>
-                            <option value="1">pengerjaan plafond proyek A</option>
-                            <option value="2">Pengerjaan lantai proyek B</option>
+                        <label class="form-label">Pilih Proyek</label>
+                        <select class="form-select" name="project_id" required>
+                            <option disabled selected>-- Pilih Proyek --</option>
+                            @foreach ($projects as $project)
+                                <option value="{{ $project->id }}">{{ $project->nama_proyek }}</option>
+                            @endforeach
                         </select>
                     </div>
 
-                    <!-- 2. DESKRIPSI -->
+                    {{-- Deskripsi --}}
                     <div class="mb-3">
-                        <label for="deskripsi" class="form-label">Deskripsi</label>
-                        <textarea class="form-control" id="deskripsi" name="description" rows="3" placeholder="Jelaskan detail dokumen atau progress yang diupload..." required></textarea>
+                        <label class="form-label">Deskripsi</label>
+                        <textarea class="form-control" name="deskripsi" rows="3" required></textarea>
                     </div>
 
-                    <!-- 4. STATUS -->
+                    {{-- Status --}}
                     <div class="mb-3">
-                        <label for="status" class="form-label">Status Progres</label>
-                        <select class="form-select" id="status" name="status" required>
-                            <option selected disabled>-- Pilih Status --</option>
-                            <option value="On Progress">On Progress</option>
-                            <option value="Pending Review">Pending Review</option>
-                            <option value="Revisi">Revisi</option>
-                            <option value="Completed">Completed</option>
+                        <label class="form-label">Status Progres</label>
+                        <select class="form-select" name="status_publikasi" required>
+                            <option disabled selected>-- Pilih Status --</option>
+                            <option value="menunggu">Menunggu</option>
+                            <option value="disetujui">Disetujui</option>
+                            <option value="ditolak">Ditolak</option>
                         </select>
                     </div>
 
-                    <!-- 5. UPLOAD GAMBAR -->
+                    {{-- Upload file --}}
                     <div class="mb-4">
-                        <label for="gambar" class="form-label">Upload Gambar Bukti</label>
-                        <input class="form-control" type="file" id="gambar" name="image" accept="image/*" required>
-                        <div class="form-text">Format yang didukung: JPG, PNG, JPEG (Max max:10240 kb).</div>
+                        <label class="form-label">Upload File</label>
+                        <input class="form-control" type="file" name="file" accept=".jpg,.png,.jpeg,.mp4,.pdf">
                     </div>
 
                     <div class="d-flex justify-content-end">
                         <button type="reset" class="btn btn-secondary me-2">Reset</button>
                         <button type="submit" class="btn btn-primary">Kirim Laporan</button>
                     </div>
-                        <label for="fileUpload" class="form-label">Upload File Bukti/Dokumen</label>
-                        <input type="file" class="form-control" id="fileUpload" name="file_path" required>
-                        <div class="form-text">Format: PDF, JPG, PNG, DOCX (Maks. 5MB)</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Status Laporan</label>
-                        <select class="form-select" id="status" name="status" required>
-                            <option selected disabled>-- Pilih Status --</option>
-                            <option value="draft">Belum Dikerjakan</option>
-                            <option value="in_review">Diproses</option>
-                            <option value="approved">Perlu di review</option>
-                            <option value="rejected">Finish</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Simpan Progress</button>
                 </form>
 
             </div>

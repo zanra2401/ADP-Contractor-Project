@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\ProgressService;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ProgressLog;
 
 class ProgressController extends Controller
 {
@@ -16,49 +17,43 @@ class ProgressController extends Controller
         $this->service = $service;
     }
 
-    // Create new progress (admin only).
-    // POST /api/progress
+    //SHOW PROGRESS LIST PAGE (ADMIN ONLY)
+    public function index()
+    {
+        if (!$this->isAdmin()) {
+            abort(403);
+        }
+
+        $progress = $this->service->getProgressPengunjung();
+
+        return view('admin.progress-index', compact('progress'));
+    }
+
+
     public function store(Request $request)
     {
-        // check role admin
         if (!$this->isAdmin()) {
-            return response()->json(['message' => 'Forbidden: only admin can create progress'], 403);
+            abort(403, 'Forbidden');
         }
 
-        // validate request
-        $rules = [
+        $data = $request->validate([
             'project_id' => 'required|string|exists:projects,id',
             'deskripsi'  => 'nullable|string',
-            'file'       => 'nullable|file|mimes:jpg,jpeg,png,mp4,avi,pdf|max:20480', // adjust as needed
+            'file'       => 'nullable|file|mimes:jpg,jpeg,png,mp4,avi,pdf|max:20480',
             'status_publikasi' => 'nullable|in:menunggu,disetujui,ditolak',
-            'tanggal_upload' => 'nullable|date',
-        ];
+        ]);
 
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422);
-        }
-
-        $data = $validator->validated();
-
-        // handle file upload
         if ($request->hasFile('file')) {
-            $path = $this->service->storeUploadedFile($request->file('file'));
-            $data['file_path'] = $path;
+            $data['file_path'] = $this->service->storeUploadedFile($request->file('file'));
         }
 
-        // set default tanggal_upload if not provided
-        if (empty($data['tanggal_upload'])) {
-            $data['tanggal_upload'] = now();
-        }
+        $this->service->create($data);
 
-        $progress = $this->service->create($data);
-
-        return response()->json([
-            'message' => 'Progress created',
-            'data' => $progress
-        ], 201);
+        return redirect()
+            ->route('admin.upload-progress')
+            ->with('success', 'Progress berhasil ditambahkan');
     }
+
 
     // List progress by project (admin only).
     // GET /api/progress/project/{projectId}
@@ -78,7 +73,7 @@ class ProgressController extends Controller
 
     // Get single progress item (admin only).
     // GET /api/progress/{id}
-    public function show(int $id)
+    public function show(string $id)
     {
         if (!$this->isAdmin()) {
             return response()->json(['message' => 'Forbidden: only admin can view progress'], 403);
@@ -94,10 +89,13 @@ class ProgressController extends Controller
 
     // Update progress (admin only).
     // PUT /api/progress/{id}
-    public function update(Request $request, int $id)
+    public function update(Request $request, string $id)
     {
         if (!$this->isAdmin()) {
-            return response()->json(['message' => 'Forbidden: only admin can update progress'], 403);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Forbidden: only admin can update progress'], 403);
+            }
+            abort(403);
         }
 
         $rules = [
@@ -108,8 +106,12 @@ class ProgressController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules);
+
         if ($validator->fails()) {
-            return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Validation failed', 'errors' => $validator->errors()], 422);
+            }
+            return back()->withErrors($validator)->withInput();
         }
 
         $data = $validator->validated();
@@ -119,28 +121,40 @@ class ProgressController extends Controller
             $data['file_path'] = $path;
         }
 
-        $updated = $this->service->update($id, $data);
+        $this->service->update($id, $data);
+
+        if (!$request->expectsJson()) {
+            return redirect()->back()->with('success', 'Progress berhasil diperbarui');
+        }
 
         return response()->json([
-            'message' => 'Progress updated',
-            'data' => $updated
+            'message' => 'Progress updated'
         ]);
     }
 
+
     // Delete progress (admin only).
     // DELETE /api/progress/{id}
-    public function destroy(int $id)
+    public function destroy(Request $request, string $id)
     {
         if (!$this->isAdmin()) {
-            return response()->json(['message' => 'Forbidden: only admin can delete progress'], 403);
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Forbidden: only admin can delete progress'], 403);
+            }
+            abort(403);
         }
 
         $this->service->delete($id);
+
+        if (!$request->expectsJson()) {
+            return redirect()->back()->with('success', 'Progress berhasil dihapus');
+        }
 
         return response()->json([
             'message' => 'Progress deleted'
         ]);
     }
+
 
     // Helper: check if authenticated user is admin.
     protected function isAdmin(): bool

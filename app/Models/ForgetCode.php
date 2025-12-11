@@ -4,16 +4,10 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Ramsey\Uuid\Uuid;
 
 class ForgetCode extends Model
 {
-
-    use HasUuids;
-
     protected $table = 'forget_codes';
     public $timestamps = false;
 
@@ -24,24 +18,20 @@ class ForgetCode extends Model
         'created_at'
     ];
 
-    public static function booted()
+    protected static function booted()
     {
         static::creating(function ($forgetCode) {
             $forgetCode->created_at = Carbon::now();
+
+            // Jika expired_at belum diset, otomatis 5 menit
+            if (!$forgetCode->expired_at) {
+                $forgetCode->expired_at = Carbon::now()->addMinutes(5);
+            }
         });
     }
 
-    public function uniqueIds(): array
+    public function user(): BelongsTo
     {
-        return ['code'];
-    }
-
-    public function newUniqueId(): string
-    {
-        return Uuid::uuid4();
-    }
-
-    public function users(): BelongsTo {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('forget_codes', function (Blueprint $table) {
             $table->id();
             $table->foreignUlid('user_id')->references('id')->on('users');
-            $table->uuid('code')->uniqid();
-            $table->timestamp('expired_at')->useCurrent();
+            $table->uuid('code')->unique();
+            $table->timestamp('expired_at');
             $table->timestamp('created_at')->useCurrent();
         });
     }
+
 
     /**
      * Reverse the migrations.
