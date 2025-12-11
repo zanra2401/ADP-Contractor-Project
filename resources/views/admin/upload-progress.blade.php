@@ -11,9 +11,10 @@
 
     <div class="p-4">
         <div class="card shadow-sm">
-            <div class="card-header fw-bold bg-white">Laporkan Kemajuan Proyek</div>
+            <div class="card-header fw-bold bg-white py-3">
+                Laporkan Kemajuan Proyek
+            </div>
             <div class="card-body">
-
                 {{-- tampilkan error --}}
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -71,9 +72,9 @@
                         <input class="form-control" type="file" name="file" accept=".jpg,.png,.jpeg,.mp4,.pdf">
                     </div>
 
-                    <div class="d-flex justify-content-end">
-                        <button type="reset" class="btn btn-secondary me-2">Reset</button>
-                        <button type="submit" class="btn btn-primary">Kirim Laporan</button>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="reset" class="btn btn-secondary">Reset</button>
+                        <button type="submit" class="btn btn-primary">Simpan Progress</button>
                     </div>
                 </form>
 

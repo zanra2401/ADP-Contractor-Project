@@ -27,23 +27,14 @@
                 {{-- NAMA --}}
                 <label class="mt-3">Nama Desain</label>
                 <input type="text" name="nama" class="form-control" value="{{ old('nama') }}">
-                @error('nama')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
 
                 {{-- DESKRIPSI --}}
                 <label class="mt-3">Deskripsi</label>
                 <textarea name="deskripsi" class="form-control" rows="4">{{ old('deskripsi') }}</textarea>
-                @error('deskripsi')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
 
                 {{-- HARGA --}}
                 <label class="mt-3">Harga</label>
                 <input type="number" name="harga" class="form-control" value="{{ old('harga') }}">
-                @error('harga')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
 
                 {{-- KATEGORI --}}
                 <label class="mt-3">Kategori</label>
@@ -52,25 +43,53 @@
                         <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
                     @endforeach
                 </select>
-                @error('kategori')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
 
                 {{-- UPLOAD GAMBAR --}}
                 <label class="mt-3">Upload Gambar (bisa banyak)</label>
                 <input type="file" name="files[]" class="form-control" multiple>
-                @error('files')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-                @error('files.*')
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
+
+                {{-- ====================== SPESIFIKASI ====================== --}}
+                <label class="mt-4 fw-bold">Spesifikasi</label>
+
+                <div id="specContainer" class="mb-3">
+
+                    <div class="input-group mb-2">
+                        <input type="text" name="spesifikasi[]" class="form-control"
+                               placeholder="contoh: 2 Kamar Tidur">
+                        <button type="button" class="btn btn-danger removeSpec d-none">X</button>
+                    </div>
+
+                </div>
+
+                <button type="button" onclick="addSpec()" class="btn btn-outline-primary btn-sm mb-4">
+                    + Tambah Spesifikasi
+                </button>
 
                 {{-- BUTTON --}}
-                <button class="btn btn-primary mt-4">Simpan</button>
+                <button class="btn btn-primary mt-3">Simpan</button>
             </form>
 
         </div>
     </div>
 </div>
+
+{{--===== JAVASCRIPT =====--}}
+<script>
+function addSpec(){
+    let html = `
+        <div class="input-group mb-2">
+            <input type="text" name="spesifikasi[]" class="form-control" placeholder="contoh: 2 Kamar Tidur">
+            <button type="button" class="btn btn-danger removeSpec">X</button>
+        </div>
+    `;
+    document.getElementById('specContainer').insertAdjacentHTML('beforeend', html);
+}
+
+document.addEventListener('click', function(e){
+    if(e.target.classList.contains('removeSpec')){
+        e.target.parentElement.remove();
+    }
+});
+</script>
+
 @endsection

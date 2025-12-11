@@ -14,17 +14,27 @@
             <table class="table table-hover">
                 <thead class="table-dark">
                     <tr>
+                        <th>Gambar</th>
                         <th>Nama</th>
                         <th>Kategori</th>
+                        <th>Spesifikasi</th>
                         <th>Deskripsi</th>
                         <th>Harga</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
 
+
                 <tbody>
                 @foreach ($designs as $d)
                     <tr>
+                        <td>
+                            <img
+                                src="{{ asset('storage/' . ($d->contents->first()->file_path ?? 'placeholder.jpg')) }}"
+                                alt="{{ $d->nama }}"
+                                style="width:100px;height:60px;object-fit:cover;border-radius:8px;"
+                            >
+                        </td>
                         <td>{{ $d->nama }}</td>
 
                         <td>
@@ -32,6 +42,14 @@
                                 <span class="badge bg-info">{{ $c->nama }}</span>
                             @endforeach
                         </td>
+                        <td>
+                            <ul class="mb-0 ps-3">
+                                @foreach($d->specs as $s)
+                                    <li>{{ $s->spesifikasi }}</li>
+                                @endforeach
+                            </ul>
+                        </td>
+
 
                         <td>{{ Str::limit($d->deskripsi, 50) }}</td>
 

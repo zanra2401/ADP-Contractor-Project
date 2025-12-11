@@ -3,11 +3,9 @@
 @section('title', 'Manajemen Proyek')
 
 @section('content')
-    <!-- TOP NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-3 mb-4 shadow-sm">
         <div class="container-fluid">
             <h1 class="h3 mb-0">🗂️ Manajemen Proyek</h1>
-
             <div class="ms-auto d-flex align-items-center">
                 <div class="dropdown">
                     <a href="#" class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -19,20 +17,19 @@
                     </ul>
                 </div>
             </div>
-        </div>
     </nav>
 
     <div class="p-4">
         <p class="lead mb-4">Kelola semua proyek yang sedang berjalan atau sudah selesai.</p>
 
         <div class="card shadow-sm">
-            <div class="card-header d-flex justify-content-between align-items-center bg-white">
+            <div class="card-header d-flex flex-wrap justify-content-between align-items-center bg-white py-3 gap-2">
                 <h5 class="mb-0">Daftar Proyek</h5>
-                <!-- TOMBOL TAMBAH PROYEK (Trigger Modal) -->
                 <button type="button" class="btn btn-primary btn-sm" onclick="showCreateProjectModal()">
                     <span class="me-1">+</span> Buat Proyek Baru
                 </button>
             </div>
+            
             <div class="card-body p-0">
                 <table class="table table-striped table-hover align-middle mb-0">
                     <thead class="table-dark">
@@ -50,11 +47,8 @@
         </div>
     </div>
 
-    <!-- ================================ -->
-    <!-- MODAL: FORM TAMBAH/EDIT PROYEK   -->
-    <!-- ================================ -->
     <div class="modal fade" id="projectModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- modal-lg agar lebih lebar -->
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="projectModalLabel">Buat Proyek Baru</h5>
@@ -155,7 +149,6 @@
             </div>
         </div>
     </div>
-
 
 @endsection
 

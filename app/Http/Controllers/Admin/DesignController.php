@@ -45,7 +45,7 @@ class DesignController extends Controller
             $design->categories()->attach($request->kategori);
         }
 
-        // upload file gambar
+        // upload gambar
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $path = $file->store("uploads/designs", "public");
@@ -57,13 +57,26 @@ class DesignController extends Controller
             }
         }
 
+        // ========================================
+        // SPESIFIKASI
+        // ========================================
+        if ($request->spesifikasi) {
+            foreach ($request->spesifikasi as $spec) {
+                if (!empty($spec)) {
+                    $design->specs()->create([
+                        'spesifikasi' => $spec
+                    ]);
+                }
+            }
+        }
+
         return redirect()->route('admin.design.index')
             ->with("success", "Desain berhasil disimpan!");
     }
 
     public function edit($id)
     {
-        $design = Design::with(['categories', 'contents'])->findOrFail($id);
+        $design = Design::with(['categories', 'contents', 'specs'])->findOrFail($id);
         $categories = Category::all();
 
         return view('admin.design.edit', compact('design','categories'));
@@ -88,6 +101,21 @@ class DesignController extends Controller
 
         // update kategori
         $design->categories()->sync($request->kategori);
+
+        // =========================================
+        // UPDATE SPESIFIKASI
+        // =========================================
+        $design->specs()->delete();
+
+        if ($request->spesifikasi) {
+            foreach ($request->spesifikasi as $spec) {
+                if (!empty($spec)) {
+                    $design->specs()->create([
+                        'spesifikasi' => $spec
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('admin.design.edit', $design->id)
             ->with("success", "Desain berhasil diperbarui!");

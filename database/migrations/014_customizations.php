@@ -12,9 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('customizations', function (Blueprint $table) {
-            $table->foreignUlid('project')->references("id")->on('projects');
-            $table->foreignId('material')->references('id')->on('materials');
+            $table->foreignUlid('project')
+                ->references("id")->on('projects')
+                ->cascadeOnDelete();
 
+            $table->foreignId('material')
+                ->references('id')->on('materials')
+                ->cascadeOnDelete();
 
             $table->primary(['project', 'material']);
         });
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::drop('customizations');
+        Schema::dropIfExists('customizations');
     }
 };
