@@ -21,12 +21,16 @@ class PaymentProgressSeeder extends Seeder
             'payment_id' => $payment->id,
             'jumlah'     => $payment->total_harga * 0.3, // 30% DP
             'metode'     => 'transfer',
+            'deskripsi'  => 'Uang Muka (DP)',
+            'status'     => 'lunas',
         ]);
 
         PaymentProgress::create([
             'payment_id' => $payment->id,
             'jumlah'     => $payment->total_harga * 0.7, // pelunasan
             'metode'     => 'cash',
+            'deskripsi'  => 'TAI',
+            'status'     => 'lunas',
         ]);
     }
 }

@@ -74,32 +74,15 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
             
             <!-- Item 1 -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                <img class="h-64 w-full object-cover group-hover:opacity-75" src="https://images.unsplash.com/photo-1570129477490-d11e74d11d1e?fit=crop&w=800&q=60" alt="Rumah Minimalis">
-                <div class="p-5">
-                    <h3 class="text-xl font-semibold text-gray-900">Rumah Minimalis Tipe 80</h3>
-                    <p class="text-gray-600 mt-1">3 Kamar Tidur, 2 Kamar Mandi</p>
+            @foreach($designs as $design)
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
+                    <img class="h-64 w-full object-cover group-hover:opacity-75" src="{{  storage_path($design->contents->first()->content_path ?? '') }}" alt="Rumah Minimalis">
+                    <div class="p-5">
+                        <h3 class="text-xl font-semibold text-gray-900">{{ $design->nama }}</h3>
+                        <p class="text-gray-600 mt-1">3 Kamar Tidur, 2 Kamar Mandi</p>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Item 2 -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                <img class="h-64 w-full object-cover group-hover:opacity-75" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?fit=crop&w=800&q=60" alt="Rumah Modern">
-                <div class="p-5">
-                    <h3 class="text-xl font-semibold text-gray-900">Rumah Modern Tipe 120</h3>
-                    <p class="text-gray-600 mt-1">4 Kamar Tidur, 3 Kamar Mandi, Kolam Renang</p>
-                </div>
-            </div>
-
-            <!-- Item 3 -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                <img class="h-64 w-full object-cover group-hover:opacity-75" src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?fit=crop&w=800&q=60" alt="Rumah Mediterania">
-                <div class="p-5">
-                    <h3 class="text-xl font-semibold text-gray-900">Desain Ruko 3 Lantai</h3>
-                    <p class="text-gray-600 mt-1">Area Komersial, 2 Kamar Mandi</p>
-                </div>
-            </div>
-
+            @endforeach
         </div>
 
         <div class="text-center mt-12">
