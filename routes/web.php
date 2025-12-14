@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Middleware\LoginMiddleware;
 use App\Http\Controllers\Pelanggan\PelangganController;
+use App\Http\Controllers\Pelanggan\PaymentController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\CSMiddleware;
 use App\Http\Controllers\CS\CSController;
@@ -140,7 +141,8 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     
         Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
     
-        Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+        Route::post('/pembayaran/{paymentProgress}/snap', [PaymentController::class, 'createSnapToken'])
+            ->name('pembayaran.snap');
     
         // Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
         //     ->name('galeri');
@@ -158,11 +160,16 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
 
-        Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
         Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
     });
 });
+
+
+// Midtrans webhook
+Route::post('/payment/midtrans/callback', [PaymentController::class, 'handleCallback'])
+    ->name('payment.midtrans-callback')
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
 /* --------------------- PENGAWAS ---------------------- */
 Route::prefix('pengawas')->middleware([AuthMiddleware::class, PengawasMiddleware::class])->name('pengawas.')->group(function () {

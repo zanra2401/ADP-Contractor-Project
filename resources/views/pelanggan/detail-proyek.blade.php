@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
+@php use Illuminate\Support\Number; @endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Detail Proyek - ADP Konstruksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    @php $snapJs = config('midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'; @endphp
+    <script src="{{ $snapJs }}" data-client-key="{{ config('midtrans.client_key') }}"></script>
     <style>
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -208,9 +212,10 @@
                                         </td>
                                     @else
                                         <td class="px-6 py-5 text-center">
-                                            <a href="{{ route('pelanggan.pembayaran') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5">
+                                            <button type="button" class="pay-button inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5"
+                                                data-pay-url="{{ route('pelanggan.pembayaran.snap', $payment) }}">
                                                 Bayar Sekarang
-                                            </a>
+                                            </button>
                                         </td>
                                     @endif
                                 </tr>
@@ -222,6 +227,51 @@
         </div>
 
     </main>
+
+    <script>
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        document.querySelectorAll('.pay-button').forEach((button) => {
+            button.addEventListener('click', async () => {
+                if (!button.dataset.payUrl) return;
+
+                button.disabled = true;
+                button.classList.add('opacity-50', 'cursor-not-allowed');
+
+                try {
+                    const response = await fetch(button.dataset.payUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.message ?? 'Gagal memulai pembayaran');
+                    }
+
+                    if (!window.snap || !data.token) {
+                        throw new Error('Snap Midtrans belum siap. Muat ulang halaman.');
+                    }
+
+                    window.snap.pay(data.token, {
+                        onSuccess: () => window.location.reload(),
+                        onPending: () => window.location.reload(),
+                        onError: () => window.location.reload(),
+                        onClose: () => button.removeAttribute('disabled'),
+                    });
+                } catch (error) {
+                    alert(error.message || 'Gagal memulai pembayaran');
+                } finally {
+                    button.disabled = false;
+                    button.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

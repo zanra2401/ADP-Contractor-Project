@@ -73,7 +73,6 @@
                 <a href="{{ route('pelanggan.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">Dashboard</a>
                 <a href="{{ route('pelanggan.galeri') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Galeri Proyek</a>
                 <a href="{{ route('pelanggan.chat') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Chat</a>
-                <a href="{{ route('pelanggan.pembayaran') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Pembayaran</a>
             </div>
             <div class="pt-4 pb-3 border-t border-gray-200">
                 <div class="px-4">

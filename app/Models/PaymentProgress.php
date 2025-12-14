@@ -19,6 +19,8 @@ class PaymentProgress extends Model
         'payment_id',
         'jumlah',
         'metode',
+        'status',
+        'deskripsi',
         'created_at',
         'updated_at'
     ];
