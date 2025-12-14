@@ -118,18 +118,18 @@
         {{-- GRID LIST --}}
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {{-- Mengubah md:grid-cols-2 menjadi sm:grid-cols-2 agar grid segera aktif di tablet/landscape mobile --}}
-
+                
                 @foreach ($designs as $design)
-                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                {{-- PERBAIKAN 1: Tambahkan h-full, flex, dan flex-col di sini --}}
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300 h-full flex flex-col">
 
                     {{-- GAMBAR UTAMA --}}
-                    <div class="relative h-56">
+                    {{-- Tambahkan shrink-0 agar gambar tidak tergencet --}}
+                    <div class="relative h-56 shrink-0">
                         <img class="w-full h-full object-cover"
                             src="{{ asset('storage/' . ($design->contents->first()->file_path ?? 'placeholder.jpg')) }}"
                             alt="{{ $design->nama }}">
 
-                        {{-- Label Terpopuler untuk item pertama --}}
                         @if ($loop->iteration == 1)
                             <div class="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 rounded-bl-lg font-semibold text-sm">
                                 Terpopuler
@@ -138,7 +138,8 @@
                     </div>
 
                     {{-- CARD BODY --}}
-                    <div class="p-6">
+                    {{-- PERBAIKAN 2: Tambahkan flex, flex-col, dan flex-grow di sini --}}
+                    <div class="p-6 flex flex-col flex-grow">
                         {{-- NAMA DESIGN --}}
                         <h3 class="text-xl font-bold text-gray-900 leading-tight mb-2">
                             {{ $design->nama }}
@@ -159,8 +160,9 @@
                         </p>
 
                         {{-- LINK BUTTON --}}
+                        {{-- PERBAIKAN 3: Tambahkan mt-auto di sini agar tombol didorong ke bawah --}}
                         <a href="{{ route('pelanggan.galeri.detail', $design->id) }}"
-                           class="block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200">
+                           class="mt-auto block w-full text-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors duration-200">
                             Lihat Detail Desain
                         </a>
                     </div>

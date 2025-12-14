@@ -1,12 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+{{-- Load Icon Bootstrap --}}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
 <nav class="navbar navbar-light bg-white border-bottom p-3 shadow-sm mb-4">
     <h4 class="m-0">➕ Tambah Desain</h4>
 </nav>
 
 <div class="p-4">
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
 
             {{-- ALERT ERROR --}}
@@ -26,7 +29,7 @@
 
                 {{-- NAMA --}}
                 <label class="mt-3">Nama Desain</label>
-                <input type="text" name="nama" class="form-control" value="{{ old('nama') }}">
+                <input type="text" name="nama" class="form-control" value="{{ old('nama') }}" placeholder="Masukkan nama desain...">
 
                 {{-- DESKRIPSI --}}
                 <label class="mt-3">Deskripsi</label>
@@ -34,44 +37,79 @@
 
                 {{-- HARGA --}}
                 <label class="mt-3">Harga</label>
-                <input type="number" name="harga" class="form-control" value="{{ old('harga') }}">
+                <input type="number" name="harga" class="form-control" value="{{ old('harga') }}" placeholder="0">
 
-                {{-- KATEGORI --}}
+                {{-- KATEGORI (CHECKBOX STYLE) --}}
                 <label class="mt-3">Kategori</label>
-                <select name="kategori[]" class="form-select" multiple>
+                <div class="border rounded p-3" style="max-height: 200px; overflow-y: auto; background-color: #f8f9fa;">
                     @foreach ($categories as $cat)
-                        <option value="{{ $cat->id }}">{{ $cat->nama }}</option>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" 
+                                name="kategori[]" 
+                                value="{{ $cat->id }}" 
+                                id="cat_{{ $cat->id }}"
+                                {{-- Agar checkbox tetap terpilih jika terjadi error validasi --}}
+                                @if(is_array(old('kategori')) && in_array($cat->id, old('kategori'))) checked @endif
+                            >
+                            <label class="form-check-label" for="cat_{{ $cat->id }}">
+                                {{ $cat->nama }}
+                            </label>
+                        </div>
                     @endforeach
-                </select>
+                </div>
+                <small class="text-muted">* Pilih satu atau lebih kategori.</small>
 
                 {{-- UPLOAD GAMBAR --}}
-                <label class="mt-3">Upload Gambar (bisa banyak)</label>
+                <label class="mt-3">Upload Gambar</label>
                 <input type="file" name="files[]" class="form-control" multiple>
+                <small class="text-muted d-block mb-3">* Bisa memilih banyak gambar sekaligus.</small>
 
                 {{-- ====================== SPESIFIKASI ====================== --}}
                 <label class="mt-4 fw-bold">Spesifikasi</label>
 
                 <div id="specContainer" class="mb-3">
-
+                    {{-- Input Pertama (Default) --}}
                     <div class="input-group mb-2">
-                        <input type="text" name="spesifikasi[]" class="form-control"
-                               placeholder="contoh: 2 Kamar Tidur">
-                        <button type="button" class="btn btn-danger removeSpec d-none">X</button>
+                        <input type="text" name="spesifikasi[]" class="form-control" placeholder="contoh: 2 Kamar Tidur">
+                        <button type="button" class="btn btn-danger removeSpec">
+                            <i class="bi bi-trash"></i>
+                        </button>
                     </div>
-
                 </div>
 
-                <button type="button" onclick="addSpec()" class="btn btn-outline-primary btn-sm mb-4">
-                    + Tambah Spesifikasi
+                {{-- Tombol Tambah Spesifikasi --}}
+                <button type="button" onclick="addSpec()" class="btn btn-outline-primary w-100 mb-4 border-dashed">
+                    <i class="bi bi-plus-lg"></i> Tambah Spesifikasi
                 </button>
 
-                {{-- BUTTON --}}
-                <button class="btn btn-primary mt-3">Simpan</button>
+                <hr>
+
+                {{-- Tombol Simpan di Kanan --}}
+                <div class="d-flex justify-content-end mt-3">
+                    <button class="btn btn-primary px-4">
+                        <i class="bi bi-save me-1"></i> Simpan Data
+                    </button>
+                </div>
+
             </form>
 
         </div>
     </div>
 </div>
+
+<style>
+    .border-dashed {
+        border-style: dashed;
+        border-width: 2px;
+    }
+    .removeSpec i {
+        pointer-events: none;
+    }
+    .form-check-input:checked {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+</style>
 
 {{--===== JAVASCRIPT =====--}}
 <script>
@@ -79,7 +117,9 @@ function addSpec(){
     let html = `
         <div class="input-group mb-2">
             <input type="text" name="spesifikasi[]" class="form-control" placeholder="contoh: 2 Kamar Tidur">
-            <button type="button" class="btn btn-danger removeSpec">X</button>
+            <button type="button" class="btn btn-danger removeSpec">
+                <i class="bi bi-trash"></i>
+            </button>
         </div>
     `;
     document.getElementById('specContainer').insertAdjacentHTML('beforeend', html);
@@ -87,7 +127,14 @@ function addSpec(){
 
 document.addEventListener('click', function(e){
     if(e.target.classList.contains('removeSpec')){
-        e.target.parentElement.remove();
+        // Cek agar minimal sisa 1 input (opsional, jika ingin wajib ada 1 spec)
+        // Jika boleh kosong semua, baris if di bawah bisa dihapus
+        if(document.querySelectorAll('input[name="spesifikasi[]"]').length > 1){
+            e.target.parentElement.remove();
+        } else {
+            // Jika tinggal 1, hanya kosongkan nilainya
+            e.target.parentElement.querySelector('input').value = '';
+        }
     }
 });
 </script>
