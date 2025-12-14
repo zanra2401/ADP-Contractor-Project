@@ -45,15 +45,18 @@
     <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative">
 
         {{-- ================= CARD UTAMA ================= --}}
-        <div class="bg-white rounded-none overflow-hidden mb-12">
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-12">
             
             {{-- CAROUSEL GAMBAR --}}
-            <div id="carousel-container" class="relative w-full h-72 sm:h-96 lg:h-[550px] bg-gray-200 group">
+            {{-- Menggunakan bg-gray-100 sebagai frame jika rasio gambar beda --}}
+            <div id="carousel-container" class="relative w-full h-72 sm:h-96 lg:h-[550px] bg-gray-100 group flex items-center justify-center">
                 <div class="relative w-full h-full">
                     @foreach ($design->contents as $index => $content)
-                        <div class="carousel-slide absolute inset-0 w-full h-full {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
-                            <img src="{{ asset('storage/'.$content->file_path) }}">
-                            
+                        <div class="carousel-slide absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-700 ease-in-out {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
+                            {{-- PERBAIKAN: object-contain agar gambar utuh dan rapi --}}
+                            <img src="{{ asset('storage/'.$content->file_path) }}"
+                                 alt="{{ $design->nama }} - Slide {{ $index + 1 }}"
+                                 class="w-full h-full object-cover object center">
                         </div>
                     @endforeach
                 </div>
@@ -128,7 +131,6 @@
         </div>
         {{-- ================= END CARD UTAMA ================= --}}
 
-
     </main>
 
     {{-- ================= MODAL BUAT PROYEK ================= --}}
@@ -166,7 +168,6 @@
                                     <div class="relative">
                                         <select id="design_id" name="design_id" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm appearance-none border">
                                             <option value="">-- Pilih Desain --</option>
-                                            {{-- Contoh data statis untuk dropdown --}}
                                             <option value="{{ $design->id }}" selected>{{ $design->nama }} (Terpilih)</option>
                                             <option value="2">Rumah Minimalis Type 36</option>
                                             <option value="3">Ruko Modern 2 Lantai</option>
@@ -178,11 +179,12 @@
                                     </div>
                                 </div>
 
-                                <!-- {{-- Field: Nama Proyek --}}
+                                {{-- Field: Nama Proyek (Optional/Hidden in your snippet, uncomment if needed)
                                 <div>
                                     <label for="nama_proyek" class="block text-sm font-bold text-gray-700 mb-1">Nama Proyek</label>
                                     <input type="text" name="nama_proyek" id="nama_proyek" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Contoh: Renovasi Rumah Bapak Budi">
-                                </div> -->
+                                </div> 
+                                --}}
 
                                 {{-- Field: Deskripsi --}}
                                 <div>
