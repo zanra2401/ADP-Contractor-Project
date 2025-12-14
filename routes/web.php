@@ -185,9 +185,14 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 
 /* --------------------- PENGAWAS ---------------------- */
 Route::prefix('pengawas')->middleware([AuthMiddleware::class, PengawasMiddleware::class])->name('pengawas.')->group(function () {
-    Route::get('/dashboard', fn() => view('pengawas.dashboard'))->name('dashboard');
+    // Dashboard handled by Pengawas\DashboardController@index to provide project data
+    Route::get('/dashboard', [\App\Http\Controllers\Pengawas\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/chat/{rid?}', [PengawasController::class, 'chat'])->name('chat');
-    Route::get('/detail-proyek', fn() => view('pengawas.detail-proyek'))->name('detail-proyek');
+
+    // Detail proyek - use controller for show and update
+    Route::get('/detail-proyek/{id}', [\App\Http\Controllers\Pengawas\ProjectController::class, 'show'])->name('detail-proyek');
+    Route::put('/detail-proyek/{id}', [\App\Http\Controllers\Pengawas\ProjectController::class, 'update'])->name('detail-proyek.update');
+
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
     // Route::post('/admin/projects', [AdminProjectController::class, 'store']);
 });
