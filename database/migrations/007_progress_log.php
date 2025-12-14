@@ -13,12 +13,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('progress_log', function (Blueprint $table) {
-            $table->bigInteger('id')->primary();
+            $table->id(); // bigint, auto increment, primary key
             $table->foreignUlid('project_id')->references('id')->on('projects')->cascadeOnDelete();
-            $table->text("deskripsi")->nullable(true);
-            $table->string('file_path', length: 255);
+            $table->text("deskripsi")->nullable();
+            $table->string('file_path', 255)->nullable();
             $table->enum('status_publikasi', ['menunggu', 'disetujui', 'ditolak'])->default('menunggu');
-            $table->timestamp('tanggal_upload')->default(Carbon::now());
+            $table->timestamp('tanggal_upload')->useCurrent();
             $table->timestamps();
             $table->softDeletes();
         });
