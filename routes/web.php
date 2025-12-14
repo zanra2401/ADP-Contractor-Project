@@ -116,6 +116,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
+
+/* --------------------- PUBLIC GALERI ---------------------- */
+Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
+
+    // LIST GALERI → PUBLIC
+    Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+        ->name('galeri');
+
+});
+
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
@@ -127,8 +137,8 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
     
-        Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
-            ->name('galeri');
+        // Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+        //     ->name('galeri');
     
         Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
             ->name('galeri.detail');
