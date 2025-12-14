@@ -36,6 +36,6 @@ class Payment extends Model
     }
 
     public function progresses(): HasMany {
-        return $this->hasMany(PaymentProgress::class, 'project_id', 'id');
+        return $this->hasMany(PaymentProgress::class, 'payment_id', 'id');
     }
 }

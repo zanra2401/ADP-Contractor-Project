@@ -15,7 +15,7 @@ return new class extends Migration
             $table->ulid('id')->primary();
             $table->foreignUlid('pengawas_id')->nullable(true)->references('id')->on('users')->cascadeOnDelete();
             $table->foreignUlid('pengunjung_id')->references('id')->on('users')->cascadeOnDelete();
-            $table->foreignUlid('design_id')->references('id')->on('designs')->cascadeOnDelete();
+            $table->foreignUlid('design_id')->nullable()->references('id')->on('designs')->cascadeOnDelete();
             $table->string('nama_proyek', length:150)->nullable(true);
             $table->text('deskripsi')->nullable(true);
             $table->decimal('harga', total: 15, places: 2)->nullable(true);

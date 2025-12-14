@@ -54,7 +54,10 @@ Route::post('/message_send', [MessageController::class, 'sendMessage'])->name('m
 */
 
 // LANDING PAGE
-Route::get('/', fn() => view('welcome'))->name('home');
+Route::get('/', function ()  {
+    $designs = \App\Models\Design::has('contents')->with('contents')->inRandomOrder()->take(3)->get();
+    return view('welcome', compact('designs'));
+})->name('home');
 
 // Logout
 
@@ -135,7 +138,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
-
     Route::controller(PelangganController::class)->group(function () {
         Route::post('/register', 'register')->name('register');
     });
@@ -156,14 +158,32 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/detail-proyek', function () {
         return view('pelanggan.detail-proyek');
     })->name('detail-proyek');
-
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
-        Route::get('/dashboard', fn() => view('pelanggan.dashboard'))
+        Route::controller(PelangganController::class)->group(function () {
+            Route::post('/register', 'register')->name('register');
+        });
+    
+        Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
+    
+        Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
+    
+        Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+            ->name('galeri');
+    
+        Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
+            ->name('galeri.detail');
+    
+        Route::get('/register', fn() => view('auth.register'))->name('register');
+        Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
+    
+        Route::get('/detail-proyek/{id}', [PelangganController::class, 'detailProject'])->name('detail-proyek');
+        Route::get('/dashboard', [PelangganController::class, 'dashboard'])
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
     
         // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
+
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
         Route::get('/profil', fn() => view('pelanggan.profil'))->name('profil');
         Route::get('/galeri/detail', fn() => view('pelanggan.detail-desain'))->name('galeri.detail');
@@ -206,4 +226,5 @@ Route::post('/forgot-password/request', [ForgotPasswordController::class, 'reque
 Route::post('/forgot-password/reset', [ForgotPasswordController::class, 'resetPassword'])->name('forgot.reset');
 Route::get('/forgot-password', function () {return view('auth.forgot-password');})->name('password.request');
 Route::post('/forgot-password/verify', [ForgotPasswordController::class, 'verifyCode'])->name('forgot.verify');
+
 
