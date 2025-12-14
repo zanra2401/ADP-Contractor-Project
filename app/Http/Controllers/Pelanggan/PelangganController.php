@@ -15,11 +15,39 @@ use Exception;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Factory;
 use App\Models\Chat;
+use App\Models\Design;
+use App\Models\Project;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class PelangganController extends Controller
 {
+
+    public function dashboard(): View|Factory {
+        $proyek = Project::where('pengunjung_id', Auth::id())->get();
+        foreach ($proyek as $p) {
+            $p['content_path'] = $p->design?->contents->first()->content_path;
+            $p['progress'] = $p->payment ? $p->harga / $p->payment?->progresses->sum('jumlah') * 100 : 0;
+        }
+
+        $designs = Design::all();
+
+
+        return view('pelanggan.dashboard', compact('proyek', 'designs'));
+    }
+
+    public function detailProject(Request $request, $id): View|Factory {
+        $proyek = Project::where('id', $id)->first();
+       
+        $sudahDibayar = $proyek->payment?->progresses->sum('jumlah');
+        $proyek['progress'] = $sudahDibayar ? $proyek->harga / $sudahDibayar * 100 : 0;
+        $proyek['sudah_dibayar'] = $sudahDibayar ? $sudahDibayar : 0;
+
+        
+
+        return view('pelanggan.detail-proyek', compact('proyek'));
+    }
+
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
 
         $role = Role::where("nama_Role", "pengunjung")->first();
@@ -59,6 +87,12 @@ class PelangganController extends Controller
                 });
             })
             ->get();
+        
+        if ($rid) {
+            if ($users->contains('id', $rid) == false) {
+                $users->push(User::where('id', $rid)->first());
+            }
+        }
 
         $messages = Chat::getMessageWith($rid);
 
@@ -68,6 +102,8 @@ class PelangganController extends Controller
             $user['last_time'] = Carbon::parse($lastMessage?->waktu_kirim)?->toTimeString();
             $user['unread'] = Chat::getUnreadMessagesWith($user->id)->count();
         }
+
+        
         
         return view('pelanggan.chat', [
             'contacts' => $users,
