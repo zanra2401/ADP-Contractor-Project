@@ -135,6 +135,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/progress/{id}/edit', [ProgressController::class, 'show'])->name('progress.edit');
         Route::put('/progress/{id}', [ProgressController::class, 'update'])->name('progress.update');
         Route::delete('/progress/{id}', [ProgressController::class, 'destroy'])->name('progress.destroy');
+        
+        // Payment management by admin
+        Route::put('/payments/{id}', [AdminProjectController::class, 'updatePayment'])->name('payments.update');
+        Route::delete('/payments/{id}', [AdminProjectController::class, 'deletePayment'])->name('payments.destroy');
+
+        // Payment progress (installment) management
+        Route::put('/payment-progress/{id}', [AdminProjectController::class, 'updatePaymentProgress'])->name('payment-progress.update');
+        Route::delete('/payment-progress/{id}', [AdminProjectController::class, 'deletePaymentProgress'])->name('payment-progress.destroy');
     });
 });
 

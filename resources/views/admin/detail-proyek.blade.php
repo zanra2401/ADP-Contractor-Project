@@ -103,6 +103,118 @@
             </div>
         </div>
     </div>
+
+    {{-- Payment History --}}
+    <div class="p-4 mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Riwayat Pembayaran</h5>
+            </div>
+            <div class="card-body">
+                @if (session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+
+                @if (isset($paymentProgress) && $paymentProgress->count())
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tanggal</th>
+                                    <th>Jumlah</th>
+                                    <th>Metode</th>
+                                    <th>Status</th>
+                                    <th>Payment ID</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($paymentProgress as $pp)
+                                    <tr>
+                                        <td>{{ \Carbon\Carbon::parse($pp->created_at)->translatedFormat('d F Y H:i') }}
+                                        </td>
+                                        <td>Rp {{ number_format($pp->jumlah, 0, ',', '.') }}</td>
+                                        <td>{{ $pp->metode ?? '-' }}</td>
+                                        <td>{{ $pp->status ?? '-' }}</td>
+                                        <td>{{ $pp->payment?->id ?? '-' }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
+                                                data-bs-target="#editPPModal{{ $pp->id }}">Edit</button>
+
+                                            <form action="{{ route('admin.payment-progress.destroy', $pp->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger"
+                                                    onclick="return confirm('Hapus entry pembayaran ini?')">Hapus</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Edit PaymentProgress Modal -->
+                                    <div class="modal fade" id="editPPModal{{ $pp->id }}" tabindex="-1"
+                                        aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <form action="{{ route('admin.payment-progress.update', $pp->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Edit Pembayaran (Instalment)</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label>Jumlah</label>
+                                                            <input type="number" name="jumlah" class="form-control"
+                                                                value="{{ $pp->jumlah }}" required>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label>Metode</label>
+                                                            <select name="metode" class="form-select">
+                                                                <option value="">-- Pilih Metode --</option>
+                                                                <option value="transfer"
+                                                                    {{ $pp->metode == 'transfer' ? 'selected' : '' }}>
+                                                                    Transfer</option>
+                                                                <option value="cash"
+                                                                    {{ $pp->metode == 'cash' ? 'selected' : '' }}>Cash
+                                                                </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label>Status</label>
+                                                            <select name="status" class="form-select">
+                                                                <option value="pending"
+                                                                    {{ ($pp->status ?? '') == 'pending' ? 'selected' : '' }}>
+                                                                    Pending</option>
+                                                                <option value="lunas"
+                                                                    {{ ($pp->status ?? '') == 'lunas' ? 'selected' : '' }}>
+                                                                    Lunas</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <p class="text-muted">Belum ada riwayat pembayaran.</p>
+                @endif
+            </div>
+        </div>
+    </div>
 @endsection
 <!-- Modal Edit Proyek -->
 <div class="modal fade" id="editProjectModal" tabindex="-1" aria-hidden="true">
@@ -193,7 +305,8 @@
                             </option>
                             <option value="In Progress" {{ $project->status == 'In Progress' ? 'selected' : '' }}>In
                                 Progress</option>
-                            <option value="Completed" {{ $project->status == 'Completed' ? 'selected' : '' }}>Completed
+                            <option value="Completed" {{ $project->status == 'Completed' ? 'selected' : '' }}>
+                                Completed
                             </option>
                         </select>
                     </div>

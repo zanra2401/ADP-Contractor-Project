@@ -25,6 +25,14 @@ class AdminProjectController extends BaseController
     {
         $project = \App\Models\Project::with(['pengunjung', 'pengawas', 'design'])->findOrFail($id);
 
+        // load payments related to this project
+        $payments = \App\Models\Payment::where('project_id', $id)->with('progresses')->get();
+
+        // load payment progress entries for this project's payments
+        $paymentProgress = \App\Models\PaymentProgress::whereHas('payment', function ($q) use ($id) {
+            $q->where('project_id', $id);
+        })->with('payment')->get();
+
         $users = \App\Models\User::whereHas('role', fn($q) => $q->where('nama_role', 'pengunjung'))->get();
         $pengawas = \App\Models\User::whereHas('role', fn($q) => $q->where('nama_role', 'pengawas'))->get();
         $designs = \App\Models\Design::all();
@@ -33,8 +41,67 @@ class AdminProjectController extends BaseController
             'project',
             'users',
             'pengawas',
-            'designs'
+            'designs',
+            'payments',
+            'paymentProgress'
         ));
+    }
+
+    // Update a payment (admin)
+    public function updatePayment(Request $request, $id)
+    {
+        $this->authorizeAdmin();
+
+        $payment = \App\Models\Payment::findOrFail($id);
+
+        $validated = $request->validate([
+            'total_harga' => 'required|numeric',
+            'status' => 'required|string',
+        ]);
+
+        $payment->update($validated);
+
+        return redirect()->back()->with('success', 'Payment updated successfully.');
+    }
+
+    // Delete a payment
+    public function deletePayment($id)
+    {
+        $this->authorizeAdmin();
+
+        $payment = \App\Models\Payment::findOrFail($id);
+        $payment->delete();
+
+        return redirect()->back()->with('success', 'Payment deleted successfully.');
+    }
+
+    // Update a payment progress entry
+    public function updatePaymentProgress(Request $request, $id)
+    {
+        $this->authorizeAdmin();
+
+        $pp = \App\Models\PaymentProgress::findOrFail($id);
+
+        $validated = $request->validate([
+            'jumlah' => 'required|numeric',
+            'metode' => 'nullable|in:transfer,cash',
+            'status' => 'nullable|in:pending,lunas'
+        ]);
+
+        $pp->update($validated);
+
+        return redirect()->back()->with('success', 'Payment progress updated successfully.');
+    }
+
+    // Delete a payment progress entry
+    public function deletePaymentProgress($id)
+    {
+        $this->authorizeAdmin();
+
+        $pp = \App\Models\PaymentProgress::findOrFail($id);
+        $pp->delete();
+
+        return redirect()->back()->with('success', 'Payment progress deleted successfully.');
     }
 
     // === LIST ALL PROJECTS ===
