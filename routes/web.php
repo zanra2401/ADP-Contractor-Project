@@ -33,6 +33,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', 'auth')->name('login');
 });
 
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+
 Route::get('/login', fn() => view('auth.login'))->name('login')->middleware([
     LoginMiddleware::class
 ]);
@@ -116,8 +120,19 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
+
+/* --------------------- PUBLIC GALERI ---------------------- */
+Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
+
+    // LIST GALERI → PUBLIC
+    Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+        ->name('galeri');
+
+});
+
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
+    Route::get('/register', fn() => view('auth.register'))->name('register');
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
         Route::controller(PelangganController::class)->group(function () {
             Route::post('/register', 'register')->name('register');
@@ -127,13 +142,12 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     
         Route::get('/pembayaran', fn() => view('pelanggan.pembayaran'))->name('pembayaran');
     
-        Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
-            ->name('galeri');
+        // Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
+        //     ->name('galeri');
     
         Route::get('/galeri/{id}/detail', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'detail'])
             ->name('galeri.detail');
     
-        Route::get('/register', fn() => view('auth.register'))->name('register');
         Route::get('/forgot-password', fn() => view('auth.forgot-password'))->name('password.request');
     
         Route::get('/detail-proyek/{id}', [PelangganController::class, 'detailProject'])->name('detail-proyek');
