@@ -72,18 +72,41 @@
         <p class="text-center text-gray-600 mt-2">Temukan inspirasi untuk proyek Anda.</p>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            
-            <!-- Item 1 -->
+    
             @foreach($designs as $design)
+                @php
+                    $cover = $design->contents->first()->file_path ?? null;
+                @endphp
+
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden group">
-                    <img class="h-64 w-full object-cover group-hover:opacity-75" src="{{  storage_path($design->contents->first()->content_path ?? '') }}" alt="Rumah Minimalis">
+                    <img
+                        class="h-64 w-full object-cover group-hover:opacity-75"
+                        src="{{ $cover ? asset('storage/' . $cover) : asset('placeholder.jpg') }}"
+                        alt="{{ $design->nama }}"
+                    >
                     <div class="p-5">
-                        <h3 class="text-xl font-semibold text-gray-900">{{ $design->nama }}</h3>
-                        <p class="text-gray-600 mt-1">3 Kamar Tidur, 2 Kamar Mandi</p>
+                        <h3 class="text-xl font-semibold text-gray-900">
+                            {{ $design->nama }}
+                        </h3>
+
+                        {{-- kategori --}}
+                        <div class="flex gap-2 mt-2">
+                            @foreach($design->categories as $cat)
+                                <span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
+                                    {{ $cat->nama }}
+                                </span>
+                            @endforeach
+                        </div>
+
+                        <p class="text-gray-600 mt-2 line-clamp-2">
+                            {{ $design->deskripsi }}
+                        </p>
                     </div>
                 </div>
             @endforeach
+
         </div>
+
 
         <div class="text-center mt-12">
              <a href="{{ route('pelanggan.galeri') }}" class="text-lg font-medium text-blue-600 hover:text-blue-800">
@@ -96,7 +119,7 @@
     <footer class="bg-gray-800 text-white py-8 mt-10">
         <div class="max-w-7xl mx-auto px-4 text-center">
             <p>&copy; 2025 ADP Konstruksi. All rights reserved.</p>
-        </div>
+    </div>
     </footer>
 
 </body>

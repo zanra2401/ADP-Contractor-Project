@@ -113,8 +113,7 @@
                         @foreach ($contacts as $contact)
                             <li>
                                 {{-- Menggunakan onclick untuk switch view di mobile --}}
-                                <a href="javascript:void(0);" 
-                                    onclick="openChatMobile('{{ $contact->nama }}', '{{ $contact->status ?? 'online' }}', '{{ $contact->id }}')" 
+                                <a href="{{ route('pengawas.chat', ['rid' => $contact->id]) }}" 
                                     class="p-4 flex items-center cursor-pointer {{ $rid == $contact->id ? 'border-l-4 border-blue-600 bg-blue-50' : '' }} hover:bg-blue-100 transition">
                                     
                                     <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ $contact->nama }}&background=random" alt="<?= $contact->role->nama ?>">
@@ -152,11 +151,6 @@
                                     </p>
                                 </div>
                             </div>
-                             <button 
-                                onclick="alert('Buka modal Tentukan Harga untuk RID: {{ $rid }}')"
-                                class="inline-flex justify-center p-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 text-sm font-medium transition duration-150 shadow-md">
-                                Tentukan Harga
-                            </button>
                         </div>
                         
                         <div id='message-container' class="flex-1 p-6 space-y-4 overflow-y-auto bg-gray-50 no-scrollbar">
