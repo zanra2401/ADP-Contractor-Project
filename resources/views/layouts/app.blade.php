@@ -91,7 +91,7 @@
                 </li>
                 <li>
                     <a href="{{ route('admin.chat.index') }}" class="nav-link text-white {{ request()->routeIs('admin.chat.index') ? 'active' : '' }}">
-                        <i class="bi bi-palette me-2"></i> Chat
+                        <i class="bi bi-chat-dots me-2"></i> Chat
                     </a>
                 </li>
                 <li>
