@@ -121,7 +121,7 @@
                                 <div class="mt-6 flex-shrink-0">
                                     <a href="{{ route('pengawas.detail-proyek', ['id' => $project->id]) }}"
                                         class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition">
-                                        Kelola Progres
+                                        Detail Proyek
                                     </a>
                                 </div>
                             </div>

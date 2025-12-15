@@ -108,12 +108,17 @@
     <div class="p-4 mt-4">
         <div class="card shadow-sm">
             <div class="card-header">
-                <h5 class="mb-0">Riwayat Pembayaran</h5>
+                <h5 class="mb-0">Progres Payment</h5>
             </div>
             <div class="card-body">
                 @if (session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createPPModal">Tambah
+                        Progres Payment</button>
+                </div>
 
                 @if (isset($paymentProgress) && $paymentProgress->count())
                     <div class="table-responsive">
@@ -122,9 +127,8 @@
                                 <tr>
                                     <th>Tanggal</th>
                                     <th>Jumlah</th>
-                                    <th>Metode</th>
+                                    <th>Deskripsi</th>
                                     <th>Status</th>
-                                    <th>Payment ID</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -134,9 +138,8 @@
                                         <td>{{ \Carbon\Carbon::parse($pp->created_at)->translatedFormat('d F Y H:i') }}
                                         </td>
                                         <td>Rp {{ number_format($pp->jumlah, 0, ',', '.') }}</td>
-                                        <td>{{ $pp->metode ?? '-' }}</td>
+                                        <td>{{ $pp->deskripsi ?? '-' }}</td>
                                         <td>{{ $pp->status ?? '-' }}</td>
-                                        <td>{{ $pp->payment?->id ?? '-' }}</td>
                                         <td>
                                             <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal"
                                                 data-bs-target="#editPPModal{{ $pp->id }}">Edit</button>
@@ -172,16 +175,8 @@
                                                                 value="{{ $pp->jumlah }}" required>
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label>Metode</label>
-                                                            <select name="metode" class="form-select">
-                                                                <option value="">-- Pilih Metode --</option>
-                                                                <option value="transfer"
-                                                                    {{ $pp->metode == 'transfer' ? 'selected' : '' }}>
-                                                                    Transfer</option>
-                                                                <option value="cash"
-                                                                    {{ $pp->metode == 'cash' ? 'selected' : '' }}>Cash
-                                                                </option>
-                                                            </select>
+                                                            <label>Deskripsi</label>
+                                                            <textarea name="deskripsi" class="form-control" rows="3">{{ $pp->deskripsi }}</textarea>
                                                         </div>
 
                                                         <div class="mb-3">
@@ -215,6 +210,40 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Create Payment Progress -->
+    <div class="modal fade" id="createPPModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ route('admin.payment-progress.store') }}" method="POST">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Progres Payment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden" name="payment_id" value="{{ $project->payment->id }}">
+
+                        <div class="mb-3">
+                            <label>Jumlah</label>
+                            <input type="number" name="jumlah" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Deskripsi</label>
+                            <textarea name="deskripsi" class="form-control" rows="3"></textarea>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Tambah</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 <!-- Modal Edit Proyek -->
 <div class="modal fade" id="editProjectModal" tabindex="-1" aria-hidden="true">
@@ -238,7 +267,6 @@
                         <input type="text" name="nama_proyek" class="form-control"
                             value="{{ $project->nama_proyek }}" required>
                     </div>
-
                     <!-- Klien -->
                     <div class="mb-3">
                         <label>Klien (Pengunjung)</label>

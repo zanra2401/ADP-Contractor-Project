@@ -84,13 +84,46 @@ class AdminProjectController extends BaseController
 
         $validated = $request->validate([
             'jumlah' => 'required|numeric',
-            'metode' => 'nullable|in:transfer,cash',
+            'deskripsi' => 'nullable|string',
             'status' => 'nullable|in:pending,lunas'
         ]);
 
-        $pp->update($validated);
+        $updateData = [
+            'jumlah' => $validated['jumlah'],
+            'deskripsi' => $validated['deskripsi'] ?? null,
+            'status' => $validated['status'] ?? null,
+        ];
+
+        $pp->update($updateData);
 
         return redirect()->back()->with('success', 'Payment progress updated successfully.');
+    }
+
+    // Store a new payment progress entry
+    public function storePaymentProgress(Request $request)
+    {
+        $this->authorizeAdmin();
+
+        $validated = $request->validate([
+            'payment_id' => 'required|string|exists:payments,id',
+            'jumlah' => 'required|numeric',
+            'deskripsi' => 'nullable|string',
+            'status' => 'nullable|in:pending,lunas'
+        ]);
+
+        $data = [
+            'payment_id' => $validated['payment_id'],
+            'jumlah' => $validated['jumlah'],
+            'deskripsi' => $validated['deskripsi'] ?? null,
+            // DB requires 'metode' enum; set a safe default when creating (kept for backward compatibility)
+            'metode' => 'cash',
+            // default status to 'pending' when not provided to avoid NOT NULL DB error
+            'status' => $validated['status'] ?? 'pending',
+        ];
+
+        \App\Models\PaymentProgress::create($data);
+
+        return redirect()->back()->with('success', 'Payment progress created successfully.');
     }
 
     // Delete a payment progress entry

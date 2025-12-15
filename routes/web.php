@@ -142,6 +142,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/payments/{id}', [AdminProjectController::class, 'deletePayment'])->name('payments.destroy');
 
         // Payment progress (installment) management
+        Route::post('/payment-progress', [AdminProjectController::class, 'storePaymentProgress'])->name('payment-progress.store');
         Route::put('/payment-progress/{id}', [AdminProjectController::class, 'updatePaymentProgress'])->name('payment-progress.update');
         Route::delete('/payment-progress/{id}', [AdminProjectController::class, 'deletePaymentProgress'])->name('payment-progress.destroy');
     });
@@ -204,9 +205,8 @@ Route::prefix('pengawas')->middleware([AuthMiddleware::class, PengawasMiddleware
     Route::get('/dashboard', [\App\Http\Controllers\Pengawas\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/chat/{rid?}', [PengawasController::class, 'chat'])->name('chat');
 
-    // Detail proyek - use controller for show and update
+    // Detail proyek - read-only for pengawas
     Route::get('/detail-proyek/{id}', [\App\Http\Controllers\Pengawas\ProjectController::class, 'show'])->name('detail-proyek');
-    Route::put('/detail-proyek/{id}', [\App\Http\Controllers\Pengawas\ProjectController::class, 'update'])->name('detail-proyek.update');
 
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
     // Route::post('/admin/projects', [AdminProjectController::class, 'store']);
