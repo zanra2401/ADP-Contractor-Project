@@ -59,16 +59,16 @@
                         <i class="bi bi-speedometer2 me-2"></i> Dashboard
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="{{ route('admin.laporan') }}" class="nav-link text-white {{ request()->routeIs('admin.laporan') ? 'active' : '' }}">
                         <i class="bi bi-graph-up me-2"></i> Laporan
                     </a>
-                </li>
-                <li>
+                </li> --}}
+                {{-- <li>
                     <a href="{{ route('admin.manajemen-konten') }}" class="nav-link text-white {{ request()->routeIs('admin.manajemen-konten') ? 'active' : '' }}">
                         <i class="bi bi-file-text me-2"></i> Manajemen Konten
                     </a>
-                </li>
+                </li> --}}
                 <li>
                     <a href="{{ route('admin.manajemen-proyek') }}" class="nav-link text-white {{ request()->routeIs('admin.manajemen-proyek') ? 'active' : '' }}">
                         <i class="bi bi-briefcase me-2"></i> Manajemen Proyek
@@ -102,11 +102,11 @@
                         <i class="bi bi-cloud-upload me-2"></i> Upload Progress
                     </a>
                 </li>
-                 <li>
+                 {{-- <li>
                     <a href="{{ route('admin.approve-progress') }}" class="nav-link text-white {{ request()->routeIs('admin.approve-progress') ? 'active' : '' }}">
                         <i class="bi bi-check-circle me-2"></i> Approve Progress
                     </a>
-                </li>
+                </li> --}}
                 
                 <li class="mt-4 pt-3 border-top">
                     <form action="{{ route('logout') }}" method="POST">
