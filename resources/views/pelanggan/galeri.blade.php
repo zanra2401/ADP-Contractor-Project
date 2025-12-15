@@ -41,12 +41,6 @@
                     <span class="text-sm text-gray-700 mr-2">
                         Halo, {{ Auth::user()->nama ?? 'Pelanggan' }}!
                     </span>
-
-                    <a href="{{ route('pelanggan.profil') }}"
-                        class="text-sm font-medium text-gray-500 hover:text-gray-700">
-                        Profil Saya
-                    </a>
-
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-red-600 hover:text-red-800 hover:bg-gray-100">
@@ -90,10 +84,7 @@
                     <div class="text-sm font-medium text-gray-500">{{ Auth::user()->email ?? 'email@contoh.com' }}</div>
                 </div>
                 <div class="mt-3 space-y-1">
-                    <a href="{{ route('pelanggan.profil') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
-                        Profil Saya
-                    </a>
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-red-600 hover:text-red-800 hover:bg-gray-100">
                             Logout

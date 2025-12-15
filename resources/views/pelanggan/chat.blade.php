@@ -42,7 +42,6 @@
                 <!-- MENU KANAN -->
                 <div class="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
                     <span class="text-sm text-gray-700 mr-2">Halo, {{ Auth::user()->nama ?? 'Pelanggan' }}!</span>
-                    <a href="{{ route('pelanggan.profil') }}" class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil Saya</a>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">Logout</button>

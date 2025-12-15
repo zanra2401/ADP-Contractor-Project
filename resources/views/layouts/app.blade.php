@@ -88,6 +88,11 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.chat.index') }}" class="nav-link text-white {{ request()->routeIs('admin.chat.index') ? 'active' : '' }}">
+                        <i class="bi bi-palette me-2"></i> Chat
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('admin.kategori.index') }}" class="nav-link text-white {{ request()->routeIs('admin.kategori.index') ? 'active' : '' }}">
                         <i class="bi bi-tags me-2"></i> Kategori
                     </a>
