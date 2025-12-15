@@ -73,7 +73,6 @@
                 <a href="{{ route('pelanggan.dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 border-blue-500 text-base font-medium text-blue-700 bg-blue-50">Dashboard</a>
                 <a href="{{ route('pelanggan.galeri') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Galeri Proyek</a>
                 <a href="{{ route('pelanggan.chat') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Chat</a>
-                <a href="{{ route('pelanggan.pembayaran') }}" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800">Pembayaran</a>
             </div>
             <div class="pt-4 pb-3 border-t border-gray-200">
                 <div class="px-4">
@@ -122,7 +121,11 @@
                 
                 @foreach ($proyek as $p)
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition hover:shadow-xl">
-                        <img class="h-48 w-full object-cover" src="{{ storage_path($p['content_path']) }}" alt="Rumah Tipe 70">
+                        @if($p['content_path'] && $p['content_path'] !== 'blueprint-placeholder')
+                            <img class="h-48 w-full object-cover" src="{{ asset('storage/' . $p['content_path']) }}" alt="{{ $p->nama_proyek }}">
+                        @else
+                            <img class="h-48 w-full object-cover" src="{{ Vite::asset('resources/images/blueprint.jpg') }}" alt="Blueprint Placeholder">
+                        @endif
                         <div class="p-6 flex-grow flex flex-col justify-between">
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900">{{ $p->nama_proyek ? $p->nama_proyek : '-' }}</h3>

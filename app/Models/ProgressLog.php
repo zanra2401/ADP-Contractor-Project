@@ -11,7 +11,7 @@ class ProgressLog extends Model
 
     protected $fillable = [
         "project_id",
-        "pengawas_id",
+        // "pengawas_id",
         "deskripsi",
         "file_path",
         "status_publikasi",

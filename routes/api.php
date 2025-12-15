@@ -77,7 +77,7 @@ Route::post('/forgot-password', [ForgotPasswordController::class, 'requestReset'
 Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword']);
 
 
-Route::middleware('auth:sanctum')->prefix('admin')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('api/admin')->group(function () {
     // ====================================
     //    CRUD Project Proyek API (ADMIN)
     // ====================================

@@ -17,7 +17,91 @@ class AdminProjectController extends BaseController
         $this->service = $service;
 
         // Hanya admin yang boleh
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth');
+    }
+
+    // === SHOW PROJECT DETAIL PAGE ===
+    public function showPage($id)
+    {
+        $project = \App\Models\Project::with(['pengunjung', 'pengawas', 'design'])->findOrFail($id);
+
+        // load payments related to this project
+        $payments = \App\Models\Payment::where('project_id', $id)->with('progresses')->get();
+
+        // load payment progress entries for this project's payments
+        $paymentProgress = \App\Models\PaymentProgress::whereHas('payment', function ($q) use ($id) {
+            $q->where('project_id', $id);
+        })->with('payment')->get();
+
+        $users = \App\Models\User::whereHas('role', fn($q) => $q->where('nama_role', 'pengunjung'))->get();
+        $pengawas = \App\Models\User::whereHas('role', fn($q) => $q->where('nama_role', 'pengawas'))->get();
+        $designs = \App\Models\Design::all();
+
+        return view('admin.detail-proyek', compact(
+            'project',
+            'users',
+            'pengawas',
+            'designs',
+            'payments',
+            'paymentProgress'
+        ));
+    }
+
+    // Update a payment (admin)
+    public function updatePayment(Request $request, $id)
+    {
+        $this->authorizeAdmin();
+
+        $payment = \App\Models\Payment::findOrFail($id);
+
+        $validated = $request->validate([
+            'total_harga' => 'required|numeric',
+            'status' => 'required|string',
+        ]);
+
+        $payment->update($validated);
+
+        return redirect()->back()->with('success', 'Payment updated successfully.');
+    }
+
+    // Delete a payment
+    public function deletePayment($id)
+    {
+        $this->authorizeAdmin();
+
+        $payment = \App\Models\Payment::findOrFail($id);
+        $payment->delete();
+
+        return redirect()->back()->with('success', 'Payment deleted successfully.');
+    }
+
+    // Update a payment progress entry
+    public function updatePaymentProgress(Request $request, $id)
+    {
+        $this->authorizeAdmin();
+
+        $pp = \App\Models\PaymentProgress::findOrFail($id);
+
+        $validated = $request->validate([
+            'jumlah' => 'required|numeric',
+            'metode' => 'nullable|in:transfer,cash',
+            'status' => 'nullable|in:pending,lunas'
+        ]);
+
+        $pp->update($validated);
+
+        return redirect()->back()->with('success', 'Payment progress updated successfully.');
+    }
+
+    // Delete a payment progress entry
+    public function deletePaymentProgress($id)
+    {
+        $this->authorizeAdmin();
+
+        $pp = \App\Models\PaymentProgress::findOrFail($id);
+        $pp->delete();
+
+        return redirect()->back()->with('success', 'Payment progress deleted successfully.');
     }
 
     // === LIST ALL PROJECTS ===
@@ -25,11 +109,16 @@ class AdminProjectController extends BaseController
     {
         $this->authorizeAdmin();
 
+        $projects = \App\Models\Project::with('pengunjung')
+            ->latest()
+            ->get();
+
         return response()->json([
             'status' => 'success',
-            'data' => $this->service->list()
+            'data' => $projects
         ]);
     }
+
 
     // === CREATE PROJECT ===
     public function store(Request $request)
@@ -46,7 +135,6 @@ class AdminProjectController extends BaseController
             'alamat'          => 'required|string',
             'tanggal_mulai'   => 'required|date',
             'tanggal_selesai' => 'required|date',
-            'materials'       => 'array',
         ]);
 
         $project = $this->service->create($validated);
@@ -58,47 +146,88 @@ class AdminProjectController extends BaseController
     }
 
     // === UPDATE ===
-    public function update(Request $request, Project $project)
+    public function updatePage(Request $request, $id)
     {
-        $this->authorizeAdmin();
+        $project = Project::findOrFail($id);
 
         $validated = $request->validate([
-            'pengawas_id'     => 'required|string',
-            'pengunjung_id'   => 'required|string',
-            'design_id'       => 'required|string',
-            'nama_proyek'     => 'required|string',
-            'deskripsi'       => 'required|string',
-            'harga'           => 'required|numeric',
-            'alamat'          => 'required|string',
-            'tanggal_mulai'   => 'required|date',
-            'tanggal_selesai' => 'required|date',
-            'materials'       => 'array',
+            'nama_proyek' => 'required|string',
+            'pengunjung_id' => 'required',
+            'pengawas_id' => 'required',
+            'design_id' => 'required',
+            'deskripsi' => 'nullable|string',
+            'harga' => 'required|numeric',
+            'status' => 'required|string',
+            'alamat' => 'nullable|string',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date'
         ]);
 
-        $project = $this->service->update($project, $validated);
+        // update data
+        $project->update($validated);
 
-        return response()->json([
-            'status' => 'updated',
-            'data'   => $project
-        ]);
+        // kalau upload file baru
+        if ($request->hasFile('file_path')) {
+            $file = $request->file('file_path')->store('projects', 'public');
+            $project->file_path = $file;
+            $project->save();
+        }
+
+        return redirect()
+            ->route('admin.proyek.detail', $id)
+            ->with('success', 'Proyek berhasil diperbarui!');
     }
 
     // === DELETE ===
-    public function destroy(Project $project)
+    public function deletePage($id)
     {
-        $this->authorizeAdmin();
+        $project = \App\Models\Project::findOrFail($id);
+        $project->delete();
 
-        $this->service->delete($project);
-
-        return response()->json([
-            'status' => 'deleted'
-        ]);
+        return redirect()
+            ->route('admin.manajemen-proyek')
+            ->with('success', 'Proyek berhasil dihapus.');
     }
     private function authorizeAdmin()
     {
-        if (!Auth::check() || Auth::user()->role_id !== 1) {
-            abort(403, "Only admins can access this endpoint.");
+        if (!Auth::check()) {
+            abort(403);
+        }
+
+        if (Auth::user()->role->nama_role !== 'admin') {
+            abort(403, 'Only admins can access this endpoint.');
         }
     }
-}
+    
+    // === GET USERS FOR DROPDOWN ===
+    public function users(Request $request)
+    {
+        $this->authorizeAdmin();
 
+        $role = $request->query('role');
+
+        $users = \App\Models\User::with('role')
+            ->whereHas('role', function ($q) use ($role) {
+                $q->where('nama_role', $role);
+            })
+            ->get(['id', 'nama']);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $users
+        ]);
+    }
+
+    // === GET DESIGNS FOR DROPDOWN ===
+    public function designs()
+    {
+        $this->authorizeAdmin();
+
+        $designs = \App\Models\Design::select('id', 'nama', 'cover_image')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $designs
+        ]);
+    }
+}

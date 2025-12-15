@@ -5,65 +5,98 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\ForgetCode;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class ForgotPasswordService
 {
-    // Membuat dan mengirim kode reset
     public function sendResetCode($nomor_telepon)
     {
         $user = User::where('nomor_telepon', $nomor_telepon)->first();
 
         if (!$user) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Nomor telepon tidak terdaftar.'
-            ], 404);
+            return response()->json(['message' => 'Nomor tidak terdaftar'], 404);
         }
 
-        // Hapus semua kode lama milik user
+        // Hapus OTP lama
         ForgetCode::where('user_id', $user->id)->delete();
 
-        // Buat kode baru
-        $code = ForgetCode::create([
-            'user_id' => $user->id,
-            'expired_at' => Carbon::now()->addMinutes(10)
+        // Generate OTP 6 digit
+        $otp = rand(100000, 999999);
+
+        // Simpan OTP ke database
+        $forget = ForgetCode::create([
+            'user_id'   => $user->id,
+            'code'      => $otp,
+            'expired_at' => now()->addMinutes(5),
         ]);
 
+        // ======================================
+        // KIRIM WA VIA FONNTE
+        // ======================================
+        $token = env('FONNTE_TOKEN');
+
+        // Format nomor telepon -> 62xxxxxxxx
+        $phone = preg_replace('/[^0-9]/', '', $nomor_telepon);
+        if (substr($phone, 0, 1) == '0') {
+            $phone = '62' . substr($phone, 1);
+        }
+
+        $message = "ADP Konstruksi\nKode OTP Anda adalah *$otp*\nBerlaku selama 5 menit.";
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => "https://api.fonnte.com/send",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => [
+                'target' => $phone,
+                'message' => $message,
+            ],
+            CURLOPT_HTTPHEADER => [
+                "Authorization: $token"
+            ],
+        ]);
+
+        $response = curl_exec($curl);
+        $error = curl_error($curl);
+        curl_close($curl);
+
+        if ($error) {
+            return response()->json([
+                'message' => 'Kode OTP tersimpan tetapi gagal mengirim WA.',
+                'error' => $error
+            ], 500);
+        }
+
+        // ============================
+        //  IMPORTANT: RETURN SUKSES!
+        // ============================
         return response()->json([
-            'status' => true,
-            'message' => 'Kode reset berhasil dibuat.',
-            'reset_code' => $code->code  // tampilkan untuk testing
+            'message' => 'Kode OTP berhasil dikirim.',
+            'redirect' => route('forgot.verify'),
+            'phone' => $phone
         ]);
     }
 
-    // Reset password menggunakan kode
+
     public function resetPassword($code, $password)
     {
-        $data = ForgetCode::where('code', $code)
-            ->where('expired_at', '>', Carbon::now())
+        $forget = ForgetCode::where('code', $code)
+            ->where('expired_at', '>', now())
             ->first();
 
-        if (!$data) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Kode reset tidak valid atau sudah kedaluwarsa.'
-            ], 400);
+        if (!$forget) {
+            return response()->json(['message' => 'Kode OTP salah atau kadaluarsa'], 400);
         }
 
-        $user = User::find($data->user_id);
-
-        // Update password user
+        $user = $forget->user;
         $user->password = Hash::make($password);
         $user->save();
 
-        // Hapus kode setelah dipakai
-        ForgetCode::where('code', $code)->delete();
+        $forget->delete();
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Password berhasil direset.'
-        ]);
+        return response()->json(['message' => 'Password berhasil diperbarui!']);
     }
 }

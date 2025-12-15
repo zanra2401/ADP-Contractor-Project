@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="id">
+@php use Illuminate\Support\Number; @endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Pembayaran - ADP Konstruksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    @php $snapJs = config('midtrans.is_production') ? 'https://app.midtrans.com/snap/snap.js' : 'https://app.sandbox.midtrans.com/snap/snap.js'; @endphp
+    <script src="{{ $snapJs }}" data-client-key="{{ config('midtrans.client_key') }}"></script>
 </head>
 <body class="bg-gray-100">
 
@@ -93,47 +97,42 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                
-                                {{-- Row 1: Menunggu Pembayaran (Contoh) --}}
-                                <tr class="bg-blue-50/50 hover:bg-blue-50 transition duration-150">
-                                    <td class="px-6 py-5 text-center font-medium text-blue-500">1</td>
-                                    <td class="px-6 py-5 text-gray-700">
-                                        <div class="font-bold text-blue-900">Pembayaran Tahap Akhir</div>
-                                        <span class="text-xs text-gray-500 mt-1 block">Finishing & Serah Terima</span>
-                                    </td>
-                                    <td class="px-6 py-5 font-bold text-blue-700">Rp 45.000.000</td>
-                                    <td class="px-6 py-5 text-center">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-200 animate-pulse">
-                                            Menunggu Pembayaran
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-5 text-center">
-                                        <a href="{{ route('pelanggan.pembayaran') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5">
-                                            Bayar Sekarang
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                {{-- Row 2: Lunas (Contoh) --}}
-                                <tr class="hover:bg-gray-50 transition duration-150">
-                                    <td class="px-6 py-5 text-center font-medium text-gray-400">2</td>
-                                    <td class="px-6 py-5 text-gray-700">
-                                        <div class="font-bold text-gray-900">Uang Muka (DP)</div>
-                                        <span class="text-xs text-gray-400 mt-1 block">Pembayaran awal proyek</span>
-                                    </td>
-                                    <td class="px-6 py-5 font-bold text-gray-900">Rp 105.000.000</td>
-                                    <td class="px-6 py-5 text-center">
-                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">
-                                            Lunas
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-5 text-center">
-                                        <button class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
-                                            Cetak Invoice
-                                        </button>
-                                    </td>
-                                </tr>
-
+                                @php $counter = 1; @endphp
+                                @forelse ($payments as $payment)
+                                    @foreach ($payment->progresses as $progress)
+                                        <tr class="{{ $progress->status === 'pending' ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-gray-50' }} transition duration-150">
+                                            <td class="px-6 py-5 text-center font-medium {{ $progress->status === 'pending' ? 'text-blue-500' : 'text-gray-400' }}">{{ $counter++ }}</td>
+                                            <td class="px-6 py-5 text-gray-700">
+                                                <div class="font-bold text-gray-900">{{ $progress->deskripsi ?? 'Pembayaran Proyek' }}</div>
+                                                <span class="text-xs text-gray-500 mt-1 block">{{ $payment->project?->nama_proyek ?? 'Proyek' }}</span>
+                                            </td>
+                                            <td class="px-6 py-5 font-bold {{ $progress->status === 'pending' ? 'text-blue-700' : 'text-gray-900' }}">{{ Number::currency($progress->jumlah, 'IDR') }}</td>
+                                            <td class="px-6 py-5 text-center">
+                                                @if ($progress->status === 'lunas')
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 border border-green-200">Lunas</span>
+                                                @else
+                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-200 animate-pulse">Menunggu Pembayaran</span>
+                                                @endif
+                                            </td>
+                                            <td class="px-6 py-5 text-center">
+                                                @if ($progress->status === 'lunas')
+                                                    <button class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
+                                                        Cetak Invoice
+                                                    </button>
+                                                @else
+                                                    <button type="button" class="pay-button inline-block bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2.5 px-5 rounded-lg shadow-md shadow-blue-200 transition transform hover:-translate-y-0.5"
+                                                        data-pay-url="{{ route('pelanggan.pembayaran.snap', $progress) }}">
+                                                        Bayar Sekarang
+                                                    </button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-6 text-center text-gray-500">Belum ada tagihan pembayaran.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -142,6 +141,58 @@
 
         </main>
     </div>
+
+    <script>
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu) {
+                menu.classList.toggle('hidden');
+            }
+        }
+
+        document.querySelectorAll('.pay-button').forEach((button) => {
+            button.addEventListener('click', async () => {
+                if (!button.dataset.payUrl) return;
+
+                button.disabled = true;
+                button.classList.add('opacity-50', 'cursor-not-allowed');
+
+                try {
+                    const response = await fetch(button.dataset.payUrl, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json',
+                        },
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.message ?? 'Gagal memulai pembayaran');
+                    }
+
+                    if (!window.snap || !data.token) {
+                        throw new Error('Snap Midtrans belum siap. Muat ulang halaman.');
+                    }
+
+                    window.snap.pay(data.token, {
+                        onSuccess: () => window.location.reload(),
+                        onPending: () => window.location.reload(),
+                        onError: () => window.location.reload(),
+                        onClose: () => button.removeAttribute('disabled'),
+                    });
+                } catch (error) {
+                    alert(error.message || 'Gagal memulai pembayaran');
+                } finally {
+                    button.disabled = false;
+                    button.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>

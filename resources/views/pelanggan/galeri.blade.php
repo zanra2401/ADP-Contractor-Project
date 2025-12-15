@@ -47,10 +47,9 @@
                         Profil Saya
                     </a>
 
-                    <form method="POST" action="#" class="inline">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit"
-                            class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-red-600 hover:text-red-800 hover:bg-gray-100">
                             Logout
                         </button>
                     </form>

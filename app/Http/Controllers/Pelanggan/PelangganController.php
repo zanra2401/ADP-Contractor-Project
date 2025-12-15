@@ -26,7 +26,8 @@ class PelangganController extends Controller
     public function dashboard(): View|Factory {
         $proyek = Project::where('pengunjung_id', Auth::id())->get();
         foreach ($proyek as $p) {
-            $p['content_path'] = $p->design?->contents->first()->content_path;
+            // Jika tidak ada design atau content, gunakan blueprint placeholder
+            $p['content_path'] = $p->design?->contents->first()?->content_path ?? 'blueprint-placeholder';
             $p['progress'] = $p->payment ? $p->harga / $p->payment?->progresses->sum('jumlah') * 100 : 0;
         }
 
@@ -43,14 +44,13 @@ class PelangganController extends Controller
         $proyek['progress'] = $sudahDibayar ? $proyek->harga / $sudahDibayar * 100 : 0;
         $proyek['sudah_dibayar'] = $sudahDibayar ? $sudahDibayar : 0;
 
-        
-
         return view('pelanggan.detail-proyek', compact('proyek'));
     }
 
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
-
         $role = Role::where("nama_Role", "pengunjung")->first();
+
+        
 
         $data = [
             'nomor_telepon' => $user->nomor_telepon,
@@ -63,6 +63,7 @@ class PelangganController extends Controller
 
         try {
             $user->save();
+            
             return redirect()->route('login');
         } catch (Exception $e) {
             return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");
@@ -85,6 +86,8 @@ class PelangganController extends Controller
                 ->orWhereHas('chatsAsReceiver', function ($q) use ($myId) {
                     $q->where('pengirim_id', $myId);
                 });
+            })->orWhereHas('role', function ($q) {
+                $q->where('nama_Role', 'customer_service');
             })
             ->get();
         

@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 
 class PengawasController extends Controller
 {
-        public function chat(Request $request, String|null $rid = null): View {
+        public function chat(Request $request, ?string $rid = null): View {
         $myId = Auth::id();
 
         if ($rid) {
