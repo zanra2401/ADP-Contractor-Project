@@ -80,12 +80,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.manajemen-konten') }}"
-                        class="nav-link text-white {{ request()->routeIs('admin.manajemen-konten') ? 'active' : '' }}">
-                        <i class="bi bi-file-text me-2"></i> Manajemen Konten
-                    </a>
-                </li>
-                <li>
                     <a href="{{ route('admin.manajemen-proyek') }}"
                         class="nav-link text-white {{ request()->routeIs('admin.manajemen-proyek') ? 'active' : '' }}">
                         <i class="bi bi-briefcase me-2"></i> Manajemen Proyek
@@ -114,24 +108,6 @@
                 <li>
                     <a href="{{ route('admin.kategori.index') }}" class="nav-link text-white {{ request()->routeIs('admin.kategori.index') ? 'active' : '' }}">
                         <i class="bi bi-tags me-2"></i> Kategori
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.payment') }}"
-                        class="nav-link text-white {{ request()->routeIs('admin.payment') ? 'active' : '' }}">
-                        <i class="bi bi-credit-card me-2"></i> Payment
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.upload-progress') }}"
-                        class="nav-link text-white {{ request()->routeIs('admin.upload-progress') ? 'active' : '' }}">
-                        <i class="bi bi-cloud-upload me-2"></i> Upload Progress
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('admin.approve-progress') }}"
-                        class="nav-link text-white {{ request()->routeIs('admin.approve-progress') ? 'active' : '' }}">
-                        <i class="bi bi-check-circle me-2"></i> Approve Progress
                     </a>
                 </li>
 
