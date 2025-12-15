@@ -121,7 +121,11 @@
                 
                 @foreach ($proyek as $p)
                     <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition hover:shadow-xl">
-                        <img class="h-48 w-full object-cover" src="{{ storage_path($p['content_path']) }}" alt="Rumah Tipe 70">
+                        @if($p['content_path'] && $p['content_path'] !== 'blueprint-placeholder')
+                            <img class="h-48 w-full object-cover" src="{{ asset('storage/' . $p['content_path']) }}" alt="{{ $p->nama_proyek }}">
+                        @else
+                            <img class="h-48 w-full object-cover" src="{{ Vite::asset('resources/images/blueprint.jpg') }}" alt="Blueprint Placeholder">
+                        @endif
                         <div class="p-6 flex-grow flex flex-col justify-between">
                             <div>
                                 <h3 class="text-xl font-semibold text-gray-900">{{ $p->nama_proyek ? $p->nama_proyek : '-' }}</h3>

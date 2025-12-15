@@ -26,7 +26,8 @@ class PelangganController extends Controller
     public function dashboard(): View|Factory {
         $proyek = Project::where('pengunjung_id', Auth::id())->get();
         foreach ($proyek as $p) {
-            $p['content_path'] = $p->design?->contents->first()->content_path;
+            // Jika tidak ada design atau content, gunakan blueprint placeholder
+            $p['content_path'] = $p->design?->contents->first()?->content_path ?? 'blueprint-placeholder';
             $p['progress'] = $p->payment ? $p->harga / $p->payment?->progresses->sum('jumlah') * 100 : 0;
         }
 

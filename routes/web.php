@@ -143,6 +143,8 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     
         Route::post('/pembayaran/{paymentProgress}/snap', [PaymentController::class, 'createSnapToken'])
             ->name('pembayaran.snap');
+        Route::get('/pembayaran/{paymentProgress}/invoice', [PaymentController::class, 'invoice'])
+            ->name('pembayaran.invoice');
     
         // Route::get('/galeri', [\App\Http\Controllers\Pelanggan\GaleriController::class, 'index'])
         //     ->name('galeri');

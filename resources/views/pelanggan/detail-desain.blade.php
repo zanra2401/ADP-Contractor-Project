@@ -158,33 +158,24 @@
 
                     {{-- Form Body --}}
                     <div class="px-4 py-6 sm:p-6 bg-white">
-                        <form action="" method="POST">
+                        <form action="{{ route('project.create') }}" method="POST">
                             @csrf
                             <div class="space-y-5">
                                 
                                 {{-- Field: Pilih Desain --}}
                                 <div>
-                                    <label for="design_id" class="block text-sm font-bold text-gray-700 mb-1">Pilih Desain</label>
-                                    <div class="relative">
-                                        <select id="design_id" name="design_id" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 pl-3 pr-10 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm appearance-none border">
-                                            <option value="">-- Pilih Desain --</option>
-                                            <option value="{{ $design->id }}" selected>{{ $design->nama }} (Terpilih)</option>
-                                            <option value="2">Rumah Minimalis Type 36</option>
-                                            <option value="3">Ruko Modern 2 Lantai</option>
-                                            <option value="4">Villa Tropis Bali</option>
-                                        </select>
-                                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
-                                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                                        </div>
+                                    <label for="design_id" class="block text-sm font-bold text-gray-700 mb-1">Desain Terpilih</label>
+                                    <input type="hidden" name="design_id" value="{{ $design->id }}">
+                                    <div class="block w-full rounded-xl border-gray-300 bg-gray-100 py-3 px-3 text-gray-900 sm:text-sm shadow-sm border font-medium">
+                                        {{ $design->nama }}
                                     </div>
                                 </div>
 
-                                {{-- Field: Nama Proyek (Optional/Hidden in your snippet, uncomment if needed)
+                                {{-- Field: Nama Proyek --}}
                                 <div>
-                                    <label for="nama_proyek" class="block text-sm font-bold text-gray-700 mb-1">Nama Proyek</label>
-                                    <input type="text" name="nama_proyek" id="nama_proyek" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Contoh: Renovasi Rumah Bapak Budi">
-                                </div> 
-                                --}}
+                                    <label for="nama_proyek" class="block text-sm font-bold text-gray-700 mb-1">Nama Proyek <span class="text-red-500">*</span></label>
+                                    <input type="text" name="nama_proyek" id="nama_proyek" required class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Contoh: Pembangunan Rumah Keluarga">
+                                </div>
 
                                 {{-- Field: Deskripsi --}}
                                 <div>
@@ -194,8 +185,8 @@
 
                                 {{-- Field: Alamat --}}
                                 <div>
-                                    <label for="alamat" class="block text-sm font-bold text-gray-700 mb-1">Alamat Lokasi Proyek</label>
-                                    <textarea id="alamat" name="alamat" rows="2" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Alamat lengkap lokasi pengerjaan..."></textarea>
+                                    <label for="alamat" class="block text-sm font-bold text-gray-700 mb-1">Alamat Lokasi Proyek <span class="text-red-500">*</span></label>
+                                    <textarea id="alamat" name="alamat" rows="2" required class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Alamat lengkap lokasi pengerjaan..."></textarea>
                                 </div>
 
                             </div>

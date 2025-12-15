@@ -206,9 +206,9 @@
                                     </td>
                                     @if ($payment->status == 'lunas')
                                         <td class="px-6 py-5 text-center">
-                                            <button class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
+                                            <a href="{{ route('pelanggan.pembayaran.invoice', $payment) }}" target="_blank" class="text-gray-500 hover:text-blue-600 text-xs font-bold underline decoration-2 underline-offset-4 transition">
                                                 Cetak Invoice
-                                            </button>
+                                            </a>
                                         </td>
                                     @else
                                         <td class="px-6 py-5 text-center">

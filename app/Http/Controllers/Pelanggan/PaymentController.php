@@ -125,6 +125,23 @@ class PaymentController extends Controller
         return response()->json(['message' => 'OK']);
     }
 
+    public function invoice(PaymentProgress $paymentProgress)
+    {
+        $this->guardPaymentOwnership($paymentProgress);
+
+        $payment = $paymentProgress->payment;
+        $project = $payment?->project;
+
+        abort_if(!$payment || !$project, 404, 'Data pembayaran tidak ditemukan');
+
+        return view('pelanggan.invoice', [
+            'paymentProgress' => $paymentProgress,
+            'payment' => $payment,
+            'project' => $project,
+            'customer' => $payment->project?->pengunjung,
+        ]);
+    }
+
     private function configureMidtrans(): void
     {
         Config::$serverKey    = config('midtrans.server_key');
