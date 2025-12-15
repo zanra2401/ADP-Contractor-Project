@@ -27,7 +27,8 @@ class PelangganController extends Controller
         $proyek = Project::where('pengunjung_id', Auth::id())->get();
         foreach ($proyek as $p) {
             // Jika tidak ada design atau content, gunakan blueprint placeholder
-            $p['content_path'] = $p->design?->contents->first()?->content_path ?? 'blueprint-placeholder';
+            // dd($p->design?->contents->first()?->file_path);
+            $p['content_path'] = $p->design?->contents->first()?->file_path ?? 'blueprint-placeholder';
             $p['progress'] = $p->payment ? $p->harga / $p->payment?->progresses->sum('jumlah') * 100 : 0;
         }
 

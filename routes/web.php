@@ -23,6 +23,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,7 +76,7 @@ Route::get('/', function ()  {
 /* --------------------- ADMIN ---------------------- */
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware([AuthMiddleware::class, AdminMiddleware::class])->group(function () {
-        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
         Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
         Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
@@ -142,6 +143,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/payments/{id}', [AdminProjectController::class, 'deletePayment'])->name('payments.destroy');
 
         // Payment progress (installment) management
+        Route::post('/payment-progress', [AdminProjectController::class, 'storePaymentProgress'])->name('payment-progress.store');
         Route::put('/payment-progress/{id}', [AdminProjectController::class, 'updatePaymentProgress'])->name('payment-progress.update');
         Route::delete('/payment-progress/{id}', [AdminProjectController::class, 'deletePaymentProgress'])->name('payment-progress.destroy');
     });
@@ -207,9 +209,8 @@ Route::prefix('pengawas')->middleware([AuthMiddleware::class, PengawasMiddleware
     Route::get('/dashboard', [\App\Http\Controllers\Pengawas\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/chat/{rid?}', [PengawasController::class, 'chat'])->name('chat');
 
-    // Detail proyek - use controller for show and update
+    // Detail proyek - read-only for pengawas
     Route::get('/detail-proyek/{id}', [\App\Http\Controllers\Pengawas\ProjectController::class, 'show'])->name('detail-proyek');
-    Route::put('/detail-proyek/{id}', [\App\Http\Controllers\Pengawas\ProjectController::class, 'update'])->name('detail-proyek.update');
 
     Route::get('/profil', fn() => view('pengawas.profil'))->name('profil');
     // Route::post('/admin/projects', [AdminProjectController::class, 'store']);

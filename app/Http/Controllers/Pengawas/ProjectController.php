@@ -10,15 +10,21 @@ use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
-    public function __construct()
-    {
-        // Use the application's custom AuthMiddleware (same used in routes)
-        $this->middleware(\App\Http\Middleware\AuthMiddleware::class);
-    }
+    // public function __construct()
+    // {
+    //     // Use the application's custom AuthMiddleware (same used in routes)
+    //     $this->middleware(\App\Http\Middleware\AuthMiddleware::class);
+    // }
 
     public function show($id)
     {
-        $project = Project::with(['design', 'pengunjung', 'progresses'])->findOrFail($id);
+        $project = Project::with(['design', 'pengunjung', 'payment.progresses', 'pengawas'])->findOrFail($id);
+
+        // compute paid summary similar to pelanggan controller
+        $sudahDibayar = $project->payment?->progresses->sum('jumlah');
+        $project['progress'] = $sudahDibayar ? ($project->harga ? ($sudahDibayar / $project->harga * 100) : 0) : 0;
+        $project['sudah_dibayar'] = $sudahDibayar ?? 0;
+
         return view('pengawas.detail-proyek', compact('project'));
     }
 

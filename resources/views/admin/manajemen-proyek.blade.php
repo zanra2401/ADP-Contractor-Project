@@ -109,10 +109,10 @@
                         <!-- STATUS -->
                         <div class="mb-3">
                             <label>Status</label>
-                            <select id="status" class="form-select">
-                                <option value="Pending">Pending</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Completed">Completed</option>
+                            <select id="status" name="status" class="form-select">
+                                <option value="pending">pending</option>
+                                <option value="proses">proses</option>
+                                <option value="selesai">selesai</option>
                             </select>
                         </div>
 
