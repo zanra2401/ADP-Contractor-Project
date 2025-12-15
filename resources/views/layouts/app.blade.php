@@ -107,17 +107,12 @@
                     </a>
                 </li>
                 <li>
-<<<<<<< HEAD
                     <a href="{{ route('admin.chat.index') }}" class="nav-link text-white {{ request()->routeIs('admin.chat.index') ? 'active' : '' }}">
                         <i class="bi bi-chat-dots me-2"></i> Chat
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('admin.kategori.index') }}" class="nav-link text-white {{ request()->routeIs('admin.kategori.index') ? 'active' : '' }}">
-=======
-                    <a href="{{ route('admin.kategori.index') }}"
-                        class="nav-link text-white {{ request()->routeIs('admin.kategori.index') ? 'active' : '' }}">
->>>>>>> 76fcf1e93a133f1dada30d42f71840b736491947
                         <i class="bi bi-tags me-2"></i> Kategori
                     </a>
                 </li>
