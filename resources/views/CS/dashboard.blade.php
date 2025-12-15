@@ -57,7 +57,6 @@
 
                 <div class="hidden md:flex md:items-center space-x-8">
                     <a href="{{ route('cs.dashboard') }}" class="{{ request()->routeIs('cs.dashboard') ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-blue-600' }} px-1 pt-1 text-sm font-bold transition">Chat Masuk</a>
-                    <a href="{{ route('cs.profil') }}" class="{{ request()->routeIs('cs.profil') ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500 hover:text-blue-600' }} px-1 pt-1 text-sm font-bold transition">Profil Saya</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="bg-red-50 text-red-600 px-4 py-1.5 rounded-full text-sm font-bold hover:bg-red-600 hover:text-white transition">Logout</button>
@@ -78,7 +77,6 @@
         <div x-show="openMenu" x-transition class="md:hidden bg-white border-t border-gray-100 shadow-xl">
             <div class="px-4 pt-2 pb-4 space-y-2">
                 <a href="{{ route('cs.dashboard') }}" class="block px-3 py-3 rounded-xl text-base font-bold text-gray-700 hover:bg-blue-50 hover:text-blue-600">Chat Masuk</a>
-                <a href="{{ route('cs.profil') }}" class="block px-3 py-3 rounded-xl text-base font-bold text-gray-700 hover:bg-blue-50 hover:text-blue-600">Profil Saya</a>
                 <hr class="my-2">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
