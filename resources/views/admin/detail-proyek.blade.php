@@ -329,11 +329,11 @@
                     <div class="mb-3">
                         <label>Status</label>
                         <select name="status" class="form-select">
-                            <option value="Pending" {{ $project->status == 'Pending' ? 'selected' : '' }}>Pending
+                            <option value="pending" {{ $project->status == 'Pending' ? 'selected' : '' }}>Pending
                             </option>
-                            <option value="In Progress" {{ $project->status == 'In Progress' ? 'selected' : '' }}>In
+                            <option value="proses" {{ $project->status == 'In Progress' ? 'selected' : '' }}>In
                                 Progress</option>
-                            <option value="Completed" {{ $project->status == 'Completed' ? 'selected' : '' }}>
+                            <option value="selesai" {{ $project->status == 'Completed' ? 'selected' : '' }}>
                                 Completed
                             </option>
                         </select>

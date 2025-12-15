@@ -37,10 +37,6 @@
                     <span class="text-sm text-gray-700 mr-2">
                         Halo, {{ Auth::user()->name ?? 'Pengawas' }}!
                     </span>
-
-                    <a href="{{ route('pengawas.profil') }}"
-                        class="text-sm font-medium text-gray-500 hover:text-gray-700">Profil Saya</a>
-
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
                         <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800 ml-2">
@@ -75,9 +71,6 @@
                     <div class="text-base font-medium text-gray-800">Halo, {{ Auth::user()->name ?? 'Pengawas' }}</div>
                 </div>
                 <div class="mt-3 space-y-1">
-                    <a href="{{ route('pengawas.profil') }}"
-                        class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">Profil
-                        Saya</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
@@ -99,27 +92,25 @@
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                @if (isset($recentProjects) && $recentProjects->count())
-                    @foreach ($recentProjects as $project)
+                @if (isset($proyek) && $proyek->count())
+                    @foreach ($proyek as $p)
                         <div class="bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
-                            @php
-                                $cover = optional($project->design)->cover_image;
-                            @endphp
-                            <img class="h-48 w-full object-cover"
-                                src="{{ $cover ? asset('storage/' . $cover) : 'https://via.placeholder.com/800x480?text=No+Image' }}"
-                                alt="{{ $project->nama_proyek ?? 'Proyek' }}">
-
+                            @if($p['content_path'] !== 'blueprint-placeholder')
+                                <img class="h-48 w-full object-cover" src="{{ asset('storage/' . $p['content_path']) }}" alt="{{ $p->nama_proyek }}">
+                            @else
+                                <img class="h-48 w-full object-cover" src="{{ Vite::asset('resources/images/blueprint.jpg') }}" alt="Blueprint Placeholder">
+                            @endif
                             <div class="p-6 flex-grow flex flex-col">
-                                <h3 class="text-xl font-semibold text-gray-900">{{ $project->nama_proyek ?? '-' }}</h3>
+                                <h3 class="text-xl font-semibold text-gray-900">{{ $p->nama_proyek ?? '-' }}</h3>
                                 <p class="mt-1 text-sm text-gray-600">Klien: <span
-                                        class="font-medium">{{ optional($project->pengunjung)->nama ?? '-' }}</span>
+                                        class="font-medium">{{ optional($p->pengunjung)->nama ?? '-' }}</span>
                                 </p>
                                 <p class="mt-2 text-sm text-gray-600">Status: <span
-                                        class="font-medium {{ $project->status === 'selesai' ? 'text-green-600' : ($project->status === 'proses' ? 'text-yellow-600' : 'text-gray-600') }}">{{ ucfirst($project->status) }}</span>
+                                        class="font-medium {{ $p->status === 'selesai' ? 'text-green-600' : ($p->status === 'proses' ? 'text-yellow-600' : 'text-gray-600') }}">{{ ucfirst($p->status) }}</span>
                                 </p>
 
                                 <div class="mt-6 flex-shrink-0">
-                                    <a href="{{ route('pengawas.detail-proyek', ['id' => $project->id]) }}"
+                                    <a href="{{ route('pengawas.detail-proyek', ['id' => $p->id]) }}"
                                         class="w-full text-center block py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition">
                                         Detail Proyek
                                     </a>

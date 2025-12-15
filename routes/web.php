@@ -23,6 +23,7 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\AdminProjectController;
 use App\Http\Controllers\ProgressController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,13 +76,13 @@ Route::get('/', function ()  {
 /* --------------------- ADMIN ---------------------- */
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware([AuthMiddleware::class, AdminMiddleware::class])->group(function () {
-        Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('/laporan', fn() => view('admin.laporan'))->name('laporan');
         Route::get('/manajemen-konten', fn() => view('admin.manajemen-konten'))->name('manajemen-konten');
         Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
         Route::get('/manajemen-proyek/{id}', [AdminProjectController::class, 'showPage'])->name('proyek.detail');
         Route::get('/manajemen-user', [UserManagementController::class, 'index'])->name('manajemen-user');
-        Route::get('/chat', fn() => view('admin.chat'))->name('chat');
+        Route::get('/chat', fn() => view('admin.chat'))->name('chat.index');
         Route::get('/payment', fn() => view('admin.payment'))->name('payment');
         Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');
 

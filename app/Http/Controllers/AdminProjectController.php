@@ -162,6 +162,7 @@ class AdminProjectController extends BaseController
             'pengawas_id'     => 'required|string',
             'pengunjung_id'   => 'required|string',
             'design_id'       => 'required|string',
+            'status'          => 'required|string',
             'nama_proyek'     => 'required|string',
             'deskripsi'       => 'required|string',
             'harga'           => 'required|numeric',
