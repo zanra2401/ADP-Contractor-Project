@@ -74,12 +74,6 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.laporan') }}"
-                        class="nav-link text-white {{ request()->routeIs('admin.laporan') ? 'active' : '' }}">
-                        <i class="bi bi-graph-up me-2"></i> Laporan
-                    </a>
-                </li>
-                <li>
                     <a href="{{ route('admin.manajemen-proyek') }}"
                         class="nav-link text-white {{ request()->routeIs('admin.manajemen-proyek') ? 'active' : '' }}">
                         <i class="bi bi-briefcase me-2"></i> Manajemen Proyek
