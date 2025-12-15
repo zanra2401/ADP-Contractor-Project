@@ -86,6 +86,8 @@ class PelangganController extends Controller
                 ->orWhereHas('chatsAsReceiver', function ($q) use ($myId) {
                     $q->where('pengirim_id', $myId);
                 });
+            })->orWhereHas('role', function ($q) {
+                $q->where('nama_Role', 'customer_service');
             })
             ->get();
         
