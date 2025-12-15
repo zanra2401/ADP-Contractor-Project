@@ -43,7 +43,7 @@ class UserSeeder extends Seeder
             'role_id' => $superadminRole,
             'nama' => 'Super Admin',
             'nomor_telepon' => '081111111113',
-            'password' => Hash::make('kukirakurakurasemuasama'),
+            'password' => Hash::make('kukirakurakurasemuasama123'),
         ]);
 
         // ⭐ Pengunjung (WAJIB)
