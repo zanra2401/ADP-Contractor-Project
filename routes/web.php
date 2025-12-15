@@ -82,7 +82,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/manajemen-proyek', fn() => view('admin.manajemen-proyek'))->name('manajemen-proyek');
         Route::get('/manajemen-proyek/{id}', [AdminProjectController::class, 'showPage'])->name('proyek.detail');
         Route::get('/manajemen-user', [UserManagementController::class, 'index'])->name('manajemen-user');
-        Route::get('/chat', fn() => view('admin.chat'))->name('chat');
+        Route::get('/chat', fn() => view('admin.chat'))->name('chat.index');
         Route::get('/payment', fn() => view('admin.payment'))->name('payment');
         Route::get('/simpan-desain', fn() => view('admin.simpan-desain'))->name('simpan-desain');
 
