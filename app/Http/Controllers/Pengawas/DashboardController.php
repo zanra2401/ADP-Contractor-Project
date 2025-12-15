@@ -24,12 +24,13 @@ class DashboardController extends Controller
         $totalProgressLogs = ProgressLog::count();
 
         // Eager-load design and pengunjung (client) so the view can access cover_image and client name
-        $proyek = Project::where('pengawas_id', Auth::id())->get();
+        $proyek = Project::where('pengawas_id', Auth::id())->with(['design.contents', 'payment.progresses'])->get();
         foreach ($proyek as $p) {
             // Jika tidak ada design atau content, gunakan blueprint placeholder
-            // dd($p->design?->contents->first()?->file_path);
             $p['content_path'] = $p->design?->contents->first()?->file_path ?? 'blueprint-placeholder';
-            $p['progress'] = $p->payment ? $p->harga / $p->payment?->progresses->sum('jumlah') * 100 : 0;
+            // Progress pembayaran hanya dari yang sudah dibayar (lunas)
+            $paid = $p->payment ? $p->payment->progresses->where('status', 'lunas')->sum('jumlah') : 0;
+            $p['progress'] = $p->harga && $p->harga > 0 ? ($paid / $p->harga) * 100 : 0;
         }
         
         

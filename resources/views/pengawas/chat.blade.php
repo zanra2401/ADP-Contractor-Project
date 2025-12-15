@@ -87,7 +87,7 @@
         </div>
     </nav>
 
-    <div class="flex-1 max-w-7xl mx-auto w-full sm:px-6 lg:px-8 sm:py-6 overflow-hidden flex flex-col">
+    <div class="flex-1 max-w-7xl mx-auto w-full sm:px-6 lg:px-8 sm:py-6 flex flex-col" style="height: calc(100vh - 4rem);">
 
         <header class="mb-4 px-4 sm:px-0 flex-shrink-0">
             <a href="{{ route('pengawas.dashboard') }}" class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center transition">
@@ -100,7 +100,7 @@
             <p class="text-gray-600 text-sm">Diskusikan proyek dengan klien Anda.</p>
         </header>
 
-        <main class="flex-1 w-full relative">
+        <main class="flex-1 w-full relative overflow-hidden">
             <div class="flex h-full bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200">
                 
                 <div id="contactList" class="w-full md:w-1/3 border-r border-gray-200 flex flex-col bg-white h-full z-10 absolute md:static top-0 left-0">

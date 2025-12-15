@@ -8,8 +8,8 @@
             <h1 class="h3 mb-0">🗂️ Manajemen Proyek</h1>
             <div class="ms-auto d-flex align-items-center">
                 <div class="dropdown">
-                    <a href="#" class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        🔔 <span class="badge rounded-pill bg-danger">3</span>
+                    {{-- <a href="#" class="nav-link text-dark" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        🔔 <span class="badge rounded-pill bg-danger">3</span> --}}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Notifikasi 1: Proyek baru ditambahkan.</a></li>
@@ -25,9 +25,7 @@
         <div class="card shadow-sm">
             <div class="card-header d-flex flex-wrap justify-content-between align-items-center bg-white py-3 gap-2">
                 <h5 class="mb-0">Daftar Proyek</h5>
-                <button type="button" class="btn btn-primary btn-sm" onclick="showCreateProjectModal()">
-                    <span class="me-1">+</span> Buat Proyek Baru
-                </button>
+ 
             </div>
             
             <div class="card-body p-0">

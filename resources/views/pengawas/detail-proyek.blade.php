@@ -152,7 +152,7 @@
                                                 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Progress
                                                 Realisasi</span>
                                             <div class="text-3xl font-extrabold text-gray-900 mt-1">
-                                                {{ round($project->progress ?? 0, 2) }}%</div>
+                                                {{ round($project->progress ?? 0) }}%</div>
                                         </div>
                                         <span
                                             class="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">{{ $project->status }}</span>
@@ -185,7 +185,7 @@
                                                     <span class="font-bold text-xl text-white">Rp
                                                         {{ number_format($project->sudah_dibayar ?? 0, 0, ',', '.') }}</span>
                                                     <span
-                                                        class="text-xs inline-block bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 font-medium">{{ round($project->progress ?? 0, 2) }}%</span>
+                                                        class="text-xs inline-block bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 font-medium">{{ round($project->progress ?? 0) }}%</span>
                                                 </div>
                                             </div>
                                         </div>

@@ -130,9 +130,9 @@
                                 <p class="mt-2 text-sm text-gray-600">Status: <span class="font-medium text-yellow-600">{{ $p->status }}</span></p>
                             </div>
                             <div class="mt-4 flex-shrink-0">
-                                <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: {{ $p->progress }}%</span>
+                                <span class="text-sm font-medium text-gray-700">Progres Keseluruhan: {{ round($p->progress) }}%</span>
                                 <div class="w-full bg-gray-200 rounded-full h-2.5 mt-1">
-                                    <div class="{{ $p->progress == 100.0 ? 'bg-green-600' : 'bg-blue-600' }} h-2.5 rounded-full" style="width: {{ $p->progress }}%"></div>
+                                    <div class="{{ $p->progress == 100.0 ? 'bg-green-600' : 'bg-blue-600' }} h-2.5 rounded-full" style="width: {{ round($p->progress) }}%"></div>
                                 </div>
                             </div>    
                             @if ($p->progress == 100.0)
@@ -204,7 +204,7 @@
                             {{-- Field: Nama Proyek --}}
                             <div>
                                 <label for="nama_proyek" class="block text-sm font-bold text-gray-700 mb-1">Nama Proyek</label>
-                                <input type="text" name="nama_proyek" id="nama_proyek" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Cth: Renovasi Rumah Pak Budi">
+                                <input type="text" name="nama_proyek" id="nama_proyek" class="block w-full rounded-xl border-gray-300 bg-gray-50 py-3 px-3 text-gray-900 focus:border-blue-500 focus:ring-blue-500 sm:text-sm shadow-sm border" placeholder="Cth: Renovasi Rumah Pak Budi" required>
                             </div>
 
                             {{-- Field: Deskripsi --}}

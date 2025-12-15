@@ -18,13 +18,21 @@ class ProjectController extends Controller
             'design_id' => 'nullable|exists:designs,id',
         ]);
 
-        Project::create([
+        $project = Project::create([
             'pengunjung_id' => Auth::id(),
             'design_id' => $request->input('design_id') ?? null,
             'nama_proyek' => $request->input('nama_proyek'),
             'deskripsi' => $request->input('deskripsi'),
             'alamat' => $request->input('alamat'),
             'status' => 'pending',
+        ]);
+
+        // Auto-create an empty Payment for this project
+        Payment::create([
+            'project_id'    => $project->id,
+            'pengunjung_id' => Auth::id(),
+            'total_harga'   => 0,
+            'status'        => 'progress',
         ]);
 
         return redirect()->route('pelanggan.dashboard')->with('success', 'Proyek berhasil dibuat!');

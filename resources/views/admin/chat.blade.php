@@ -263,7 +263,7 @@
 
                 if (!response.ok) {
                     const text = await response.text();
-                    throw new Error(text || 'Gagal mengirim pesan');
+                    throw new Error(text || 'Gagal mengirim pesa    n');
                 }
 
                 const data = await response.json();
@@ -271,8 +271,7 @@
                 if (data.success) {
                     this.reset();
                     clearPreview();
-                    // Reload to fetch latest messages
-                    location.reload();
+                    // Pesan akan ditambahkan otomatis via real-time listener (message.js)
                 } else {
                     throw new Error(data.message || 'Gagal mengirim pesan');
                 }

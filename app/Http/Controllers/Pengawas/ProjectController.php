@@ -20,10 +20,10 @@ class ProjectController extends Controller
     {
         $project = Project::with(['design', 'pengunjung', 'payment.progresses', 'pengawas'])->findOrFail($id);
 
-        // compute paid summary similar to pelanggan controller
-        $sudahDibayar = $project->payment?->progresses->sum('jumlah');
-        $project['progress'] = $sudahDibayar ? ($project->harga ? ($sudahDibayar / $project->harga * 100) : 0) : 0;
-        $project['sudah_dibayar'] = $sudahDibayar ?? 0;
+        // compute paid summary using only 'lunas' payments
+        $sudahDibayar = $project->payment?->progresses->where('status', 'lunas')->sum('jumlah') ?? 0;
+        $project['progress'] = ($project->harga && $project->harga > 0) ? ($sudahDibayar / $project->harga * 100) : 0;
+        $project['sudah_dibayar'] = $sudahDibayar;
 
         return view('pengawas.detail-proyek', compact('project'));
     }

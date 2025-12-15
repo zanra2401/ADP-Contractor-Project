@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Project;
+use App\Models\Payment;
 use App\Models\Customization;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -42,6 +43,14 @@ class ProjectService
                     ]);
                 }
             }
+
+            // Auto-create Payment for this project
+            Payment::create([
+                'project_id'    => $project->id,
+                'pengunjung_id' => $project->pengunjung_id,
+                'total_harga'   => $data['harga'] ?? 0,
+                'status'        => 'progress',
+            ]);
 
             return $project->load(['materials']);
         });

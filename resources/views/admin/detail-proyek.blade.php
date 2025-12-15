@@ -223,7 +223,7 @@
                     </div>
                     <div class="modal-body">
 
-                        <input type="hidden" name="payment_id" value="{{ $project->payment->id }}">
+                        <input type="hidden" name="payment_id" value="{{ $project->payment?->id }}">
 
                         <div class="mb-3">
                             <label>Jumlah</label>
