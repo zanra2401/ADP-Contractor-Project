@@ -99,7 +99,12 @@
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProjectModal">
                     Hapus
                 </button>
-                <button class="btn btn-primary">Download Kontrak PDF</button>
+                @if (!empty($project->file_path))
+                    <a href="{{ asset('storage/' . $project->file_path) }}" target="_blank" class="btn btn-primary">Lihat /
+                        Download File</a>
+                @else
+                    <button class="btn btn-primary" disabled>Tidak ada file</button>
+                @endif
             </div>
         </div>
     </div>
@@ -115,13 +120,15 @@
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
 
-                <div class="mb-3">
+                <div class="mb-3 d-flex gap-2">
                     <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createPPModal">Tambah
                         Progres Payment</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="printPaymentProgress()">Cetak
+                        Progres</button>
                 </div>
 
                 @if (isset($paymentProgress) && $paymentProgress->count())
-                    <div class="table-responsive">
+                    <div id="payment-progress-section" class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -207,199 +214,279 @@
                 @else
                     <p class="text-muted">Belum ada riwayat pembayaran.</p>
                 @endif
-            </div>
-        </div>
-    </div>
 
-    <!-- Modal Create Payment Progress -->
-    <div class="modal fade" id="createPPModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <form action="{{ route('admin.payment-progress.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-header">
-                        <h5 class="modal-title">Tambah Progres Payment</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
+                <!-- Modal Create Payment Progress -->
+                <div class="modal fade" id="createPPModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <form action="{{ route('admin.payment-progress.store') }}" method="POST">
+                                @csrf
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Tambah Progres Payment</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
 
-                        <input type="hidden" name="payment_id" value="{{ $project->payment->id }}">
+                                    <input type="hidden" name="payment_id" value="{{ $project->payment->id }}">
 
-                        <div class="mb-3">
-                            <label>Jumlah</label>
-                            <input type="number" name="jumlah" class="form-control" required>
+                                    <div class="mb-3">
+                                        <label>Jumlah</label>
+                                        <input type="number" name="jumlah" class="form-control" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label>Deskripsi</label>
+                                        <textarea name="deskripsi" class="form-control" rows="3"></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Tambah</button>
+                                </div>
+                            </form>
                         </div>
+                    </div>
+                </div>
+                <!-- Modal Edit Proyek -->
+                <div class="modal fade" id="editProjectModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
 
-                        <div class="mb-3">
-                            <label>Deskripsi</label>
-                            <textarea name="deskripsi" class="form-control" rows="3"></textarea>
+                            <form action="{{ route('admin.manajemen-proyek.update', $project->id) }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                @method('PUT')
+
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Proyek</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <!-- Nama Proyek -->
+                                    <div class="mb-3">
+                                        <label>Nama Proyek</label>
+                                        <input type="text" name="nama_proyek" class="form-control"
+                                            value="{{ $project->nama_proyek }}" required>
+                                    </div>
+                                    <!-- Klien (tidak bisa diubah) -->
+                                    <div class="mb-3">
+                                        <label>Nama Klien</label>
+                                        <div class="form-control-plaintext py-2">
+                                            {{ $project->pengunjung->nama ?? '-' }}</div>
+                                        <input type="hidden" name="pengunjung_id"
+                                            value="{{ $project->pengunjung_id }}">
+                                    </div>
+
+                                    <!-- Pengawas -->
+                                    <div class="mb-3">
+                                        <label>Pengawas</label>
+                                        <select name="pengawas_id" class="form-select" required>
+                                            @foreach ($pengawas as $p)
+                                                <option value="{{ $p->id }}"
+                                                    {{ $project->pengawas_id == $p->id ? 'selected' : '' }}>
+                                                    {{ $p->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Desain -->
+                                    <div class="mb-3">
+                                        <label>Desain</label>
+                                        <select name="design_id" class="form-select" required>
+                                            @foreach ($designs as $d)
+                                                <option value="{{ $d->id }}"
+                                                    {{ $project->design_id == $d->id ? 'selected' : '' }}>
+                                                    {{ $d->nama }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+
+                                        @if ($project->design && $project->design->cover_image)
+                                            <img src="{{ asset('storage/' . $project->design->cover_image) }}"
+                                                class="img-fluid rounded mt-2" style="max-height:150px;">
+                                        @endif
+                                    </div>
+
+                                    <!-- Deskripsi -->
+                                    <div class="mb-3">
+                                        <label>Deskripsi</label>
+                                        <textarea name="deskripsi" class="form-control">{{ $project->deskripsi }}</textarea>
+                                    </div>
+
+                                    <!-- Harga -->
+                                    <div class="mb-3">
+                                        <label>Harga</label>
+                                        <input type="number" name="harga" class="form-control"
+                                            value="{{ $project->harga }}" required>
+                                    </div>
+
+                                    <!-- Status -->
+                                    <div class="mb-3">
+                                        <label>Status</label>
+                                        <select name="status" class="form-select">
+                                            <option value="pending" {{ $project->status == 'Pending' ? 'selected' : '' }}>
+                                                Pending
+                                            </option>
+                                            <option value="proses"
+                                                {{ $project->status == 'In Progress' ? 'selected' : '' }}>
+                                                In
+                                                Progress</option>
+                                            <option value="selesai"
+                                                {{ $project->status == 'Completed' ? 'selected' : '' }}>
+                                                Completed
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Alamat -->
+                                    <div class="mb-3">
+                                        <label>Alamat</label>
+                                        <textarea name="alamat" class="form-control">{{ $project->alamat }}</textarea>
+                                    </div>
+
+                                    <!-- File Upload -->
+                                    <div class="mb-3">
+                                        <label>File (Gambar / PDF)</label>
+
+                                        @if (!empty($project->file_path))
+                                            @php
+                                                $ext = strtolower(pathinfo($project->file_path, PATHINFO_EXTENSION));
+                                                $isImage = in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp']);
+                                            @endphp
+
+                                            <div class="mb-2 d-flex align-items-center">
+                                                @if ($isImage)
+                                                    <img src="{{ asset('storage/' . $project->file_path) }}"
+                                                        alt="Lampiran" class="rounded me-3" style="max-height:80px;">
+                                                @endif
+
+                                                <a href="{{ asset('storage/' . $project->file_path) }}" target="_blank"
+                                                    class="btn btn-sm btn-outline-primary me-2">Lihat
+                                                    File</a>
+                                                <a href="{{ asset('storage/' . $project->file_path) }}" download
+                                                    class="btn btn-sm btn-outline-secondary">Download</a>
+                                            </div>
+                                        @endif
+
+                                        <input type="file" name="file_path" class="form-control"
+                                            accept="image/*,.pdf">
+                                    </div>
+
+                                    <!-- Tanggal Mulai -->
+                                    <div class="mb-3">
+                                        <label>Tanggal Mulai</label>
+                                        <input type="date" name="tanggal_mulai" class="form-control"
+                                            value="{{ $project->tanggal_mulai }}" required>
+                                    </div>
+
+                                    <!-- Tanggal Selesai -->
+                                    <div class="mb-3">
+                                        <label>Tanggal Selesai</label>
+                                        <input type="date" name="tanggal_selesai" class="form-control"
+                                            value="{{ $project->tanggal_selesai }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Simpan
+                                        Perubahan</button>
+                                </div>
+
+                            </form>
                         </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Tambah</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-@endsection
-<!-- Modal Edit Proyek -->
-<div class="modal fade" id="editProjectModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-
-            <form action="{{ route('admin.manajemen-proyek.update', $project->id) }}" method="POST"
-                enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
-
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Proyek</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <!-- Nama Proyek -->
-                    <div class="mb-3">
-                        <label>Nama Proyek</label>
-                        <input type="text" name="nama_proyek" class="form-control"
-                            value="{{ $project->nama_proyek }}" required>
-                    </div>
-                    <!-- Klien -->
-                    <div class="mb-3">
-                        <label>Klien (Pengunjung)</label>
-                        <select name="pengunjung_id" class="form-select" required>
-                            <option value="">-- Pilih Klien --</option>
-                            @foreach ($users as $u)
-                                <option value="{{ $u->id }}"
-                                    {{ $project->pengunjung_id == $u->id ? 'selected' : '' }}>
-                                    {{ $u->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Pengawas -->
-                    <div class="mb-3">
-                        <label>Pengawas</label>
-                        <select name="pengawas_id" class="form-select" required>
-                            @foreach ($pengawas as $p)
-                                <option value="{{ $p->id }}"
-                                    {{ $project->pengawas_id == $p->id ? 'selected' : '' }}>
-                                    {{ $p->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <!-- Desain -->
-                    <div class="mb-3">
-                        <label>Desain</label>
-                        <select name="design_id" class="form-select" required>
-                            @foreach ($designs as $d)
-                                <option value="{{ $d->id }}"
-                                    {{ $project->design_id == $d->id ? 'selected' : '' }}>
-                                    {{ $d->nama }}
-                                </option>
-                            @endforeach
-                        </select>
-
-                        @if ($project->design && $project->design->cover_image)
-                            <img src="{{ asset('storage/' . $project->design->cover_image) }}"
-                                class="img-fluid rounded mt-2" style="max-height:150px;">
-                        @endif
-                    </div>
-
-                    <!-- Deskripsi -->
-                    <div class="mb-3">
-                        <label>Deskripsi</label>
-                        <textarea name="deskripsi" class="form-control">{{ $project->deskripsi }}</textarea>
-                    </div>
-
-                    <!-- Harga -->
-                    <div class="mb-3">
-                        <label>Harga</label>
-                        <input type="number" name="harga" class="form-control" value="{{ $project->harga }}"
-                            required>
-                    </div>
-
-                    <!-- Status -->
-                    <div class="mb-3">
-                        <label>Status</label>
-                        <select name="status" class="form-select">
-                            <option value="pending" {{ $project->status == 'Pending' ? 'selected' : '' }}>Pending
-                            </option>
-                            <option value="proses" {{ $project->status == 'In Progress' ? 'selected' : '' }}>In
-                                Progress</option>
-                            <option value="selesai" {{ $project->status == 'Completed' ? 'selected' : '' }}>
-                                Completed
-                            </option>
-                        </select>
-                    </div>
-
-                    <!-- Alamat -->
-                    <div class="mb-3">
-                        <label>Alamat</label>
-                        <textarea name="alamat" class="form-control">{{ $project->alamat }}</textarea>
-                    </div>
-
-                    <!-- File Upload -->
-                    <div class="mb-3">
-                        <label>File (Gambar / PDF)</label>
-                        <input type="file" name="file_path" class="form-control" accept="image/*,.pdf">
-                    </div>
-
-                    <!-- Tanggal Mulai -->
-                    <div class="mb-3">
-                        <label>Tanggal Mulai</label>
-                        <input type="date" name="tanggal_mulai" class="form-control"
-                            value="{{ $project->tanggal_mulai }}" required>
-                    </div>
-
-                    <!-- Tanggal Selesai -->
-                    <div class="mb-3">
-                        <label>Tanggal Selesai</label>
-                        <input type="date" name="tanggal_selesai" class="form-control"
-                            value="{{ $project->tanggal_selesai }}" required>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                <!-- Modal Hapus Proyek -->
+                <div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <form action="{{ route('admin.manajemen-proyek.delete', $project->id) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title">Hapus Proyek</h5>
+                                    <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
+                                </div>
+
+                                <div class="modal-body text-center">
+                                    <p class="mb-0">Yakin ingin menghapus proyek ini?</p>
+                                    <strong>{{ $project->nama_proyek }}</strong>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-danger">Ya, Hapus</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
                 </div>
+                <script>
+                    function printPaymentProgress() {
+                        const section = document.getElementById('payment-progress-section');
+                        if (!section) {
+                            alert('Tidak ada data progres untuk dicetak.');
+                            return;
+                        }
 
-            </form>
-        </div>
-    </div>
-</div>
+                        const table = section.querySelector('table');
+                        if (!table) {
+                            alert('Tabel progres tidak ditemukan.');
+                            return;
+                        }
 
-<!-- Modal Hapus Proyek -->
-<div class="modal fade" id="deleteProjectModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form action="{{ route('admin.manajemen-proyek.delete', $project->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
+                        const clone = table.cloneNode(true);
+                        let aksiIndex = -1;
+                        const headerCells = clone.querySelectorAll('thead th');
+                        headerCells.forEach((th, idx) => {
+                            if (th.innerText.trim().toLowerCase() === 'aksi') {
+                                aksiIndex = idx;
+                            }
+                        });
 
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Hapus Proyek</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+                        if (aksiIndex > -1) {
+                            clone.querySelectorAll('thead tr').forEach(tr => {
+                                if (tr.children[aksiIndex]) tr.removeChild(tr.children[aksiIndex]);
+                            });
+                            clone.querySelectorAll('tbody tr').forEach(tr => {
+                                if (tr.children[aksiIndex]) tr.removeChild(tr.children[aksiIndex]);
+                            });
+                        }
 
-                <div class="modal-body text-center">
-                    <p class="mb-0">Yakin ingin menghapus proyek ini?</p>
-                    <strong>{{ $project->nama_proyek }}</strong>
-                </div>
+                        const w = window.open('', '_blank', 'width=900,height=700');
+                        const styles = `
+            <style>
+                body{font-family: Arial, Helvetica, sans-serif; margin:20px}
+                table{width:100%; border-collapse: collapse}
+                th, td{border:1px solid #ccc; padding:8px; text-align:left}
+                th{background:#f5f5f5}
+            </style>
+        `;
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-danger">Ya, Hapus</button>
-                </div>
+                        w.document.write('<html><head><title>Progres Payment - {{ $project->nama_proyek }}</title>');
+                        w.document.write(styles);
+                        w.document.write('</head><body>');
+                        w.document.write('<h3>Progres Payment - {{ $project->nama_proyek }}</h3>');
+                        w.document.write(clone.outerHTML);
+                        w.document.write('</body></html>');
+                        w.document.close();
+                        w.focus();
+                        setTimeout(() => {
+                            w.print();
+                            w.close();
+                        }, 300);
+                    }
+                </script>
 
-            </form>
-        </div>
-    </div>
-</div>
+            @endsection

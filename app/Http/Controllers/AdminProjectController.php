@@ -186,9 +186,9 @@ class AdminProjectController extends BaseController
 
         $validated = $request->validate([
             'nama_proyek' => 'required|string',
-            'pengunjung_id' => 'required',
-            'pengawas_id' => 'required',
-            'design_id' => 'required',
+            'pengunjung_id' => 'required|exists:users,id',
+            'pengawas_id' => 'required|exists:users,id',
+            'design_id' => 'required|exists:designs,id',
             'deskripsi' => 'nullable|string',
             'harga' => 'required|numeric',
             'status' => 'required|string',
@@ -197,10 +197,20 @@ class AdminProjectController extends BaseController
             'tanggal_selesai' => 'required|date'
         ]);
 
-        // update data
-        $project->update($validated);
+        // update data (assign explicitly to ensure relation ids are saved)
+        $project->pengunjung_id = (string) ($validated['pengunjung_id'] ?? $project->pengunjung_id);
+        $project->pengawas_id = (string) ($validated['pengawas_id'] ?? $project->pengawas_id);
+        $project->design_id = (string) ($validated['design_id'] ?? $project->design_id);
+        $project->nama_proyek = $validated['nama_proyek'];
+        $project->deskripsi = $validated['deskripsi'] ?? $project->deskripsi;
+        $project->harga = $validated['harga'];
+        $project->status = $validated['status'];
+        $project->alamat = $validated['alamat'] ?? $project->alamat;
+        $project->tanggal_mulai = $validated['tanggal_mulai'];
+        $project->tanggal_selesai = $validated['tanggal_selesai'];
+        $project->save();
 
-        // kalau upload file baru
+        // handle file upload if present
         if ($request->hasFile('file_path')) {
             $file = $request->file('file_path')->store('projects', 'public');
             $project->file_path = $file;

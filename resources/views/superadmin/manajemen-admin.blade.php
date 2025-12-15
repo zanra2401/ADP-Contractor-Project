@@ -1,12 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.superadmin')
 
 @section('content')
-    <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom p-3 mb-4 shadow-sm">
-        <div class="container-fluid">
-            <h1 class="h3 mb-0">👥 Manajemen Admin</h1>
-        </div>
-    </nav>
-
     <div class="p-4">
         <div class="card shadow-sm">
             <div class="card-header d-flex justify-content-between align-items-center">
