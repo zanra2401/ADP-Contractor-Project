@@ -18,20 +18,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RoleSeeder::class,
-            JenisMaterialSeeder::class,
             UserSeeder::class,
-            UserDetailSeeder::class,
-            DesignSeeder::class,
-            ContentMediaSeeder::class,
-            MaterialSeeder::class,
-            ProjectSeeder::class,
-            CustomizationSeeder::class,
-            ProgressLogSeeder::class,
-            PaymentSeeder::class,
-            PaymentProgressSeeder::class,
-            ChatSeeder::class,
-            CategorySeeder::class,
-            DesignCategorySeeder::class
         ]);
     }
 }

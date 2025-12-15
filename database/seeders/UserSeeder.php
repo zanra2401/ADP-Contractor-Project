@@ -18,43 +18,43 @@ class UserSeeder extends Seeder
         $pengunjungRole = Role::where('nama_role', 'pengunjung')->first()->id;
 
         // Admin
-        User::create([
-            'role_id' => $adminRole,
-            'nama' => 'Admin Utama',
-            'nomor_telepon' => '081111111110',
-            'password' => Hash::make('admin123'),
-        ]);
+        // User::create([
+        //     'role_id' => $adminRole,
+        //     'nama' => 'Admin Utama',
+        //     'nomor_telepon' => '081111111110',
+        //     'password' => Hash::make('admin123'),
+        // ]);
 
         // Pengawas
-        User::create([
-            'role_id' => $pengawasRole,
-            'nama' => 'Pengawas Lapangan',
-            'nomor_telepon' => '081111111111',
-            'password' => Hash::make('pengawas123'),
-        ]);
+        // User::create([
+        //     'role_id' => $pengawasRole,
+        //     'nama' => 'Pengawas Lapangan',
+        //     'nomor_telepon' => '081111111111',
+        //     'password' => Hash::make('pengawas123'),
+        // ]);
 
         // Customer Service
-        User::create([
-            'role_id' => $customerServiceRole,
-            'nama' => 'Customer Service',
-            'nomor_telepon' => '081111111112',
-            'password' => Hash::make('customerservice123'),
-        ]);
+        // User::create([
+        //     'role_id' => $customerServiceRole,
+        //     'nama' => 'Customer Service',
+        //     'nomor_telepon' => '081111111112',
+        //     'password' => Hash::make('customerservice123'),
+        // ]);
 
         // Superadmin
         User::create([
             'role_id' => $superadminRole,
             'nama' => 'Super Admin',
             'nomor_telepon' => '081111111113',
-            'password' => Hash::make('superadmin123'),
+            'password' => Hash::make('kukirakurakurasemuasama'),
         ]);
 
         // ⭐ Pengunjung (WAJIB)
-        User::create([
-            'role_id' => $pengunjungRole,
-            'nama' => 'Pengunjung Pertama',
-            'nomor_telepon' => '081111111114',
-            'password' => Hash::make('pengunjung123'),
-        ]);
+        // User::create([
+        //     'role_id' => $pengunjungRole,
+        //     'nama' => 'Pengunjung Pertama',
+        //     'nomor_telepon' => '081111111114',
+        //     'password' => Hash::make('pengunjung123'),
+        // ]);
     }
 }
