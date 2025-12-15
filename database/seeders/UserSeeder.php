@@ -11,11 +11,8 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        $adminRole = Role::where('nama_role', 'admin')->first()->id;
-        $pengawasRole = Role::where('nama_role', 'pengawas')->first()->id;
-        $customerServiceRole = Role::where('nama_role', 'customer_service')->first()->id;
         $superadminRole = Role::where('nama_role', 'superadmin')->first()->id;
-        $pengunjungRole = Role::where('nama_role', 'pengunjung')->first()->id;
+ 
 
         // Admin
         // User::create([
