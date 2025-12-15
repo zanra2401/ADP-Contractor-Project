@@ -94,7 +94,7 @@
                     <a href="{{ route('pelanggan.profil') }}" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100">
                         Profil Saya
                     </a>
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-red-600 hover:text-red-800 hover:bg-gray-100">
                             Logout
