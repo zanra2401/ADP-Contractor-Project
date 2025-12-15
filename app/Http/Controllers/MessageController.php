@@ -35,13 +35,16 @@ class MessageController extends Controller
             $chat->save();
 
             return response()->json([
-                'message' => "berhasil mengirim pesan"
+                'success' => true,
+                'message' => "berhasil mengirim pesan",
+                'data' => $chat
             ]);
         } catch (Exception $e) {
             return response()->json([
+                'success' => false,
                 'message' => "gagal mengirim pesan",
-                'e' => $e->getMessage()
-            ]);
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

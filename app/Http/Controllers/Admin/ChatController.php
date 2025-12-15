@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers\CS;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Chat;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Chat;
+use Illuminate\Contracts\View\View;
 use App\Models\User;
 use Illuminate\Support\Carbon;
-use Illuminate\Contracts\View\View;
 
-class CSController extends Controller
+class ChatController extends Controller
 {
     public function chat(Request $request, ?string $rid = null): View {
         $myId = Auth::id();
@@ -31,16 +31,16 @@ class CSController extends Controller
             })
             ->get();
 
-        $messages = $rid ? Chat::getMessageWith($rid) : collect([]);
+        $messages = $rid ? Chat::getMessageWith($rid) : null;
 
         foreach ($users as $user) {
             $lastMessage = Chat::getLastMessageWith($user->id);
             $user['last_message'] = $lastMessage?->pesan;
-            $user['last_time'] = $lastMessage ? Carbon::parse($lastMessage->waktu_kirim)->format('H:i') : null;
+            $user['last_time'] = Carbon::parse($lastMessage?->waktu_kirim)?->toTimeString();
             $user['unread'] = Chat::getUnreadMessagesWith($user->id)->count();
         }
-        
-        return view('CS.dashboard', [
+
+        return view('admin.chat', [
             'contacts' => $users,
             'messages' => $messages,
             'rid' => $rid,

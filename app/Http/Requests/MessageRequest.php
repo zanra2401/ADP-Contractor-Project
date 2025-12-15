@@ -22,8 +22,8 @@ class MessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pesan' => 'required_without:media|nullable|string',
-            'media' => 'required_without:pesan|nullable|file|max:102400',
+            'pesan' => 'required_without:media|nullable|string|max:1000',
+            'media' => 'required_without:pesan|nullable|image|mimes:jpeg,png,jpg,gif|max:10240',
             'penerima_id' => 'required|string|exists:users,id'
         ];
     }
