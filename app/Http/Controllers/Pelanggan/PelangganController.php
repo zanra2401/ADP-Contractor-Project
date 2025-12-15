@@ -50,8 +50,6 @@ class PelangganController extends Controller
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
         $role = Role::where("nama_Role", "pengunjung")->first();
 
-        
-
         $data = [
             'nomor_telepon' => $user->nomor_telepon,
             'password' => Hash::make($user->password),

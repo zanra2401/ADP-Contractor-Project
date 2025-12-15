@@ -161,12 +161,14 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
 /* --------------------- PELANGGAN ---------------------- */
 Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
     Route::get('/register', fn() => view('auth.register'))->name('register');
+    Route::post('/register', [PelangganController::class, 'register'])->name('register.submit');
     Route::middleware([AuthMiddleware::class, PelangganMiddleware::class])->group(function () {
         
         Route::get('/detail-design', [PelangganController::class, 'detailDesign'])->name('detail-design');
     
         Route::post('/pembayaran/{paymentProgress}/snap', [PaymentController::class, 'createSnapToken'])
             ->name('pembayaran.snap');
+
         Route::get('/pembayaran/{paymentProgress}/invoice', [PaymentController::class, 'invoice'])
             ->name('pembayaran.invoice');
     
@@ -183,6 +185,7 @@ Route::prefix('pelanggan')->name('pelanggan.')->group(function () {
         Route::get('/dashboard', [PelangganController::class, 'dashboard'])
             ->name('dashboard')
             ->middleware([AuthMiddleware::class]);
+        
     
         // Route::get('/galeri', fn() => view('pelanggan.galeri'))->name('galeri');
         Route::get('/chat/{rid?}', [PelangganController::class, 'chat'])->name('chat');
