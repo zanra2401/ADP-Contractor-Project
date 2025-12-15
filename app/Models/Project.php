@@ -23,6 +23,7 @@ class Project extends Model
         "pengawas_id",
         "pengunjung_id",
         "design_id",
+        "status",
         "deskripsi",
         "nama_proyek",
         "harga",

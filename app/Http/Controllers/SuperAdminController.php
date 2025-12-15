@@ -23,7 +23,6 @@ class SuperAdminController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'role_id'       => 'required|string|exists:roles,id',
             'nama'          => 'required|string|max:100',
             'nomor_telepon' => 'required|string|max:12|unique:users,nomor_telepon',
             'password'      => 'required|string|min:6',
@@ -46,7 +45,6 @@ class SuperAdminController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'role_id'       => 'sometimes|string|exists:roles,id',
             'nama'          => 'sometimes|string|max:100',
             'nomor_telepon' => 'sometimes|string|max:12|unique:users,nomor_telepon,' . $id . ',id',
             'password'      => 'sometimes|string|min:6',

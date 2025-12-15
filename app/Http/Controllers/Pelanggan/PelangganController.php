@@ -44,14 +44,13 @@ class PelangganController extends Controller
         $proyek['progress'] = $sudahDibayar ? $proyek->harga / $sudahDibayar * 100 : 0;
         $proyek['sudah_dibayar'] = $sudahDibayar ? $sudahDibayar : 0;
 
-        
-
         return view('pelanggan.detail-proyek', compact('proyek'));
     }
 
     public function register(RegisterPengunjungRequest $user): RedirectResponse {    
-
         $role = Role::where("nama_Role", "pengunjung")->first();
+
+        
 
         $data = [
             'nomor_telepon' => $user->nomor_telepon,
@@ -64,6 +63,7 @@ class PelangganController extends Controller
 
         try {
             $user->save();
+            
             return redirect()->route('login');
         } catch (Exception $e) {
             return redirect()->to('/register')->with('error', "Gagal Mendaftarkan akun");

@@ -6,24 +6,26 @@ use App\Models\ProgressLog;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 class ProgressService
 {
     // Create a new progress entry.
     public function create(array $data): ProgressLog
     {
-        // Ensure tanggal_upload exists
         if (empty($data['tanggal_upload'])) {
             $data['tanggal_upload'] = Carbon::now();
         }
 
-        // file_path is optional, but if present assume it's already a stored path
         $payload = [
-            'project_id'     => $data['project_id'],
-            'deskripsi'      => $data['deskripsi'] ?? null,
-            'file_path'      => $data['file_path'] ?? null,
-            'status_publikasi'=> $data['status_publikasi'] ?? 'menunggu',
-            'tanggal_upload' => $data['tanggal_upload'],
+            'id'               => Str::random(26),
+            'project_id'       => $data['project_id'],
+            'deskripsi'        => $data['deskripsi'] ?? null,
+            'file_path'        => $data['file_path'] ?? null,
+            'status_publikasi' => $data['status_publikasi'] ?? 'menunggu',
+            'tanggal_upload'   => $data['tanggal_upload'],
+            'updated_at'       => now(),
+            'created_at'       => now(),
         ];
 
         return ProgressLog::create($payload);
@@ -38,13 +40,25 @@ class ProgressService
     }
 
     // Get single progress entry by ID.
-    public function getById(int $id): ProgressLog
+    public function getById(string $id): ProgressLog
     {
         return ProgressLog::findOrFail($id);
     }
 
+    public function getProgressPengunjung()
+    {
+        return ProgressLog::with([
+            'project.pengunjung.role'
+        ])
+            ->whereHas('project.pengunjung.role', function ($q) {
+                $q->where('nama_role', 'pengunjung');
+            })
+            ->orderBy('tanggal_upload', 'desc')
+            ->get();
+    }
+
     // Update progress entry.
-    public function update(int $id, array $data): ProgressLog
+    public function update(string $id, array $data): ProgressLog
     {
         $progress = ProgressLog::findOrFail($id);
 
@@ -71,7 +85,7 @@ class ProgressService
     }
 
     // Delete progress entry.
-    public function delete(int $id): ?bool
+    public function delete(string $id): ?bool
     {
         $progress = ProgressLog::findOrFail($id);
 
