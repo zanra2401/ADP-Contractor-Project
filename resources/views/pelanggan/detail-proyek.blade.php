@@ -85,7 +85,7 @@
                     <div class="flex justify-between mb-4 items-end">
                         <div>
                             <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Progress Realisasi</span>
-                            <div class="text-3xl font-extrabold text-gray-900 mt-1">{{ $proyek->progress }}%</div>
+                            <div class="text-3xl font-extrabold text-gray-900 mt-1">{{ round($proyek->progress) }}%</div>
                         </div>
                         <span class="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">{{ $proyek->status }}</span>
                     </div>
