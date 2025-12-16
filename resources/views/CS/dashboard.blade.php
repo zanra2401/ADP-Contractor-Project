@@ -44,9 +44,8 @@
     <div class="py-10">
         <header class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h1 class="text-3xl font-bold leading-tight text-gray-900">
-                Hubungi Kami
+                Kontak Pelanggan
             </h1>
-            <p class="mt-2 text-gray-600">Diskusikan proyek Anda dengan tim kami.</p>
         </header>
         
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
