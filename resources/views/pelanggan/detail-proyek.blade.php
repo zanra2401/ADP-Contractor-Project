@@ -118,7 +118,7 @@
                                 <span class="text-blue-100 text-sm">Sudah Dibayar</span>
                                 <div class="text-right">
                                     <span class="font-bold text-xl text-white">{{ Number::currency($proyek->sudah_dibayar, "IDR") }}</span>
-                                    <span class="text-xs inline-block bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 font-medium">{{ $proyek->progress }}%</span>
+                                    <span class="text-xs inline-block bg-blue-500 text-white px-1.5 py-0.5 rounded ml-1 font-medium">{{ round($proyek->progress) }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -151,9 +151,16 @@
                     @if ($proyek->pengawas)
                         <div class="mt-6">
                             <a href="{{ route('pelanggan.chat', ['rid' => $proyek->pengawas->id]) }}" class="block w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 hover:text-blue-600 hover:border-blue-300 transition text-sm font-bold text-center shadow-sm">
-                                Chat Aplikasi
+                                Chat Pengawas
                             </a>
                         </div>
+                        @else
+                            <div class="mt-6">
+                                <p class="text-sm font-medium">Pengajuan Sedang diproses, paling lambat 24 jam</p>
+                                <a href="{{ route('pelanggan.chat', ['rid' => $proyek->pengawas->id]) }}" class="block w-full bg-white border border-gray-300 text-gray-700 py-2.5 px-4 rounded-xl hover:bg-gray-50 hover:text-blue-600 hover:border-blue-300 transition text-sm font-bold text-center shadow-sm">
+                                    Chat Customer Service
+                                </a>
+                            </div>
                     @endif
                 </div>
                 
