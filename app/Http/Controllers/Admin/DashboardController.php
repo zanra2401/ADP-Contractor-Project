@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $totalUser = User::count();
 
-        $totalProyekBerjalan = Project::where('status', 'in_progress')->count();
+        $totalProyekBerjalan = Project::where('status', 'proses')->count();
 
         return view('admin.dashboard', compact(
             'totalUser',
