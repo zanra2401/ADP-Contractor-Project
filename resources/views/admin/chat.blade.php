@@ -277,7 +277,7 @@
                 }
 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error:');
                 alert('Gagal mengirim pesan, coba lagi.');
             }
         });

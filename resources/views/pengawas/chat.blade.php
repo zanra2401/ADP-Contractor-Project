@@ -396,15 +396,13 @@
             if (response.ok) {
                 this.reset();
                 clearPreview();
-                console.log('Pesan terkirim:', data);
                 // Tambahkan logika untuk menampilkan pesan baru di DOM
             } else {
-                console.error('Gagal mengirim:', data);
                 alert('Gagal mengirim pesan.');
             }
 
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error:');
             alert('Terjadi kesalahan koneksi.');
         }
     });

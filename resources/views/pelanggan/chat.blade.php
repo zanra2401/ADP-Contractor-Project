@@ -306,7 +306,6 @@
                     // 2. Reset Preview Gambar/Video
                     clearPreview();
                     
-                    console.log('Pesan terkirim:', data);
                     
                     // Opsional: Scroll ke bawah manual jika tidak menggunakan realtime listener sementara
                     // messageContainer.scrollTop = messageContainer.scrollHeight;
@@ -316,7 +315,7 @@
                 }
 
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error:');
             }
         });
 
